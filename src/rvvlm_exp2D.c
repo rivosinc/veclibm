@@ -14,9 +14,15 @@
 //   limitations under the License.
 //
 
-#ifndef __RVVLM_FP64M2_H__
-#define __RVVLM_FP64M2_H__
-#define LMUL      2
-#define BIT_WIDTH 64
-#include "rvvlm_fp.inc.h"
-#endif
+#include <stdio.h>
+#include <riscv_vector.h>
+
+#include "rvvlm.h"
+#define API_SIGNATURE API_SIGNATURE_11
+#define STRIDE UNIT_STRIDE
+
+#include RVVLM_EXP2D_VSET_CONFIG
+
+#define COMPILE_FOR_EXP2
+#include "rvvlm_expD.inc.h"
+

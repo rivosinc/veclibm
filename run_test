@@ -1,3 +1,0 @@
-/opt/qemu/bin/qemu-riscv64 \
- -cpu rv64,g=true,c=true,v=true,vext_spec=v1.0,vlen=256,elen=64,rvv_ta_all_1s=on,rvv_ma_all_1s=on test_funcs.r64
-

@@ -14,9 +14,27 @@
 //   limitations under the License.
 //
 
-#ifndef __RVVLM_FP64M2_H__
-#define __RVVLM_FP64M2_H__
-#define LMUL      2
-#define BIT_WIDTH 64
-#include "rvvlm_fp.inc.h"
-#endif
+#include <math.h>
+#include <stdio.h>
+
+#include "rvvlm.h"
+#include "test_infra.h"
+
+#define COMMENT(comment)                                                       \
+  { printf("\n=====\t" comment "\n"); }
+
+int main() {
+  unsigned long nb_tests;
+  double x_start, x_end;
+
+  COMMENT("expI: current chosen algorithm; reduced argument in FP64 only")
+
+  x_start = -0.34;
+  x_end = 0.34;
+  nb_tests = 30;
+  int stride_x = 21;
+  int stride_y = 39;
+  report_err_fp64(rvvlm_exp2I, exp2l, x_start, x_end, nb_tests, stride_x, stride_y);
+
+  return 0;
+}
