@@ -27,6 +27,8 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_exp2DI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_exp10D.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_exp10DI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expm1D.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expm1DI.c
 )
 
 add_library(vecm

@@ -60,12 +60,12 @@ do {                                                            \
   s = __riscv_vfadd((s), (Y), (vlen));                          \
 } while(0)
 
-#define KNUTH2SUM(X, Y, S, s, vlen)                                         \
-do {                                                                        \
-  S = __riscv_vfadd((X), (Y), (vlen));                                      \
-  VFLOAT X_hat = __riscv_vfsub((S), (Y), (vlen));                           \
-  s = __riscv_vfadd(__riscv_vfsub((X), X_hat, (vlen)),                      \
-             __riscv_vfsub((Y), __riscv_vfsub((S), X_hat, (vlen)), (vlen))) \
+#define KNUTH2SUM(X, Y, S, s, vlen)                                                 \
+do {                                                                                \
+  S = __riscv_vfadd((X), (Y), (vlen));                                              \
+  VFLOAT X_hat = __riscv_vfsub((S), (Y), (vlen));                                   \
+  s = __riscv_vfadd(__riscv_vfsub((X), X_hat, (vlen)),                              \
+             __riscv_vfsub((Y), __riscv_vfsub((S), X_hat, (vlen)), (vlen)), (vlen));\
 } while(0)
 
 #define IDENTIFY2(__vclass, __stencil, __signature, __identity_mask, __vlen)    \
@@ -135,6 +135,14 @@ do {                                                        \
 #define RVVLM_EXP10DI_STD_EPSIM rvvlm_exp10DI_std_epsim
 #define RVVLM_EXP10DI_TBL64  rvvlm_exp10DI_tbl64
 
+// FP64 expm1 function configuration
+#define RVVLM_EXPM1D_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_EXPM1D_STD_EPSIM rvvlm_expm1
+
+#define RVVLM_EXPM1DI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_EXPM1DI_STD_EPSIM rvvlm_expm1I
+
+
 // Define the various tables for table-driven implementations
 extern int64_t expD_tbl64_fixedpt[128];
 
@@ -165,6 +173,9 @@ void RVVLM_EXP10D_STD_EPSIM(size_t x_len, const double *x, double *y);
 void RVVLM_EXP10DI_STD_EPSIM(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
 void RVVLM_EXP10D_TBL64(size_t x_len, const double *x, double *y);
 void RVVLM_EXP10DI_TBL64(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+
+void RVVLM_EXPM1D_STD_EPSIM(size_t x_len, const double *x, double *y);
+void RVVLM_EXPM1DI_STD_EPSIM(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
 
 #ifdef __cplusplus
 }
