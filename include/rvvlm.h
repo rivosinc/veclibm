@@ -15,6 +15,7 @@
 //
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,6 +36,19 @@ union sui64_fp64 {int64_t si; uint64_t ui; double f; uint32_t ui_hilo[2];};
 
 #define UNIT_STRIDE 1
 #define GENERAL_STRIDE 2
+
+#define SET_ROUNDTONEAREST \
+int original_frm; bool need_to_restore; \
+do { \
+  (original_frm) = fegetround(); \
+  need_to_restore = (original_frm != FE_TONEAREST); \
+} while(0)
+
+#define RESTORE_FRM \
+do { \
+  if (need_to_restore) {fesetround((original_frm));} \
+} while(0)
+
 
 #define PSTEP(coeff_j, x, poly, vlen) \
   __riscv_vfmadd((poly), (x), VFMV_VF((coeff_j), (vlen)), (vlen))   

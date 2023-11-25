@@ -98,6 +98,8 @@ do {                                                                    \
 static_assert(false, "Must specify base of exponential" __FILE__);
 #endif
 
+#include <fenv.h>
+
 // Version 1 is reduction to standard primary interval.
 // Reduced argument is represented as one FP64 variable.
 void F_VER1(API) {
@@ -105,6 +107,7 @@ void F_VER1(API) {
     VFLOAT vx, vy, vy_special;
     VBOOL special_args;
 
+    SET_ROUNDTONEAREST;
     // stripmining over input arguments
     for (; _inarg_n > 0; _inarg_n -= vlen) {
         vlen = VSET(_inarg_n);
@@ -178,6 +181,7 @@ void F_VER1(API) {
         INCREMENT_INARG1(vlen);
         INCREMENT_OUTARG1(vlen);
     }
+    RESTORE_FRM;
 }
 
 // Version 2 is reduction to standard primary interval.
@@ -187,6 +191,7 @@ void F_VER2(API) {
     VFLOAT vx, vy, vy_special;
     VBOOL special_args;
 
+    SET_ROUNDTONEAREST;
     // stripmining over input arguments
     for (; _inarg_n > 0; _inarg_n -= vlen) {
         vlen = VSET(_inarg_n);
@@ -271,6 +276,7 @@ void F_VER2(API) {
         INCREMENT_INARG1(vlen); 
         INCREMENT_OUTARG1(vlen);
     }
+    RESTORE_FRM;
 }
 
 // Version 3 computes 1 + r + r^2/2 to extra precision using FP techniques
@@ -281,6 +287,7 @@ void F_VER3(API) {
     VBOOL special_args;
     double Peg = 0x1.8p+27;
     
+    SET_ROUNDTONEAREST;
     // stripmining over input arguments
     for (; _inarg_n > 0; _inarg_n -= vlen) {
         vlen = VSET(_inarg_n);
@@ -380,6 +387,7 @@ void F_VER3(API) {
         INCREMENT_INARG1(vlen); 
         INCREMENT_OUTARG1(vlen);
     }
+    RESTORE_FRM;
 }
 
 // Version 4 is a table driven algorithm. The table contains exp(j/64)
@@ -391,6 +399,7 @@ void F_VER4(API) {
     VFLOAT vx, vy, vy_special;
     VBOOL special_args;
     
+    SET_ROUNDTONEAREST;
     // stripmining over input arguments
     for (; _inarg_n > 0; _inarg_n -= vlen) {
         vlen = VSET(_inarg_n);
@@ -457,6 +466,7 @@ void F_VER4(API) {
         INCREMENT_INARG1(vlen);
         INCREMENT_OUTARG1(vlen);
     }
+    RESTORE_FRM;
 }
 
 
