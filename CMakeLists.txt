@@ -29,6 +29,13 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_exp10DI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expm1D.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expm1DI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_logD_tbl.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_logD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_logDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_log2D.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_log2DI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_log10D.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_log10DI.c
 )
 
 add_library(vecm

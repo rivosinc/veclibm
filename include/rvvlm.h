@@ -142,9 +142,28 @@ do {                                                        \
 #define RVVLM_EXPM1DI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_EXPM1DI_STD_EPSIM rvvlm_expm1I
 
+// FP64 log function configuration
+#define RVVLM_LOGD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOGD_TBL128 rvvlm_log
+
+#define RVVLM_LOGDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOGDI_TBL128 rvvlm_logI
+
+#define RVVLM_LOG2D_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOG2D_TBL128 rvvlm_log2
+
+#define RVVLM_LOG2DI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOG2DI_TBL128 rvvlm_log2I
+
+#define RVVLM_LOG10D_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOG10D_TBL128 rvvlm_log10
+
+#define RVVLM_LOG10DI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOG10DI_TBL128 rvvlm_log10I
 
 // Define the various tables for table-driven implementations
-extern int64_t expD_tbl64_fixedpt[128];
+extern int64_t expD_tbl64_fixedpt[64];
+extern int64_t logD_tbl128_fixedpt[128];
 
 // Define the functions in the vector math library
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
@@ -176,6 +195,16 @@ void RVVLM_EXP10DI_TBL64(size_t x_len, const double *x, size_t stride_x, double 
 
 void RVVLM_EXPM1D_STD_EPSIM(size_t x_len, const double *x, double *y);
 void RVVLM_EXPM1DI_STD_EPSIM(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+
+void RVVLM_LOGD_TBL128(size_t x_len, const double *x, double *y);
+void RVVLM_LOGDI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+
+void RVVLM_LOG10D_TBL128(size_t x_len, const double *x, double *y);
+void RVVLM_LOG10DI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+
+void RVVLM_LOG2D_TBL128(size_t x_len, const double *x, double *y);
+void RVVLM_LOG2DI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+
 
 #ifdef __cplusplus
 }
