@@ -81,7 +81,7 @@ void F_VER1(API) {
         // However, unlike in the case of log where we simply change the exponent to 0,
         // this technique does not work too well here as we would than need to adjust the exponent of u
         // accordingly as well. Here we modify vxp1 only when it is large, which in this case
-        // u will be zero.
+        // u will so small in comparison that missing this theoretically needed adjustment does not matter.
         VINT n_adjust = VMVI_VX(0,vlen);
         VFLOAT scale = VFMV_VF(fp_posOne, vlen);
         VBOOL adjust = __riscv_vmfge(vxp1, 0x1.0p1020, vlen);
