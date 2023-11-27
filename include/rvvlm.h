@@ -60,6 +60,14 @@ do {                                                            \
   s = __riscv_vfadd((s), (Y), (vlen));                          \
 } while(0)
 
+#define POS2SUM(X, Y, S, s, vlen) \
+do { \
+  VFLOAT _first = __riscv_vfmax((X), (Y), (vlen)); \
+  VFLOAT _second = __riscv_vfmin((X), (Y), (vlen)); \
+  S = __riscv_vfadd((X), (Y), (vlen)); \
+  s = __riscv_vfadd(__riscv_vfsub(_first, (S), (vlen)), _second, (vlen)); \
+} while(0)
+
 #define KNUTH2SUM(X, Y, S, s, vlen)                                                 \
 do {                                                                                \
   S = __riscv_vfadd((X), (Y), (vlen));                                              \
@@ -161,6 +169,13 @@ do {                                                        \
 #define RVVLM_LOG10DI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_LOG10DI_TBL128 rvvlm_log10I
 
+// FP64 log1p function configuration
+#define RVVLM_LOG1PD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOG1PD_TBL128 rvvlm_log1p
+
+#define RVVLM_LOG1PDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_LOG1PDI_TBL128 rvvlm_log1pI
+
 // Define the various tables for table-driven implementations
 extern int64_t expD_tbl64_fixedpt[64];
 extern int64_t logD_tbl128_fixedpt[128];
@@ -204,6 +219,9 @@ void RVVLM_LOG10DI_TBL128(size_t x_len, const double *x, size_t stride_x, double
 
 void RVVLM_LOG2D_TBL128(size_t x_len, const double *x, double *y);
 void RVVLM_LOG2DI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+
+void RVVLM_LOG1PD_TBL128(size_t x_len, const double *x, double *y);
+void RVVLM_LOG1PDI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
 
 
 #ifdef __cplusplus

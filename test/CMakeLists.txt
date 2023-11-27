@@ -77,6 +77,8 @@ set(TEST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log2I.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log10.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log10I.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1pI.cpp
 )
 
 foreach(TEST_FILE IN LISTS TEST_SOURCES)
