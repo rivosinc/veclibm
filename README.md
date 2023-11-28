@@ -1,4 +1,13 @@
+<!--
+SPDX-FileCopyrightText: 2023 Rivos Inc.
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # veclibm
+
+[![REUSE status](https://api.reuse.software/badge/github.com/rivosinc/veclibm)](https://api.reuse.software/info/github.com/rivosinc/veclibm)
+
 A vector math library using RISC-V vector ISA via C intrinsic. 
 
 WORK IN PROGRESS...

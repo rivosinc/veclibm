@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2023 Rivos Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+repos:
+  # pull mirror of https://github.com/fsfe/reuse-tool
+  - repo: https://github.com/rivosinc/reuse-tool
+    rev: 'd95c0e946ee0448420fb1417a0f98fc2eb87d94a'
+    hooks:
+      # Check compliance
+      - id: reuse
