@@ -64,6 +64,20 @@ do {                                                                            
              __riscv_vfsub((Y), __riscv_vfsub((S), X_hat, (vlen)), (vlen)), (vlen));\
 } while(0)
 
+#define PROD_X1Y1(x, y, prod_hi, prod_lo, vlen) \
+do {\
+  prod_hi = __riscv_vfmul((x), (y), (vlen)); \
+  prod_lo = __riscv_vfmsub((x), (y), (prod_hi), (vlen)); \
+} while(0)
+
+#define DIV_N1D2(numer, denom, delta_d, Q, q, vlen) \
+do { \
+  Q = __riscv_vfdiv((numer), (denom), (vlen)); \
+  q = __riscv_vfnmsub((Q), (denom), (numer), (vlen)); \
+  q = __riscv_vfnmsac((q), (Q), (delta_d), (vlen)); \
+  q = __riscv_vfmul(q, __riscv_vfrec7((denom), (vlen)), (vlen)); \
+} while(0)
+
 #define IDENTIFY2(__vclass, __stencil, __signature, __identity_mask, __vlen)    \
 do {                                                                            \
   __signature = __riscv_vand(__vclass, __stencil, __vlen);                      \
@@ -140,22 +154,28 @@ do {                                                        \
 
 // FP64 log function configuration
 #define RVVLM_LOGD_VSET_CONFIG "rvvlm_fp64m2.h"
-#define RVVLM_LOGD_TBL128 rvvlm_log
+#define RVVLM_LOGD_TBL128 rvvlm_logD_tbl128
+#define RVVLM_LOGD_ATANH rvvlm_log
 
 #define RVVLM_LOGDI_VSET_CONFIG "rvvlm_fp64m2.h"
-#define RVVLM_LOGDI_TBL128 rvvlm_logI
+#define RVVLM_LOGDI_TBL128 rvvlm_logDI_tbl128
+#define RVVLM_LOGDI_ATANH rvvlm_logI
 
 #define RVVLM_LOG2D_VSET_CONFIG "rvvlm_fp64m2.h"
-#define RVVLM_LOG2D_TBL128 rvvlm_log2
+#define RVVLM_LOG2D_TBL128 rvvlm_log2D_tbl128
+#define RVVLM_LOG2D_ATANH rvvlm_log2
 
 #define RVVLM_LOG2DI_VSET_CONFIG "rvvlm_fp64m2.h"
-#define RVVLM_LOG2DI_TBL128 rvvlm_log2I
+#define RVVLM_LOG2DI_TBL128 rvvlm_log2DI_tbl128
+#define RVVLM_LOG2DI_ATANH rvvlm_log2I
 
 #define RVVLM_LOG10D_VSET_CONFIG "rvvlm_fp64m2.h"
-#define RVVLM_LOG10D_TBL128 rvvlm_log10
+#define RVVLM_LOG10D_TBL128 rvvlm_log10D_tbl128
+#define RVVLM_LOG10D_ATANH rvvlm_log10
 
 #define RVVLM_LOG10DI_VSET_CONFIG "rvvlm_fp64m2.h"
-#define RVVLM_LOG10DI_TBL128 rvvlm_log10I
+#define RVVLM_LOG10DI_TBL128 rvvlm_log10DI_tbl128
+#define RVVLM_LOG10DI_ATANH rvvlm_log10I
 
 // FP64 log1p function configuration
 #define RVVLM_LOG1PD_VSET_CONFIG "rvvlm_fp64m2.h"
@@ -201,12 +221,18 @@ void RVVLM_EXPM1DI_STD_EPSIM(size_t x_len, const double *x, size_t stride_x, dou
 
 void RVVLM_LOGD_TBL128(size_t x_len, const double *x, double *y);
 void RVVLM_LOGDI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+void RVVLM_LOGD_ATANH(size_t x_len, const double *x, double *y);
+void RVVLM_LOGDI_ATANH(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
 
 void RVVLM_LOG10D_TBL128(size_t x_len, const double *x, double *y);
 void RVVLM_LOG10DI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+void RVVLM_LOG10D_ATANH(size_t x_len, const double *x, double *y);
+void RVVLM_LOG10DI_ATANH(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
 
 void RVVLM_LOG2D_TBL128(size_t x_len, const double *x, double *y);
 void RVVLM_LOG2DI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+void RVVLM_LOG2D_ATANH(size_t x_len, const double *x, double *y);
+void RVVLM_LOG2DI_ATANH(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
 
 void RVVLM_LOG1PD_TBL128(size_t x_len, const double *x, double *y);
 void RVVLM_LOG1PDI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);

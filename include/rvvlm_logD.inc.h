@@ -35,8 +35,10 @@ do { \
 #if defined(COMPILE_FOR_LOG)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1    RVVLM_LOGD_TBL128
+#define F_VER2    RVVLM_LOGD_ATANH
 #else
 #define F_VER1    RVVLM_LOGDI_TBL128
+#define F_VER2    RVVLM_LOGDI_ATANH
 #endif
 #define LOGB_2_HI 0x1.62e42fefa39efp-1
 #define LOGB_2_LO 0x1.abc9e3b39803fp-56 
@@ -45,8 +47,10 @@ do { \
 #elif defined(COMPILE_FOR_LOG2)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1    RVVLM_LOG2D_TBL128
+#define F_VER2    RVVLM_LOG2D_ATANH
 #else
 #define F_VER1    RVVLM_LOG2DI_TBL128
+#define F_VER2    RVVLM_LOG2DI_ATANH
 #endif
 #define LOGB_2_HI 0x1.0p0
 #define LOGB_2_LO 0.0
@@ -55,8 +59,10 @@ do { \
 #elif defined(COMPILE_FOR_LOG10)
 #if (STRIDE == 1)
 #define F_VER1    RVVLM_LOG10D_TBL128
+#define F_VER2    RVVLM_LOG10D_ATANH
 #else
 #define F_VER1    RVVLM_LOG10DI_TBL128
+#define F_VER2    RVVLM_LOG10DI_ATANH
 #endif
 #define LOGB_2_HI  0x1.34413509f79ffp-2
 #define LOGB_2_LO -0x1.9dc1da994fd00p-59 
@@ -158,6 +164,111 @@ void F_VER1(API) {
 #else
         vy = __riscv_vfadd(A, poly, vlen);
 #endif
+        vy = __riscv_vmerge(vy, vy_special, special_args, vlen);
+
+        // copy vy into y and increment addr pointers
+        VFSTORE_OUTARG1(vy, vlen);
+
+        INCREMENT_INARG1(vlen);
+        INCREMENT_OUTARG1(vlen);
+
+    }
+    RESTORE_FRM;
+}
+
+// Version uses the identity log(x) = 2 atanh((x-1)/(x+1)) 
+void F_VER2(API) {
+    size_t vlen;
+    VFLOAT vx, vy, vy_special;
+    VBOOL special_args;
+    VINT n_adjust;
+
+    SET_ROUNDTONEAREST;
+    // stripmining over input arguments
+    for (; _inarg_n > 0; _inarg_n -= vlen) {
+        vlen = VSET(_inarg_n);
+        vx = VFLOAD_INARG1(vlen);
+
+        // NaN, Inf, and -ve handling, as well as scaling denormal input by 2^64
+        EXCEPTION_HANDLING_LOG(vx, special_args, vy_special, n_adjust, vlen);
+ 
+        // in_arg at this point are positive, finite and not subnormal
+        // Decompose in_arg into 2^n * X, where 0.75 <= X < 1.5 
+        // logB(2^n X) = n * logB(2)  +  log(X) * logB(e) 
+        // log(X) = 2 atanh((X-1)/(X+1))
+
+        // Argument reduction: represent in_arg as 2^n X where 0.75 <= X < 1.5
+        // Then compute 2(X-1)/(X+1) as r + delta_r. 
+        // natural log, log(X) = 2 atanh(w/2)  = w + p1 w^3 + p2 w5 ...; w = r+delta_r
+        VINT n = U_AS_I(__riscv_vadd(__riscv_vsrl(F_AS_U(vx), MAN_LEN-1, vlen), 1, vlen));
+        n = __riscv_vsra(n, 1, vlen);
+        n = __riscv_vsub(n, EXP_BIAS, vlen);
+        vx = I_AS_F(__riscv_vsub(F_AS_I(vx), __riscv_vsll(n, MAN_LEN, vlen), vlen));
+        n = __riscv_vsub(n, n_adjust, vlen);
+        VFLOAT n_flt = __riscv_vfcvt_f(n, vlen);
+
+        VFLOAT numer = __riscv_vfsub(vx, fp_posOne, vlen); 
+        numer = __riscv_vfadd(numer, numer, vlen);
+        VFLOAT denom, delta_d;
+        //FAST2SUM(fp_posOne, vx, denom, delta_d, vlen);
+        denom = __riscv_vfadd(vx, fp_posOne, vlen);
+        delta_d = __riscv_vfrsub(denom, fp_posOne, vlen);
+        delta_d = __riscv_vfadd(delta_d, vx, vlen);
+        VFLOAT r, delta_r;
+        DIV_N1D2(numer, denom, delta_d, r, delta_r, vlen);
+
+        VFLOAT dummy = r;
+
+        VFLOAT rsq = __riscv_vfmul(r, r, vlen);
+        VFLOAT rcube = __riscv_vfmul(rsq, r, vlen);
+        VFLOAT r6 = __riscv_vfmul(rcube, rcube, vlen);
+
+        VFLOAT poly_right = PSTEP( 0x1.c71c0199a565ap-12, rsq,
+                            PSTEP( 0x1.7474da9e7cf64p-14, rsq,
+                            PSTEP( 0x1.38537160c26d6p-16, 0x1.3ab9b0aaeafa7p-18, rsq,
+                            vlen), vlen), vlen);
+
+        VFLOAT poly_left = PSTEP( 0x1.5555555555774p-4, rsq,
+                           PSTEP( 0x1.99999998f142dp-7, 0x1.249249b1caf58p-9, rsq,
+                           vlen), vlen);
+
+        VFLOAT poly = __riscv_vfmadd(poly_right, r6, poly_left, vlen);
+        poly = __riscv_vfmadd(poly, rcube, delta_r, vlen);
+        // At this point r + poly approximates log(X) 
+
+        // Reconstruction: logB(in_arg) = n logB(2) + log(X) * logB(e), computed as
+        // n*(logB_2_hi + logB_2_lo) + r * (logB_e_hi + logB_e_lo) + poly * logB_e_hi
+        // It is best to compute n * logB_2_hi + r * logB_e_hi in extra precision
+        VFLOAT A, a, B, b, S, s;
+#if !defined(COMPILE_FOR_LOG2)
+        PROD_X1Y1(n_flt, LOGB_2_HI, A, a, vlen);
+#else
+        A = n_flt;
+        a = I_AS_F(__riscv_vxor(F_AS_I(a), F_AS_I(a), vlen));
+#endif
+#if !defined(COMPILE_FOR_LOG)
+        PROD_X1Y1(r, LOGB_e_HI, B, b, vlen);
+#else
+        B = r;
+        b = I_AS_F(__riscv_vxor(F_AS_I(b), F_AS_I(b), vlen));
+#endif
+        a = __riscv_vfadd(a, b, vlen);
+        FAST2SUM(A, B, S, s, vlen);
+        s = __riscv_vfadd(s, a, vlen);
+
+#if !defined(COMPILE_FOR_LOG)
+        s = __riscv_vfmacc(s, LOGB_e_LO, r, vlen);
+        s = __riscv_vfmacc(s, LOGB_e_HI, poly, vlen);
+#else
+        s = __riscv_vfadd(s, poly, vlen);
+#endif
+
+#if !defined(COMPILE_FOR_LOG2)
+        s = __riscv_vfmacc(s, LOGB_2_LO, n_flt, vlen);
+#endif
+        vy = __riscv_vfadd(S, s, vlen); 
+
+        // vy = dummy;
         vy = __riscv_vmerge(vy, vy_special, special_args, vlen);
 
         // copy vy into y and increment addr pointers
