@@ -200,8 +200,8 @@ void F_VER2(API) {
         // Argument reduction: represent in_arg as 2^n X where 0.75 <= X < 1.5
         // Then compute 2(X-1)/(X+1) as r + delta_r. 
         // natural log, log(X) = 2 atanh(w/2)  = w + p1 w^3 + p2 w5 ...; w = r+delta_r
-        VINT n = U_AS_I(__riscv_vadd(__riscv_vsrl(F_AS_U(vx), MAN_LEN-1, vlen), 1, vlen));
-        n = __riscv_vsra(n, 1, vlen);
+        VINT n = U_AS_I(__riscv_vadd(__riscv_vsrl(F_AS_U(vx), MAN_LEN-8, vlen), 0x96, vlen));
+        n = __riscv_vsra(n, 8, vlen);
         n = __riscv_vsub(n, EXP_BIAS, vlen);
         vx = I_AS_F(__riscv_vsub(F_AS_I(vx), __riscv_vsll(n, MAN_LEN, vlen), vlen));
         n = __riscv_vsub(n, n_adjust, vlen);
@@ -223,13 +223,13 @@ void F_VER2(API) {
         VFLOAT rcube = __riscv_vfmul(rsq, r, vlen);
         VFLOAT r6 = __riscv_vfmul(rcube, rcube, vlen);
 
-        VFLOAT poly_right = PSTEP( 0x1.c71c0199a565ap-12, rsq,
-                            PSTEP( 0x1.7474da9e7cf64p-14, rsq,
-                            PSTEP( 0x1.38537160c26d6p-16, 0x1.3ab9b0aaeafa7p-18, rsq,
+        VFLOAT poly_right = PSTEP( 0x1.c71c51c73bb7fp-12, rsq,
+                            PSTEP( 0x1.74664bed42062p-14, rsq,
+                            PSTEP( 0x1.39a071f83b771p-16, 0x1.2f123764244dfp-18, rsq,
                             vlen), vlen), vlen);
 
-        VFLOAT poly_left = PSTEP( 0x1.5555555555774p-4, rsq,
-                           PSTEP( 0x1.99999998f142dp-7, 0x1.249249b1caf58p-9, rsq,
+        VFLOAT poly_left = PSTEP( 0x1.5555555555594p-4, rsq,
+                           PSTEP( 0x1.999999997f6b6p-7, 0x1.2492494248a48p-9, rsq,
                            vlen), vlen);
 
         VFLOAT poly = __riscv_vfmadd(poly_right, r6, poly_left, vlen);
