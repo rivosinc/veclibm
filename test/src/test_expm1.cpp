@@ -19,7 +19,6 @@ int main() {
 
   show_special_fp64(rvvlm_expm1, "Special Value handling of this function");
 
-  
   x_start = -0.01;
   x_end = 0.01;
   nb_tests = 300000;

@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #include <math.h>
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "rvvlm.h"
 #include "test_infra.h"
@@ -29,9 +29,8 @@ int main() {
   stride_y = 39;
   stride_z = 11;
   swap_xy = 0;
-  report_err2_fp64(rvvlm_powI, powl, x_start, x_end, nb_pts_x, stride_x, 
-                                    y_start, y_end, nb_pts_y, stride_y,
-                                    stride_z, swap_xy);
+  report_err2_fp64(rvvlm_powI, powl, x_start, x_end, nb_pts_x, stride_x,
+                   y_start, y_end, nb_pts_y, stride_y, stride_z, swap_xy);
 
   return 0;
 }

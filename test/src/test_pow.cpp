@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #include <math.h>
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "rvvlm.h"
 #include "test_infra.h"
@@ -29,18 +29,20 @@ int main() {
   y_start = 0x1.0p-3;
   y_end = 0x1.0p4;
   nb_pts_y = 300;
-  report_err2_fp64(rvvlm_pow, powl, x_start, x_end, nb_pts_x, y_start, y_end, nb_pts_y, swap_xy); 
+  report_err2_fp64(rvvlm_pow, powl, x_start, x_end, nb_pts_x, y_start, y_end,
+                   nb_pts_y, swap_xy);
 
   nb_targets = 10;
   x_start = 0x1.0p-10;
-  x_end = 0x1.0p10;;
+  x_end = 0x1.0p10;
+  ;
   nb_tests = 40000;
 
   target_start = -1070.0 * log(2.0);
   target_end = -1020.0 * log(2.0);
   delta = (target_end - target_start) / (double)(nb_targets - 1);
   for (int j = 0; j < nb_targets; j++) {
-    target = target_start + (double)j * delta; 
+    target = target_start + (double)j * delta;
     report_err_pow_fp64(rvvlm_pow, powl, target, x_start, x_end, nb_tests);
   }
 
@@ -48,7 +50,7 @@ int main() {
   target_end = 32.0 * log(2.0);
   delta = (target_end - target_start) / (double)(nb_targets - 1);
   for (int j = 0; j < nb_targets; j++) {
-    target = target_start + (double)j * delta; 
+    target = target_start + (double)j * delta;
     report_err_pow_fp64(rvvlm_pow, powl, target, x_start, x_end, nb_tests);
   }
 
@@ -56,7 +58,7 @@ int main() {
   target_end = 1023.5 * log(2.0);
   delta = (target_end - target_start) / (double)(nb_targets - 1);
   for (int j = 0; j < nb_targets; j++) {
-    target = target_start + (double)j * delta; 
+    target = target_start + (double)j * delta;
     report_err_pow_fp64(rvvlm_pow, powl, target, x_start, x_end, nb_tests);
   }
 
@@ -64,7 +66,7 @@ int main() {
   target_end = -80.0 * log(2.0);
   delta = (target_end - target_start) / (double)(nb_targets - 1);
   for (int j = 0; j < nb_targets; j++) {
-    target = target_start + (double)j * delta; 
+    target = target_start + (double)j * delta;
     report_err_pow_fp64(rvvlm_pow, powl, target, x_start, x_end, nb_tests);
   }
 
