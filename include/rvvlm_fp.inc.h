@@ -55,7 +55,7 @@ static_assert(false, "requested BIT_WIDTH unsupported" __FILE__);
 #define API_11_GS size_t _inarg_n, const NATIVE_TYPE * _inarg1,  size_t _inarg1_stride, \
                                          NATIVE_TYPE * _outarg1, size_t _outarg1_stride
 #define API_21_US size_t _inarg_n, \
-                  const NATIVE_TYPE * _inarg1, const NATIVE_TYPE * _inarg2 \
+                  const NATIVE_TYPE * _inarg1, const NATIVE_TYPE * _inarg2, \
                   NATIVE_TYPE * _outarg1
 
 #define API_21_GS size_t _inarg_n, \

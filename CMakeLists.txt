@@ -27,6 +27,9 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_log10DI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_log1pD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_log1pDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_powD_tbl.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_powD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_powDI.c
 )
 
 add_library(vecm

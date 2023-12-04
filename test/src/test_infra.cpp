@@ -292,15 +292,15 @@ void report_err_fp64(
   return;
 }
 
-void report_err_powD_fp64(void (*test_func)(size_t, const double *,
-                                            const double *, double *),
+void report_err_pow_fp64(void (*test_func)(size_t, const double *,
+                                           const double *, double *),
                           long double (*ref_func)(long double, long double),
                           double target, double start, double end, int nb_pts) {
 
   long double z_ref;
   double *x, *y, *z, delta;
-  double abs_err, rel_err, ulp_err;
-  double max_abs_err, max_rel_err, max_ulp_err;
+  long double abs_err, rel_err, ulp_err;
+  long double max_abs_err, max_rel_err, max_ulp_err;
 
   x = (double *)malloc(nb_pts * sizeof(double));
   y = (double *)malloc(nb_pts * sizeof(double));
@@ -313,9 +313,9 @@ void report_err_powD_fp64(void (*test_func)(size_t, const double *,
     delta = (end - start) / (double)(nb_pts - 1);
   }
 
-  max_abs_err = 0.0;
-  max_rel_err = 0.0;
-  max_ulp_err = 0.0;
+  max_abs_err = 0.0L;
+  max_rel_err = 0.0L;
+  max_ulp_err = 0.0L;
 
   // fill up the set of test points
   for (int i = 0; i < nb_pts; ++i) {
@@ -329,9 +329,9 @@ void report_err_powD_fp64(void (*test_func)(size_t, const double *,
   // now for each point we compute error and log the max
   for (int j = 0; j < nb_pts; j++) {
     z_ref = ref_func((long double)x[j], (long double)y[j]);
-    abs_err = (double)((long double)z[j] - z_ref);
+    abs_err = (long double)z[j] - z_ref;
     abs_err = ABS(abs_err);
-    rel_err = abs_err / ABS((double)z_ref);
+    rel_err = abs_err / ABS(z_ref);
     ulp_err = abs_err / ulp_64((double)z_ref);
 
     max_abs_err = MAX(max_abs_err, abs_err);
@@ -351,17 +351,19 @@ void report_err_powD_fp64(void (*test_func)(size_t, const double *,
   }
   printf("----------------------------\n");
   if ((ABS(start) > 100.) || (ABS(end) < 1.e-2)) {
-    printf("Tested %d points in [%8.3le, %8.3le]\n", nb_pts, start, end);
+    printf("Tested %d X-points in [%8.3le, %8.3le]\n", nb_pts, start, end);
+    printf("Constrained to Y * log(X) = %8.3le\n", target);
   } else {
-    printf("Tested %d points in [%3.3lf, %3.3lf]\n", nb_pts, start, end);
+    printf("Tested %d X-points in [%3.3lf, %3.3lf]\n", nb_pts, start, end);
+    printf("Constrained to Y * log(X) = %8.3le\n", target);
   }
-  printf("Maximum observed absolute error is %8.3le\n", max_abs_err);
-  printf("Maximum observed relative error is %8.3le\n", max_rel_err);
+  printf("Maximum observed absolute error is %8.3Le\n", max_abs_err);
+  printf("Maximum observed relative error is %8.3Le\n", max_rel_err);
   if (max_rel_err > 0.0) {
-    printf("                          which is 2^(%3.3lf)\n",
-           log2(max_rel_err));
+    printf("                          which is 2^(%3.3Lf)\n",
+           log2l(max_rel_err));
   }
-  printf("Maximum observed ULP      error is %3.3lf\n", max_ulp_err);
+  printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
 
   free(x);
   free(y);
@@ -489,6 +491,264 @@ void report_err_fp64(double (*test_func)(double), double (*ref_func)(double),
 
   return;
 }
+
+void report_err2_fp64(
+  void (*test_func)(size_t, const double *, const double *, double *), 
+  long double (*ref_func)(long double, long double),
+  double start_x,
+  double end_x,
+  int nb_pts_x,
+  double start_y,
+  double end_y,
+  int nb_pts_y,
+  bool swap_xy
+) {
+
+  long double z_ref;
+  double *x, *y, *z, delta_x, delta_y;
+  long double abs_err, rel_err, ulp_err; 
+  long double max_abs_err, max_rel_err, max_ulp_err; 
+  int nb_pts;
+
+  nb_pts = nb_pts_x * nb_pts_y;
+  
+  x = (double *)malloc(nb_pts * sizeof(double));
+  y = (double *)malloc(nb_pts * sizeof(double));
+  z = (double *)malloc(nb_pts * sizeof(double));
+
+  if (nb_pts_x <= 1){
+    delta_x = 0.0;
+    nb_pts_x = 1;
+  } 
+  else {
+    delta_x = (end_x - start_x) / (double)(nb_pts_x - 1);
+  }
+
+  if (nb_pts_y <= 1){
+    delta_y = 0.0;
+    nb_pts_y = 1;
+  } 
+  else {
+    delta_y = (end_y - start_y) / (double)(nb_pts_y - 1);
+  }
+
+  max_abs_err = 0.0;
+  max_rel_err = 0.0;
+  max_ulp_err = 0.0;
+
+  // fill up the set of test points
+  double x_val, y_val;
+  int cnt;
+  cnt = 0;
+  //printf("\n start_x %le, end_x %le, nb_pts_x %d\n", start_x, end_x, nb_pts_x);
+  //rintf("\n start_y %le, end_y %le, nb_pts_y %d\n", start_y, end_y, nb_pts_y);
+
+  for (int i=0; i<nb_pts_x; ++i) {
+    x_val = start_x + (double) i * delta_x;
+    for (int j=0; j<nb_pts_y; ++j) {
+      y_val = start_y + (double) j * delta_y;
+      x[cnt++] = x_val;
+      y[cnt] = y_val;
+    }
+  }
+ 
+  // call function under test
+  if (swap_xy) {
+    test_func( (size_t) nb_pts, y, x, z );
+  } 
+  else {
+    test_func( (size_t) nb_pts, x, y, z );
+  }
+
+  // now for each point we compute error and log the max
+  for (int j = 0; j < nb_pts_x * nb_pts_y; j++) {
+    if (swap_xy) {
+      z_ref = ref_func((long double)y[j], (long double)x[j]);
+      abs_err = (long double)z[j] - z_ref;
+    }
+    else {
+      z_ref = ref_func((long double)x[j], (long double)y[j]);
+      abs_err = (long double)z[j] - z_ref;
+
+    }
+    abs_err = ABS(abs_err);
+    if (ABS((double)z_ref) > 0.0) {
+      rel_err = abs_err / ABS(z_ref);
+    } else {
+      rel_err = abs_err / 0x1.0p-1074;
+    }
+    ulp_err = abs_err / ulp_64((double)z_ref);
+
+    max_abs_err = MAX(max_abs_err, abs_err);
+    max_rel_err = MAX(max_rel_err, rel_err);
+    max_ulp_err = MAX(max_ulp_err, ulp_err);
+
+    if (VERBOSE) {
+      union sui64_fp64 xxx, yyy, zzz;
+      xxx.f = x[j];
+      yyy.f = y[j];
+      zzz.f = z[j];
+      printf("--input X %24.17le, 0x%016lx, Y %24.17le, 0x%016lx, \n output %24.17le, 0x%016lx \n",
+             xxx.f, xxx.ui, yyy.f, yyy.ui, zzz.f, zzz.ui);
+      printf("  reference %24.17le\n\n", (double)z_ref);
+    }
+  }
+  printf("----------------------------\n");
+  if ((ABS(start_x) > 100.) || (ABS(end_x)<1.e-2)){
+    printf("Tested %d X-points in [%8.3le, %8.3le]\n", nb_pts_x, start_x, end_x);
+    printf("Tested %d Y-points in [%8.3le, %8.3le]\n", nb_pts_y, start_y, end_y);
+
+  }
+  else {
+    printf("Tested %d X-points in [%3.3lf, %3.3lf]\n", nb_pts_x, start_x, end_x);
+    printf("Tested %d Y-points in [%3.3lf, %3.3lf]\n", nb_pts_y, start_y, end_y);
+
+  }
+  printf("Maximum observed absolute error is %8.3Le\n", max_abs_err);
+  printf("Maximum observed relative error is %8.3Le\n", max_rel_err);
+  if (max_rel_err > 0.0){
+    printf("                          which is 2^(%3.3Lf)\n", log2l(max_rel_err));
+  }
+  printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  free(x);
+  free(y);
+  free(z);
+  
+  return;
+}
+
+void report_err2_fp64(
+  void (*test_func)(size_t, const double *, size_t, const double *, size_t, double *, size_t), 
+  long double (*ref_func)(long double, long double),
+  double start_x,
+  double end_x,
+  int nb_pts_x,
+  int stride_x,
+  double start_y,
+  double end_y,
+  int nb_pts_y,
+  int stride_y,
+  int stride_z,
+  bool swap_xy
+) {
+
+  long double z_ref;
+  double *x, *y, *z, delta_x, delta_y;
+  long double abs_err, rel_err, ulp_err; 
+  long double max_abs_err, max_rel_err, max_ulp_err; 
+  int nb_pts;
+
+  nb_pts = nb_pts_x * nb_pts_y;
+  
+  x = (double *)malloc(nb_pts * stride_x * sizeof(double));
+  y = (double *)malloc(nb_pts * stride_y * sizeof(double));
+  z = (double *)malloc(nb_pts * stride_z * sizeof(double));
+
+  if (nb_pts_x <= 1){
+    delta_x = 0.0;
+    nb_pts_x = 1;
+  } 
+  else {
+    delta_x = (end_x - start_x) / (double)(nb_pts_x - 1);
+  }
+
+  if (nb_pts_y <= 1){
+    delta_y = 0.0;
+    nb_pts_y = 1;
+  } 
+  else {
+    delta_y = (end_y - start_y) / (double)(nb_pts_y - 1);
+  }
+
+  max_abs_err = 0.0;
+  max_rel_err = 0.0;
+  max_ulp_err = 0.0;
+
+  // fill up the set of test points
+  double x_val, y_val;
+  int cnt;
+  cnt = 0;
+  //printf("\n start_x %le, end_x %le, nb_pts_x %d\n", start_x, end_x, nb_pts_x);
+  //rintf("\n start_y %le, end_y %le, nb_pts_y %d\n", start_y, end_y, nb_pts_y);
+
+  for (int i=0; i<nb_pts_x; ++i) {
+    x_val = start_x + (double) i * delta_x;
+    for (int j=0; j<nb_pts_y; ++j) {
+      y_val = start_y + (double) j * delta_y;
+      x[cnt * stride_x] = x_val;
+      y[cnt * stride_y] = y_val;
+      cnt++;
+    }
+  }
+ 
+  // call function under test
+  if (swap_xy) {
+    test_func( (size_t) nb_pts, y, (size_t) stride_y, x, (size_t) stride_x, z, (size_t) stride_z );
+  } 
+  else {
+    test_func( (size_t) nb_pts, x, (size_t) stride_x, y, (size_t) stride_y, z, (size_t) stride_z );
+  }
+
+  // now for each point we compute error and log the max
+  for (int j = 0; j < nb_pts_x * nb_pts_y; j++) {
+    if (swap_xy) {
+      z_ref = ref_func((long double)y[j*stride_y], (long double)x[j*stride_x]);
+      abs_err = (long double)z[j * stride_z] - z_ref;
+    }
+    else {
+      z_ref = ref_func((long double)x[j*stride_x], (long double)y[j*stride_y]);
+      abs_err = (long double)z[j*stride_z] - z_ref;
+
+    }
+    abs_err = ABS(abs_err);
+    if (ABS((double)z_ref) > 0.0) {
+      rel_err = abs_err / ABS(z_ref);
+    } else {
+      rel_err = abs_err / 0x1.0p-1074;
+    }
+    ulp_err = abs_err / ulp_64((double)z_ref);
+
+    max_abs_err = MAX(max_abs_err, abs_err);
+    max_rel_err = MAX(max_rel_err, rel_err);
+    max_ulp_err = MAX(max_ulp_err, ulp_err);
+
+    if (VERBOSE) {
+      union sui64_fp64 xxx, yyy, zzz;
+      xxx.f = x[j*stride_x];
+      yyy.f = y[j*stride_y];
+      zzz.f = z[j*stride_z];
+      printf("--input X %24.17le, 0x%016lx, Y %24.17le, 0x%016lx, \n output %24.17le, 0x%016lx \n",
+             xxx.f, xxx.ui, yyy.f, yyy.ui, zzz.f, zzz.ui);
+      printf("  reference %24.17le\n\n", (double)z_ref);
+    }
+  }
+  printf("----------------------------\n");
+  if ((ABS(start_x) > 100.) || (ABS(end_x)<1.e-2)){
+    printf("Tested %d X-points in [%8.3le, %8.3le]\n", nb_pts_x, start_x, end_x);
+    printf("Tested %d Y-points in [%8.3le, %8.3le]\n", nb_pts_y, start_y, end_y);
+
+  }
+  else {
+    printf("Tested %d X-points in [%3.3lf, %3.3lf]\n", nb_pts_x, start_x, end_x);
+    printf("Tested %d Y-points in [%3.3lf, %3.3lf]\n", nb_pts_y, start_y, end_y);
+
+  }
+  printf("Maximum observed absolute error is %8.3Le\n", max_abs_err);
+  printf("Maximum observed relative error is %8.3Le\n", max_rel_err);
+  if (max_rel_err > 0.0){
+    printf("                          which is 2^(%3.3Lf)\n", log2l(max_rel_err));
+  }
+  printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  free(x);
+  free(y);
+  free(z);
+  
+  return;
+}
+
+
 
 void show_special_fp64(void (*test_func)(size_t, const double *, double *),
                        const char *title) {

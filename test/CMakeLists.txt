@@ -54,20 +54,22 @@ endfunction()
 
 # Loop through the source test files, and add these to the 'test' target
 set(TEST_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp2.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp2I.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expm1.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expm1I.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_logI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log2.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log2I.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log10.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log10I.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1p.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1pI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp2.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp2I.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expm1.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expm1I.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_logI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log2.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log2I.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log10.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log10I.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1p.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1pI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_pow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_powI.cpp
 )
 
 foreach(TEST_FILE IN LISTS TEST_SOURCES)

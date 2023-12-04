@@ -184,9 +184,17 @@ do {                                                        \
 #define RVVLM_LOG1PDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_LOG1PDI_TBL128 rvvlm_log1pI
 
+// FP64 pow function configuration
+#define RVVLM_POWD_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_POWD_TBL rvvlm_pow
+
+#define RVVLM_POWDI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_POWDI_TBL rvvlm_powI
+
 // Define the various tables for table-driven implementations
 extern int64_t expD_tbl64_fixedpt[64];
 extern int64_t logD_tbl128_fixedpt[128];
+extern double logtbl_4_powD_128_hi_lo[256];
 
 // Define the functions in the vector math library
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
@@ -236,6 +244,10 @@ void RVVLM_LOG2DI_ATANH(size_t x_len, const double *x, size_t stride_x, double *
 
 void RVVLM_LOG1PD_TBL128(size_t x_len, const double *x, double *y);
 void RVVLM_LOG1PDI_TBL128(size_t x_len, const double *x, size_t stride_x, double *y, size_t stride_y);
+
+void RVVLM_POWD_TBL(size_t x_len, const double *x, const double *y, double *z);
+void RVVLM_POWDI_TBL(size_t x_len, const double *x, size_t stride_x, 
+                     const double *y, size_t stride_y, double *z, size_t stride_z);
 
 
 #ifdef __cplusplus

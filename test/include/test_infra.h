@@ -18,7 +18,34 @@ void report_err_fp64(
   int
 );
 
-void report_err_powD_fp64(void (*test_func)(size_t, const double *,
+void report_err2_fp64(
+  void (*test_func)(size_t, const double *, const double *, double *),
+  long double (*ref_func)(long double, long double),
+  double,
+  double,
+  int,
+  double,
+  double,
+  int,
+  bool
+);
+
+void report_err2_fp64(
+  void (*test_func)(size_t, const double *, size_t, const double *, size_t, double *, size_t),
+  long double (*ref_func)(long double, long double),
+  double,
+  double,
+  int,
+  int,
+  double,
+  double,
+  int,
+  int,
+  int,
+  bool
+);
+
+void report_err_pow_fp64(void (*test_func)(size_t, const double *,
                                             const double *, double *),
                           long double (*ref_func)(long double, long double),
                           double, double, double, int);
