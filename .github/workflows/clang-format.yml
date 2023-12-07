@@ -1,0 +1,40 @@
+# SPDX-FileCopyrightText: 2023 Rivos Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Format checking
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  clang_formatting:
+    name: check_clang_format
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version: ['3.11']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Packages
+        run: |
+          sudo apt update
+          sudo apt install -y clang-format
+          python -m pip install click
+
+      - name: Check Clang Format
+        run: |
+          set -euo pipefail
+          python tools/run-clang-format.py check
+

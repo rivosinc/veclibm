@@ -22,7 +22,8 @@ int main() {
   nb_tests = 30;
   int stride_x = 21;
   int stride_y = 39;
-  report_err_fp64(rvvlm_exp2I, exp2l, x_start, x_end, nb_tests, stride_x, stride_y);
+  report_err_fp64(rvvlm_exp2I, exp2l, x_start, x_end, nb_tests, stride_x,
+                  stride_y);
 
   return 0;
 }

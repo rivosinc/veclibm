@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-#include <stdio.h>
 #include <riscv_vector.h>
+#include <stdio.h>
 
 #include "rvvlm.h"
 #define API_SIGNATURE API_SIGNATURE_21
@@ -12,4 +12,3 @@
 #include RVVLM_POWDI_VSET_CONFIG
 
 #include "rvvlm_powD.inc.h"
-
