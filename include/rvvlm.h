@@ -53,6 +53,12 @@ union sui64_fp64 {
 #define PSTEP(coeff_j, x, poly, vlen)                                          \
   __riscv_vfmadd((poly), (x), VFMV_VF((coeff_j), (vlen)), (vlen))
 
+#define PSTEP_ab(pick_a, coeff_a, coeff_b, x, poly, vlen)                      \
+  __riscv_vfmadd((poly), (x),                                                  \
+                 __riscv_vfmerge(VFMV_VF((coeff_b), (vlen)), (coeff_a),        \
+                                 (pick_a), (vlen)),                            \
+                 (vlen))
+
 #define FAST2SUM(X, Y, S, s, vlen)                                             \
   do {                                                                         \
     S = __riscv_vfadd((X), (Y), (vlen));                                       \
@@ -206,10 +212,37 @@ union sui64_fp64 {
 #define RVVLM_POWDI_VSET_CONFIG "rvvlm_fp64m1.h"
 #define RVVLM_POWDI_TBL rvvlm_powI
 
+// FP64 cos function configuration
+#define RVVLM_COSD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_COSD_MERGED rvvlm_cos
+
+#define RVVLM_COSDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_COSDI_MERGED rvvlm_cosI
+
+#define RVVLM_COSPID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_COSPID_MERGED rvvlm_cospi
+
+#define RVVLM_COSPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_COSPIDI_MERGED rvvlm_cospiI
+
+// FP64 sin function configuration
+#define RVVLM_SIND_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SIND_MERGED rvvlm_sin
+
+#define RVVLM_SINDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINDI_MERGED rvvlm_sinI
+
+#define RVVLM_SINPID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINPID_MERGED rvvlm_sinpi
+
+#define RVVLM_SINPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINPIDI_MERGED rvvlm_sinpiI
+
 // Define the various tables for table-driven implementations
 extern int64_t expD_tbl64_fixedpt[64];
 extern int64_t logD_tbl128_fixedpt[128];
 extern double logtbl_4_powD_128_hi_lo[256];
+extern double dbl_2ovpi_tbl[28];
 
 // Define the functions in the vector math library
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
@@ -284,6 +317,22 @@ void RVVLM_POWD_TBL(size_t x_len, const double *x, const double *y, double *z);
 void RVVLM_POWDI_TBL(size_t x_len, const double *x, size_t stride_x,
                      const double *y, size_t stride_y, double *z,
                      size_t stride_z);
+
+void RVVLM_COSD_MERGED(size_t x_len, const double *x, double *y);
+void RVVLM_COSDI_MERGED(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
+
+void RVVLM_COSPID_MERGED(size_t x_len, const double *x, double *y);
+void RVVLM_COSPIDI_MERGED(size_t x_len, const double *x, size_t stride_x,
+                          double *y, size_t stride_y);
+
+void RVVLM_SIND_MERGED(size_t x_len, const double *x, double *y);
+void RVVLM_SINDI_MERGED(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
+
+void RVVLM_SINPID_MERGED(size_t x_len, const double *x, double *y);
+void RVVLM_SINPIDI_MERGED(size_t x_len, const double *x, size_t stride_x,
+                          double *y, size_t stride_y);
 
 #ifdef __cplusplus
 }

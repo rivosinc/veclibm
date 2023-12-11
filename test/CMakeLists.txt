@@ -68,8 +68,16 @@ set(TEST_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log10I.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1p.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1pI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_pow.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_powI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_pow.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_powI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cos.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cosI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cospi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cospiI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpiI.cpp
 )
 
 foreach(TEST_FILE IN LISTS TEST_SOURCES)

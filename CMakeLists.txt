@@ -30,6 +30,15 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_powD_tbl.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_powD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_powDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_2ovpi_tbl.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cosD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cosDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cospiD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cospiDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinpiD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinpiDI.c
 )
 
 add_library(vecm
