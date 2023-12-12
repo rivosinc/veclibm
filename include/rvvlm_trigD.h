@@ -48,7 +48,7 @@
   do {                                                                         \
     /* All variable are local except for those given as arguments above. */    \
     /* First, set the non-large argument to 2**30 so that we can go through    \
-       the same code without worrying about unexpected behavior. */                                \
+       the same code without worrying about unexpected behavior. */            \
     VBOOL x_not_large = __riscv_vmnot((x_large), vlen);                        \
     VFLOAT VX = __riscv_vfmerge(vx, 0x1.0p30, x_not_large, vlen);              \
                                                                                \
@@ -75,13 +75,13 @@
    \                                                                           \
        We figure out which portions of 2/pi is needed. Recall                  \
        that the need is to get N mod 4 and R, where  x * (2/pi) = N + R, |R|   \
-   <= 1/2. So we do not need the portions of 2/pi  whose product with x is an            \
-   integer >= 4 Also, from the first relevant portion of 2/pi, we only needed                 \
+   <= 1/2. So we do not need the portions of 2/pi  whose product with x is an  \
+   integer >= 4 Also, from the first relevant portion of 2/pi, we only needed  \
    5 portions of 2/pi                                                          \
    \                                                                           \
        We figure out the first index of 2/pi that is needed using lsb_x        \
        This first index is FLOOR( (max(lsb_x,2) - 2) / 52 ), which can be      \
-   computed as  FLOOR( (20165 * (max(lsb_x,2) - 2)) / 2^20 )                              \
+   computed as  FLOOR( (20165 * (max(lsb_x,2) - 2)) / 2^20 )                   \
     */                                                                         \
     VUINT j_start = I_AS_U(__riscv_vmax(lsb_x, 2, vlen));                      \
     j_start = __riscv_vsub(j_start, 2, vlen);                                  \
@@ -93,7 +93,7 @@
     /*                                                                         \
        Need to compute y * 2ovpi_tbl[j] in 2 pieces, lsb(y*2ovpi_tbl[j]) is    \
        -52 + 500 - (52 (j+1)); we chose Peg = sign(2ovpi_tbl[j]) x 2^(52+53) * \
-       lsb that is, sgn * 2^(501 - 52*j)                                                 \
+       lsb that is, sgn * 2^(501 - 52*j)                                       \
     */                                                                         \
     VFLOAT two_by_pi;                                                          \
     two_by_pi = __riscv_vluxei64(dbl_2ovpi_tbl, ind, vlen);                    \
