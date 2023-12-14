@@ -9,10 +9,10 @@
 #define PI_HI 0x1.921fb54442d18p+1
 #define PI_MID 0x1.1a62633145c07p-53
 
-#if defined(COMPILE_FOR_SIN)
+#if defined(COMPILE_FOR_SIN) || defined(COMPILE_FOR_TAN)
 #define FUNC_NEAR_ZERO(small_x, vx, vlen)                                      \
   __riscv_vfmadd((small_x), (vx), 0x1.0p-60, (vx), (vlen))
-#elif defined(COMPILE_FOR_SINPI)
+#elif defined(COMPILE_FOR_SINPI) || defined(COMPILE_FOR_TANPI)
 #define FUNC_NEAR_ZERO(small_x, vx, vlen)                                      \
   __riscv_vfmadd((small_x), (vx), PI_HI,                                       \
                  __riscv_vfmul((small_x), (vx), PI_MID, (vlen)), (vlen))

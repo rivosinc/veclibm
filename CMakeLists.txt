@@ -39,6 +39,10 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinpiD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinpiDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_tanD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_tanDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_tanpiD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_tanpiDI.c
 )
 
 add_library(vecm
