@@ -12,5 +12,6 @@
 #include RVVLM_SINPID_VSET_CONFIG
 
 #define COMPILE_FOR_SINPI
-#include "rvvlm_sincosD.inc.h"
 #include "rvvlm_trigD.h"
+
+#include "rvvlm_sincosD.inc.h"

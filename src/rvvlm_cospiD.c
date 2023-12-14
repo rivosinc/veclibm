@@ -12,5 +12,6 @@
 #include RVVLM_COSPID_VSET_CONFIG
 
 #define COMPILE_FOR_COSPI
-#include "rvvlm_sincosD.inc.h"
 #include "rvvlm_trigD.h"
+
+#include "rvvlm_sincosD.inc.h"
