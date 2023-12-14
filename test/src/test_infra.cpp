@@ -63,7 +63,7 @@ double ulp_64(double ref_value) {
   return ulp.f;
 }
 
-#define N_SPECIALS 17
+#define N_SPECIALS 26
 union sui64_fp64 fp64_special_values[N_SPECIALS] = {
     (int64_t)0xfff0000000000000, (int64_t)0xffefffffffffffff,
     (int64_t)0xbff0000000000000, (int64_t)0x8010000000000000,
@@ -73,7 +73,11 @@ union sui64_fp64 fp64_special_values[N_SPECIALS] = {
     (int64_t)0x0010000000000000, (int64_t)0x3ff0000000000000,
     (int64_t)0xbff0000000000000, (int64_t)0x7fefffffffffffff,
     (int64_t)0x7ff0000000000000, (int64_t)0x7ff4000000000000,
-    (int64_t)0x7ff8000000000000};
+    (int64_t)0x7ff8000000000000, (int64_t)0x3fe0000000000000,
+    (int64_t)0x3ff0000000000000, (int64_t)0x3ff8000000000000,
+    (int64_t)0x4000000000000000, (int64_t)0x4004000000000000,
+    (int64_t)0x4008000000000000, (int64_t)0x400C000000000000,
+    (int64_t)0x4010000000000000, (int64_t)0x4012000000000000};
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double),

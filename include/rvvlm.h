@@ -98,6 +98,17 @@ union sui64_fp64 {
     q = __riscv_vfmul(q, __riscv_vfrec7((denom), (vlen)), (vlen));             \
   } while (0)
 
+#define DIV_N2D2(numer, delta_n, denom, delta_d, Q, vlen)                      \
+  do {                                                                         \
+    VFLOAT _q;                                                                 \
+    (Q) = __riscv_vfdiv((numer), (denom), (vlen));                             \
+    _q = __riscv_vfnmsub((Q), (denom), (numer), (vlen));                       \
+    _q = __riscv_vfnmsac(_q, (Q), (delta_d), (vlen));                          \
+    _q = __riscv_vfadd(_q, (delta_n), (vlen));                                 \
+    _q = __riscv_vfmul(_q, __riscv_vfrec7((denom), (vlen)), (vlen));           \
+    (Q) = __riscv_vfadd((Q), _q, (vlen));                                      \
+  } while (0)
+
 #define IDENTIFY2(__vclass, __stencil, __signature, __identity_mask, __vlen)   \
   do {                                                                         \
     __signature = __riscv_vand(__vclass, __stencil, __vlen);                   \
@@ -238,6 +249,19 @@ union sui64_fp64 {
 #define RVVLM_SINPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_SINPIDI_MERGED rvvlm_sinpiI
 
+// FP64 tan function configuration
+#define RVVLM_TAND_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_TAND_MERGED rvvlm_tan
+
+#define RVVLM_TANDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_TANDI_MERGED rvvlm_tanI
+
+#define RVVLM_TANPID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_TANPID_MERGED rvvlm_tanpi
+
+#define RVVLM_TANPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_TANPIDI_MERGED rvvlm_tanpiI
+
 // Define the various tables for table-driven implementations
 extern int64_t expD_tbl64_fixedpt[64];
 extern int64_t logD_tbl128_fixedpt[128];
@@ -332,6 +356,14 @@ void RVVLM_SINDI_MERGED(size_t x_len, const double *x, size_t stride_x,
 
 void RVVLM_SINPID_MERGED(size_t x_len, const double *x, double *y);
 void RVVLM_SINPIDI_MERGED(size_t x_len, const double *x, size_t stride_x,
+                          double *y, size_t stride_y);
+
+void RVVLM_TAND_MERGED(size_t x_len, const double *x, double *y);
+void RVVLM_TANDI_MERGED(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
+
+void RVVLM_TANPID_MERGED(size_t x_len, const double *x, double *y);
+void RVVLM_TANPIDI_MERGED(size_t x_len, const double *x, size_t stride_x,
                           double *y, size_t stride_y);
 
 #ifdef __cplusplus
