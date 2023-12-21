@@ -262,6 +262,31 @@ union sui64_fp64 {
 #define RVVLM_TANPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_TANPIDI_MERGED rvvlm_tanpiI
 
+// FP64 cosh function configuration
+#define RVVLM_COSHD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_COSHD_STD rvvlm_coshD_std
+#define RVVLM_COSHD_MIXED rvvlm_cosh
+
+#define RVVLM_COSHDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_COSHDI_STD rvvlm_coshI
+#define RVVLM_COSHDI_MIXED rvvlm_coshDI_mixed
+
+// FP64 sinh function configuration
+#define RVVLM_SINHD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINHD_STD rvvlm_sinhD_std
+#define RVVLM_SINHD_MIXED rvvlm_sinh
+
+#define RVVLM_SINHDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINHDI_STD rvvlm_sinhI
+#define RVVLM_SINHDI_MIXED rvvlm_sinhDI_mixed
+
+// FP64 tanh function configuration
+#define RVVLM_TANHD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_TANHD_STD rvvlm_tanh
+
+#define RVVLM_TANHDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_TANHDI_STD rvvlm_tanhI
+
 // Define the various tables for table-driven implementations
 extern int64_t expD_tbl64_fixedpt[64];
 extern int64_t logD_tbl128_fixedpt[128];
@@ -365,6 +390,26 @@ void RVVLM_TANDI_MERGED(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_TANPID_MERGED(size_t x_len, const double *x, double *y);
 void RVVLM_TANPIDI_MERGED(size_t x_len, const double *x, size_t stride_x,
                           double *y, size_t stride_y);
+
+void RVVLM_COSHD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_COSHDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
+                      size_t stride_y);
+
+void RVVLM_COSHD_MIXED(size_t x_len, const double *x, double *y);
+void RVVLM_COSHDI_MIXED(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
+
+void RVVLM_SINHD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_SINHDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
+                      size_t stride_y);
+
+void RVVLM_SINHD_MIXED(size_t x_len, const double *x, double *y);
+void RVVLM_SINHDI_MIXED(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
+
+void RVVLM_TANHD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_TANHDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
+                      size_t stride_y);
 
 #ifdef __cplusplus
 }
