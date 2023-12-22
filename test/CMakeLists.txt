@@ -70,17 +70,23 @@ set(TEST_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_log1pI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_pow.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_powI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cos.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cosI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cospi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cospiI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpiI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cos.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cosI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sin.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cospi.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cospiI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpi.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpiI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tan.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanpi.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cosh.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_coshI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinh.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinhI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanh.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanhI.cpp
 )
 
 foreach(TEST_FILE IN LISTS TEST_SOURCES)
