@@ -761,7 +761,7 @@ void show_special_fp64(void (*test_func)(size_t, const double *, double *),
 
 void show_special2_fp64(void (*test_func)(size_t, const double *,
                                           const double *, double *),
-                        char *title) {
+                        int swap_xy, char *title) {
 
   double x[N_SPECIALS * N_SPECIALS], y[N_SPECIALS * N_SPECIALS],
       z[N_SPECIALS * N_SPECIALS];
@@ -775,7 +775,12 @@ void show_special2_fp64(void (*test_func)(size_t, const double *,
       cnt++;
     }
   }
-  test_func((size_t)N_SPECIALS * N_SPECIALS, x, y, z);
+  if (swap_xy) {
+    test_func((size_t)N_SPECIALS * N_SPECIALS, y, x, z);
+  } else {
+    test_func((size_t)N_SPECIALS * N_SPECIALS, x, y, z);
+  }
+
   printf("\n\n");
   printf("\t%s\n", title);
   for (int i = 0; i < N_SPECIALS * N_SPECIALS; ++i) {
@@ -833,6 +838,13 @@ long double atanpil(long double x) {
   long double pi_inv = 0x1.45f3'06dc'9c88'2a53'f84e'afa3'ea6ap-2L;
   long double result;
   result = atanl(x) * pi_inv;
+  return result;
+}
+
+long double atan2pil(long double y, long double x) {
+  long double pi_inv = 0x1.45f3'06dc'9c88'2a53'f84e'afa3'ea6ap-2L;
+  long double result;
+  result = atan2l(y, x) * pi_inv;
   return result;
 }
 
