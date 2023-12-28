@@ -198,6 +198,8 @@ const uint64_t class_posNormal = 0x40;
 const uint64_t class_Normal = 0x42;
 const uint64_t class_negative = 0x7;
 const uint64_t class_positive = 0xe0;
+const uint64_t class_finite_neg = 0x06;
+const uint64_t class_finite_pos = 0x60;
 
 static const double fp_sNaN = __builtin_nans("");
 static const double fp_qNaN = __builtin_nan("");

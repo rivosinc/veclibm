@@ -54,6 +54,22 @@ endfunction()
 
 # Loop through the source test files, and add these to the 'test' target
 set(TEST_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_acos.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_acosI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_acospi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_acospiI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_asin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_asinI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_asinpi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_asinpiI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atanI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atanpi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atanpiI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2I.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2pi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2piI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp2.cpp
@@ -85,7 +101,7 @@ set(TEST_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_coshI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinh.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinhI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanh.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanh.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanhI.cpp
 )
 

@@ -9,6 +9,22 @@ project(veclibm C)
 include(CTest)
 
 set(PROJECT_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_acosD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_acosDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_acospiD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_acospiDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_asinD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_asinDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_asinpiD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_asinpiDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atanD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atanDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atanpiD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atanpiDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atan2D.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atan2DI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atan2piD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atan2piDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expD_tbl.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expDI.c

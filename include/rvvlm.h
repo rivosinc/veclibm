@@ -59,6 +59,12 @@ union sui64_fp64 {
                                  (pick_a), (vlen)),                            \
                  (vlen))
 
+#define PSTEP_I(COEFF_j, X, POLY, vlen)                                        \
+  __riscv_vsadd(__riscv_vsmul((POLY), (X), 1, (vlen)), (COEFF_j), (vlen))
+
+#define PSTEPN_I(COEFF_j, X, POLY, vlen)                                       \
+  __riscv_vrsub(__riscv_vsmul((POLY), (X), 1, (vlen)), (COEFF_j), (vlen))
+
 #define FAST2SUM(X, Y, S, s, vlen)                                             \
   do {                                                                         \
     S = __riscv_vfadd((X), (Y), (vlen));                                       \
@@ -109,13 +115,6 @@ union sui64_fp64 {
     (Q) = __riscv_vfadd((Q), _q, (vlen));                                      \
   } while (0)
 
-#define IDENTIFY2(__vclass, __stencil, __signature, __identity_mask, __vlen)   \
-  do {                                                                         \
-    __signature = __riscv_vand(__vclass, __stencil, __vlen);                   \
-    __identity_mask =                                                          \
-        __riscv_vmsgtu(__riscv_vand(__vclass, __stencil, __vlen), 0, __vlen)   \
-  } while (0)
-
 #define IDENTIFY(vclass, stencil, identity_mask, vlen)                         \
   identity_mask =                                                              \
       __riscv_vmsgtu(__riscv_vand((vclass), (stencil), (vlen)), 0, (vlen));
@@ -137,6 +136,58 @@ union sui64_fp64 {
 // Some of the functions have multiple implementations using different
 // algorithms or styles. The following configure the name of each of these
 // variations, thus allowing one to be set to the standard libm name.
+
+// FP64 acos function configuration
+#define RVVLM_ACOSD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ACOSD_FIXEDPT rvvlm_acos
+
+#define RVVLM_ACOSDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ACOSDI_FIXEDPT rvvlm_acosI
+
+#define RVVLM_ACOSPID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ACOSPID_FIXEDPT rvvlm_acospi
+
+#define RVVLM_ACOSPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ACOSPIDI_FIXEDPT rvvlm_acospiI
+
+// FP64 asin function configuration
+#define RVVLM_ASIND_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ASIND_FIXEDPT rvvlm_asin
+
+#define RVVLM_ASINDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ASINDI_FIXEDPT rvvlm_asinI
+
+#define RVVLM_ASINPID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ASINPID_FIXEDPT rvvlm_asinpi
+
+#define RVVLM_ASINPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ASINPIDI_FIXEDPT rvvlm_asinpiI
+
+// FP64 atan function configuration
+#define RVVLM_ATAND_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATAND_FIXEDPT rvvlm_atan
+
+#define RVVLM_ATANDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATANDI_FIXEDPT rvvlm_atanI
+
+#define RVVLM_ATANPID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATANPID_FIXEDPT rvvlm_atanpi
+
+#define RVVLM_ATANPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATANPIDI_FIXEDPT rvvlm_atanpiI
+
+// FP64 atan2 function configuration
+#define RVVLM_ATAN2D_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATAN2D_FIXEDPT rvvlm_atan2
+
+#define RVVLM_ATAN2DI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATAN2DI_FIXEDPT rvvlm_atan2I
+
+#define RVVLM_ATAN2PID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATAN2PID_FIXEDPT rvvlm_atan2pi
+
+#define RVVLM_ATAN2PIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATAN2PIDI_FIXEDPT rvvlm_atan2piI
 
 // FP64 exp function configuration
 #define RVVLM_EXPD_VSET_CONFIG "rvvlm_fp64m4.h"
@@ -294,6 +345,42 @@ extern double logtbl_4_powD_128_hi_lo[256];
 extern double dbl_2ovpi_tbl[28];
 
 // Define the functions in the vector math library
+void RVVLM_ACOSD_FIXEDPT(size_t x_len, const double *x, double *y);
+void RVVLM_ACOSDI_FIXEDPT(size_t x_len, const double *x, size_t stride_x,
+                          double *y, size_t stride_y);
+
+void RVVLM_ACOSPID_FIXEDPT(size_t x_len, const double *x, double *y);
+void RVVLM_ACOSPIDI_FIXEDPT(size_t x_len, const double *x, size_t stride_x,
+                            double *y, size_t stride_y);
+
+void RVVLM_ASIND_FIXEDPT(size_t x_len, const double *x, double *y);
+void RVVLM_ASINDI_FIXEDPT(size_t x_len, const double *x, size_t stride_x,
+                          double *y, size_t stride_y);
+
+void RVVLM_ASINPID_FIXEDPT(size_t x_len, const double *x, double *y);
+void RVVLM_ASINPIDI_FIXEDPT(size_t x_len, const double *x, size_t stride_x,
+                            double *y, size_t stride_y);
+
+void RVVLM_ATAND_FIXEDPT(size_t x_len, const double *x, double *y);
+void RVVLM_ATANDI_FIXEDPT(size_t x_len, const double *x, size_t stride_x,
+                          double *y, size_t stride_y);
+
+void RVVLM_ATANPID_FIXEDPT(size_t x_len, const double *x, double *y);
+void RVVLM_ATANPIDI_FIXEDPT(size_t x_len, const double *x, size_t stride_x,
+                            double *y, size_t stride_y);
+
+void RVVLM_ATAN2D_FIXEDPT(size_t xy_len, const double *y, const double *x,
+                          double *z);
+void RVVLM_ATAN2DI_FIXEDPT(size_t xy_len, const double *y, size_t stride_y,
+                           const double *x, size_t stride_x, double *z,
+                           size_t stride_z);
+
+void RVVLM_ATAN2PID_FIXEDPT(size_t xy_len, const double *y, const double *x,
+                            double *z);
+void RVVLM_ATAN2PIDI_FIXEDPT(size_t xy_len, const double *y, size_t stride_y,
+                             const double *x, size_t stride_x, double *z,
+                             size_t stride_z);
+
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_EXPDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
                      size_t stride_y);

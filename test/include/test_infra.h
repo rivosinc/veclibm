@@ -38,13 +38,14 @@ void show_special_fp64(void (*test_func)(size_t, const double *, double *),
 
 void show_special2_fp64(void (*test_func)(size_t, const double *,
                                           const double *, double *),
-                        char *);
+                        int, char *);
 
 void trig_2pi_reduction(long double, long double *, int64_t *);
 
 long double acospil(long double);
 long double asinpil(long double);
 long double atanpil(long double);
+long double atan2pil(long double, long double);
 
 long double cospil(long double);
 long double sinpil(long double);
