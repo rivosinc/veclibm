@@ -96,22 +96,32 @@ void F_VER1(API) {
     // At this point, exp(r) is 1 + P_head + P_tail + r_lo + r^3 * poly
     // expm1(x) = 2^n ( 1 - 2^(-n) + P_head + P_tail + r_lo + r^3 * poly )
 
-    // Compute 1 - 2^(-n) accurately using Knuth-2-sum
-    //
+    // Compute 1 - 2^(-n) accurately
+    // Note that n >= -61 because the input argument was clipped because
+    // expm1(x) = 1 as long as x <= -54 log(2).
+    // For the purpose of 1 - 2^(-n), n can be clipped to n <= 64 as well
+    // Then 1 - 2^(-n) = A + a, where A := 1 - 2^(-n), and
+    // a = 1.0 for n <= -54; a = -2^(-n) if n >= 54; and a = 0 otherwise
+    // While it is true we can use a KNUTH2SUM to compute A and a using 6
+    // floating-point instructions, we can obtain A and a with just one
+    // floating-point instructions and other simple integer instructions.
+    // This should be more performant on most hardware implementations as
+    // integer instructions have lower latency in general and possibly using
+    // hardware resources different from that for floating point.
     VFLOAT One = VFMV_VF(fp_posOne, vlen);
-    VINT n_clip =
-        __riscv_vmin(n, 64, vlen); //  n_clip <= 64; note that n_clip >= -61
-    n_clip = __riscv_vrsub(n_clip, -1025, vlen); // (sign,expo) of -2^(-n_clip)
-    VFLOAT u = I_AS_F(__riscv_vsll(n_clip, 52, vlen)); // u = -2^(-n_clip)
-    VFLOAT A, a;
-    KNUTH2SUM(One, u, A, a, vlen);
-
-    // VBOOL n_ge_0 = __riscv_vmsge(n_clip, 0, vlen);
-    // VFLOAT first = __riscv_vmerge(u, One, n_ge_0, vlen);
-    // VFLOAT second = __riscv_vmerge(One, u, n_ge_0, vlen);
-    // VFLOAT A = __riscv_vfadd(u, One, vlen);
-    // VFLOAT a = __riscv_vfsub(first, A, vlen);
-    // a = __riscv_vfadd(a, second, vlen);
+    VINT n_clip = __riscv_vmin(n, 64, vlen);
+    //  n_clip <= 64; note that n_clip >= -61
+    VBOOL n_le53 = __riscv_vmsle(n_clip, 53, vlen);
+    VBOOL n_le_neg54 = __riscv_vmsle(n_clip, -54, vlen);
+    VINT I_tail = __riscv_vrsub(n_clip, -(EXP_BIAS + 2), vlen);
+    // The 12 lsb of I_tail is (sign,expo) of -2^(-n_clip)
+    VFLOAT u = I_AS_F(__riscv_vsll(I_tail, MAN_LEN, vlen)); // u = -2^(-n_clip)
+    I_tail = __riscv_vmerge(I_tail, 0, n_le53, vlen);
+    I_tail = __riscv_vmerge(I_tail, EXP_BIAS, n_le_neg54, vlen);
+    VFLOAT a = I_AS_F(__riscv_vsll(I_tail, MAN_LEN, vlen));
+    // a is 1.0, 0, -2^(-n_clip)
+    // for n <= -54, -53 <= n <= 53, 54 <= n, respectively
+    VFLOAT A = __riscv_vfadd(One, u, vlen);
 
     // Compute A + a + P_head + P_tail + r_lo + r^3 * poly
     P_tail = __riscv_vfadd(P_tail, a, vlen);
@@ -123,34 +133,15 @@ void F_VER1(API) {
     // vy is now exp(r) - 1 accurately.
 
     // Need to compute 2^n * exp(r).
-    // Although most of the time, it suffices to add n to the exponent field of
-    // exp(r) this will fail n is just a bit too positive or negative,
-    // corresponding to 2^n * exp(r) causing over or underflow. So we have to
-    // decompose n into n1 + n2  where n1 = n >> 1 2^n1 * exp(r) can be
-    // performed by adding n to exp(r)'s exponent field But we need to create
-    // the floating point value scale = 2^n2 and perform a multiplication to
-    // finish the task.
-
-    // n1 =__riscv_vsra_vx_i64m1(n, (size_t) 1, vlen);
-    // n2 = __riscv_vsub(n, n1, vlen);
-    // n1 = __riscv_vsll_vx_i64m1(n1, (size_t) 52, vlen);
-    // vy = I_AS_F( __riscv_vadd(F_AS_I(vy), n1, vlen));
-    // n2 = __riscv_vadd_vx_i64m1(n2, (INT) 1023, vlen);
-    // n2 = __riscv_vsll_vx_i64m1(n2, (size_t) 52, vlen);
-    // vy = __riscv_vfmul(vy, I_AS_F(n2), vlen);
-
     FAST_LDEXP(vy, n, vlen);
 
     vy = __riscv_vmerge(vy, vy_special, special_args, vlen);
 
     // copy vy into y and increment addr pointers
-    // VSE (y, vy, vlen);
     VFSTORE_OUTARG1(vy, vlen);
 
     INCREMENT_INARG1(vlen);
     INCREMENT_OUTARG1(vlen);
-
-    // x += vlen; y += vlen;
   }
   RESTORE_FRM;
 }
