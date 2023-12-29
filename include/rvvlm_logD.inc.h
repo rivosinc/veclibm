@@ -214,14 +214,11 @@ void F_VER2(API) {
     VFLOAT numer = __riscv_vfsub(vx, fp_posOne, vlen);
     numer = __riscv_vfadd(numer, numer, vlen);
     VFLOAT denom, delta_d;
-    // FAST2SUM(fp_posOne, vx, denom, delta_d, vlen);
     denom = __riscv_vfadd(vx, fp_posOne, vlen);
     delta_d = __riscv_vfrsub(denom, fp_posOne, vlen);
     delta_d = __riscv_vfadd(delta_d, vx, vlen);
     VFLOAT r, delta_r;
     DIV_N1D2(numer, denom, delta_d, r, delta_r, vlen);
-
-    VFLOAT dummy = r;
 
     VFLOAT rsq = __riscv_vfmul(r, r, vlen);
     VFLOAT rcube = __riscv_vfmul(rsq, r, vlen);
@@ -275,7 +272,6 @@ void F_VER2(API) {
 #endif
     vy = __riscv_vfadd(S, s, vlen);
 
-    // vy = dummy;
     vy = __riscv_vmerge(vy, vy_special, special_args, vlen);
 
     // copy vy into y and increment addr pointers
