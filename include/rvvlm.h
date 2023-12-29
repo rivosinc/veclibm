@@ -218,8 +218,8 @@ union sui64_fp64 {
 // FP64 exp10 function configuration
 #define RVVLM_EXP10D_VSET_CONFIG "rvvlm_fp64m1.h"
 #define RVVLM_EXP10D_STD rvvlm_exp10D_std
-#define RVVLM_EXP10D_STD_R_EXTRA rvvlm_exp10
-#define RVVLM_EXP10D_STD_EPSIM rvvlm_exp10D_std_epsim
+#define RVVLM_EXP10D_STD_R_EXTRA rvvlm_exp10D_std_r_extra
+#define RVVLM_EXP10D_STD_EPSIM rvvlm_exp10
 #define RVVLM_EXP10D_TBL64 rvvlm_exp10D_tbl64
 
 #define RVVLM_EXP10DI_VSET_CONFIG "rvvlm_fp64m1.h"

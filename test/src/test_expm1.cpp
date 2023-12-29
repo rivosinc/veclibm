@@ -39,6 +39,16 @@ int main() {
   nb_tests = 400000;
   report_err_fp64(rvvlm_expm1, expm1l, x_start, x_end, nb_tests);
 
+  x_start = -40.0;
+  x_end = -36.0;
+  nb_tests = 400000;
+  report_err_fp64(rvvlm_expm1, expm1l, x_start, x_end, nb_tests);
+
+  x_start = 36.0;
+  x_end = 40.0;
+  nb_tests = 400000;
+  report_err_fp64(rvvlm_expm1, expm1l, x_start, x_end, nb_tests);
+
   x_start = 700.0;
   x_end = 709.0;
   nb_tests = 40000;
