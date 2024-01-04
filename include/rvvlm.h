@@ -67,9 +67,9 @@ union sui64_fp64 {
 
 #define FAST2SUM(X, Y, S, s, vlen)                                             \
   do {                                                                         \
-    S = __riscv_vfadd((X), (Y), (vlen));                                       \
-    s = __riscv_vfsub((X), (S), (vlen));                                       \
-    s = __riscv_vfadd((s), (Y), (vlen));                                       \
+    (S) = __riscv_vfadd((X), (Y), (vlen));                                     \
+    (s) = __riscv_vfsub((X), (S), (vlen));                                     \
+    (s) = __riscv_vfadd((s), (Y), (vlen));                                     \
   } while (0)
 
 #define POS2SUM(X, Y, S, s, vlen)                                              \
@@ -92,8 +92,8 @@ union sui64_fp64 {
 
 #define PROD_X1Y1(x, y, prod_hi, prod_lo, vlen)                                \
   do {                                                                         \
-    prod_hi = __riscv_vfmul((x), (y), (vlen));                                 \
-    prod_lo = __riscv_vfmsub((x), (y), (prod_hi), (vlen));                     \
+    (prod_hi) = __riscv_vfmul((x), (y), (vlen));                               \
+    (prod_lo) = __riscv_vfmsub((x), (y), (prod_hi), (vlen));                   \
   } while (0)
 
 #define DIV_N1D2(numer, denom, delta_d, Q, q, vlen)                            \
@@ -113,6 +113,32 @@ union sui64_fp64 {
     _q = __riscv_vfadd(_q, (delta_n), (vlen));                                 \
     _q = __riscv_vfmul(_q, __riscv_vfrec7((denom), (vlen)), (vlen));           \
     (Q) = __riscv_vfadd((Q), _q, (vlen));                                      \
+  } while (0)
+
+#define DIV2_N2D2(numer, delta_n, denom, delta_d, Q, delta_Q, vlen)            \
+  do {                                                                         \
+    VFLOAT _q;                                                                 \
+    (Q) = __riscv_vfdiv((numer), (denom), (vlen));                             \
+    _q = __riscv_vfnmsub((Q), (denom), (numer), (vlen));                       \
+    _q = __riscv_vfnmsac(_q, (Q), (delta_d), (vlen));                          \
+    _q = __riscv_vfadd(_q, (delta_n), (vlen));                                 \
+    (delta_Q) = __riscv_vfmul(_q, __riscv_vfrec7((denom), (vlen)), (vlen));    \
+  } while (0)
+
+#define SQRT2_X2(x, delta_x, r, delta_r, vlen)                                 \
+  do {                                                                         \
+    VFLOAT xx = __riscv_vfadd((x), (delta_x), (vlen));                         \
+    VBOOL x_eq_0 = __riscv_vmfeq(xx, fp_posZero, (vlen));                      \
+    xx = __riscv_vfmerge(xx, fp_posOne, x_eq_0, (vlen));                       \
+    (r) = __riscv_vfsqrt(xx, (vlen));                                          \
+    (delta_r) = __riscv_vfnmsub((r), (r), (x), (vlen));                        \
+    (delta_r) = __riscv_vfadd((delta_r), (delta_x), (vlen));                   \
+    (delta_r) = __riscv_vfmul((delta_r), __riscv_vfrec7(xx, (vlen)), (vlen));  \
+    /* (delta_r) = __riscv_vfdiv((delta_r), xx, (vlen)); */                    \
+    (delta_r) = __riscv_vfmul((delta_r), 0x1.0p-1, (vlen));                    \
+    (delta_r) = __riscv_vfmul((delta_r), (r), (vlen));                         \
+    (r) = __riscv_vfmerge((r), fp_posZero, x_eq_0, (vlen));                    \
+    (delta_r) = __riscv_vfmerge((delta_r), fp_posZero, x_eq_0, (vlen));        \
   } while (0)
 
 #define IDENTIFY(vclass, stencil, identity_mask, vlen)                         \
@@ -188,6 +214,27 @@ union sui64_fp64 {
 
 #define RVVLM_ATAN2PIDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_ATAN2PIDI_FIXEDPT rvvlm_atan2piI
+
+// FP64 acosh function configuration
+#define RVVLM_ACOSHD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ACOSHD_STD rvvlm_acosh
+
+#define RVVLM_ACOSHDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ACOSHDI_STD rvvlm_acoshI
+
+// FP64 asinh function configuration
+#define RVVLM_ASINHD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ASINHD_STD rvvlm_asinh
+
+#define RVVLM_ASINHDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ASINHDI_STD rvvlm_asinhI
+
+// FP64 atanh function configuration
+#define RVVLM_ATANHD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATANHD_MIXED rvvlm_atanh
+
+#define RVVLM_ATANHDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ATANHDI_MIXED rvvlm_atanhI
 
 // FP64 exp function configuration
 #define RVVLM_EXPD_VSET_CONFIG "rvvlm_fp64m4.h"
@@ -380,6 +427,18 @@ void RVVLM_ATAN2PID_FIXEDPT(size_t xy_len, const double *y, const double *x,
 void RVVLM_ATAN2PIDI_FIXEDPT(size_t xy_len, const double *y, size_t stride_y,
                              const double *x, size_t stride_x, double *z,
                              size_t stride_z);
+
+void RVVLM_ACOSHD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_ACOSHDI_STD(size_t x_len, const double *x, size_t stride_x,
+                       double *y, size_t stride_y);
+
+void RVVLM_ASINHD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_ASINHDI_STD(size_t x_len, const double *x, size_t stride_x,
+                       double *y, size_t stride_y);
+
+void RVVLM_ATANHD_MIXED(size_t x_len, const double *x, double *y);
+void RVVLM_ATANHDI_MIXED(size_t x_len, const double *x, size_t stride_x,
+                         double *y, size_t stride_y);
 
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_EXPDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,

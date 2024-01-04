@@ -25,6 +25,12 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atan2DI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atan2piD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atan2piDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_acoshD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_acoshDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_asinhD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_asinhDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atanhD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atanhDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expD_tbl.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expDI.c
