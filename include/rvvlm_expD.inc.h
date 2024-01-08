@@ -6,12 +6,12 @@
 #define EXCEPTION_HANDLING_EXP(vx, special_args, vy_special, vlen)             \
   do {                                                                         \
     VUINT vclass = __riscv_vfclass((vx), (vlen));                              \
-    IDENTIFY(vclass, class_NaN | class_Inf, (special_args), (vlen))            \
+    IDENTIFY(vclass, class_NaN | class_Inf, (special_args), (vlen));           \
     UINT nb_special_args = __riscv_vcpop((special_args), (vlen));              \
     if (nb_special_args > 0) {                                                 \
       /* Substitute -Inf with +0 */                                            \
       VBOOL id_mask;                                                           \
-      IDENTIFY(vclass, class_negInf, id_mask, (vlen))                          \
+      IDENTIFY(vclass, class_negInf, id_mask, (vlen));                         \
       vx = __riscv_vfmerge(vx, fp_posZero, id_mask, (vlen));                   \
       vy_special = __riscv_vfadd((special_args), (vx), (vx), (vlen));          \
       vx = __riscv_vfmerge((vx), fp_posZero, (special_args), (vlen));          \

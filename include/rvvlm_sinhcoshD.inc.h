@@ -143,7 +143,6 @@ void F_VER1(API) {
 #if defined(COMPILE_FOR_SINH)
     VFLOAT A = __riscv_vfrsub(s_hi, fp_posOne, vlen);
     s_lo = __riscv_vfsgnjn(s_lo, s_lo, vlen);
-    // s_lo = __riscv_vfadd(s_lo, poly_lo, vlen);
 #else
     VFLOAT A = __riscv_vfadd(s_hi, fp_posOne, vlen);
 #endif

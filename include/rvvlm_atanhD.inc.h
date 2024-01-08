@@ -90,7 +90,7 @@ void F_VER1(API) {
 
     VFLOAT r_hi, r_lo, r;
     DIV2_N2D2(numer, delta_numer, denom, delta_denom, r_hi, r_lo, vlen);
-    VBOOL x_in_range = __riscv_vmflt(vx, 0x1.fcp-3, vlen);
+    VBOOL x_in_range = __riscv_vmflt(vx, 0x1.0p-8, vlen);
     r_hi = __riscv_vmerge(r_hi, vx, x_in_range, vlen);
     r_lo = __riscv_vfmerge(r_lo, fp_posZero, x_in_range, vlen);
     n = __riscv_vmerge(n, 0, x_in_range, vlen);
@@ -98,21 +98,20 @@ void F_VER1(API) {
     r = __riscv_vfadd(r_hi, r_lo, vlen);
     VFLOAT rsq = __riscv_vfmul(r, r, vlen);
     VFLOAT rcube = __riscv_vfmul(rsq, r, vlen);
-    VFLOAT r4 = __riscv_vfmul(rsq, rsq, vlen);
-    VFLOAT r8 = __riscv_vfmul(r4, r4, vlen);
+    VFLOAT r6 = __riscv_vfmul(rcube, rcube, vlen);
+
     VFLOAT poly_right = PSTEP(
-        0x1.745841007bbc5p-4, rsq,
-        PSTEP(0x1.3b99547086d02p-4, rsq,
-              PSTEP(0x1.08c7af78d89d3p-4, 0x1.35f7ae00ccaf9p-4, rsq, vlen),
+        0x1.c71c4a9aa397dp-4, rsq,
+        PSTEP(0x1.7467d1711e0d8p-4, rsq,
+              PSTEP(0x1.397813e4ac2d0p-4, 0x1.30b2960ceaa62p-4, rsq, vlen),
               vlen),
         vlen);
+
     VFLOAT poly_left = PSTEP(
-        0x1.555555555547dp-2, rsq,
-        PSTEP(0x1.99999999d0d12p-3, rsq,
-              PSTEP(0x1.249248fe05e8dp-3, 0x1.c71c8bc60dde3p-4, rsq, vlen),
-              vlen),
-        vlen);
-    VFLOAT poly = __riscv_vfmadd(poly_right, r8, poly_left, vlen);
+        0x1.55555555555aep-2, rsq,
+        PSTEP(0x1.999999997646fp-3, 0x1.2492494ac4a16p-3, rsq, vlen), vlen);
+
+    VFLOAT poly = __riscv_vfmadd(poly_right, r6, poly_left, vlen);
     poly = __riscv_vfmadd(poly, rcube, r_lo, vlen);
     // At this point r_hi + poly approximates atanh(r)
 
