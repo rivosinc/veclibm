@@ -78,8 +78,8 @@ void F_VER1(API) {
     if (nb_special_args > 0) {
       // y or x is one of {NaN, +-Inf, +-0}
       class_of_interest = class_NaN;
-      IDENTIFY(vclass_y, class_of_interest, special_y, vlen)
-      IDENTIFY(vclass_x, class_of_interest, special_x, vlen)
+      IDENTIFY(vclass_y, class_of_interest, special_y, vlen);
+      IDENTIFY(vclass_x, class_of_interest, special_x, vlen);
       VBOOL y_notNaN = __riscv_vmnot(special_y, vlen);
       id_mask = __riscv_vmor(special_y, special_x, vlen);
       result_tmp = __riscv_vfadd(id_mask, vy, vx, vlen);

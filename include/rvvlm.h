@@ -143,7 +143,7 @@ union sui64_fp64 {
 
 #define IDENTIFY(vclass, stencil, identity_mask, vlen)                         \
   identity_mask =                                                              \
-      __riscv_vmsgtu(__riscv_vand((vclass), (stencil), (vlen)), 0, (vlen));
+      __riscv_vmsgtu(__riscv_vand((vclass), (stencil), (vlen)), 0, (vlen))
 
 #define FCLIP(vx, x_min, x_max, vlen)                                          \
   __riscv_vfmin(__riscv_vfmax((vx), X_MIN, (vlen)), X_MAX, (vlen))
