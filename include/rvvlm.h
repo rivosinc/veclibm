@@ -347,6 +347,19 @@ union sui64_fp64 {
 #define RVVLM_SINPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_SINPIDI_MERGED rvvlm_sinpiI
 
+// FP64 sincos function configuration
+#define RVVLM_SINCOSD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINCOSD_STD rvvlm_sincos
+
+#define RVVLM_SINCOSDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINCOSDI_STD rvvlm_sincosI
+
+#define RVVLM_SINCOSPID_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINCOSPID_STD rvvlm_sincospi
+
+#define RVVLM_SINCOSPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_SINCOSPIDI_STD rvvlm_sincospiI
+
 // FP64 tan function configuration
 #define RVVLM_TAND_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_TAND_MERGED rvvlm_tan
@@ -528,6 +541,15 @@ void RVVLM_SINDI_MERGED(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_SINPID_MERGED(size_t x_len, const double *x, double *y);
 void RVVLM_SINPIDI_MERGED(size_t x_len, const double *x, size_t stride_x,
                           double *y, size_t stride_y);
+
+void RVVLM_SINCOSD_STD(size_t x_len, const double *x, double *y, double *z);
+void RVVLM_SINCOSDI_STD(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y, double *z, size_t stride_z);
+
+void RVVLM_SINCOSPID_STD(size_t x_len, const double *x, double *y, double *z);
+void RVVLM_SINCOSPIDI_STD(size_t x_len, const double *x, size_t stride_x,
+                          double *y, size_t stride_y, double *z,
+                          size_t stride_z);
 
 void RVVLM_TAND_MERGED(size_t x_len, const double *x, double *y);
 void RVVLM_TANDI_MERGED(size_t x_len, const double *x, size_t stride_x,
