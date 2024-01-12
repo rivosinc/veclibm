@@ -5,6 +5,11 @@
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double), double, double, int);
 
+void report_err_fp64(void (*test_func)(size_t, const double *, double *,
+                                       double *),
+                     long double (*ref_func)(long double), int, double, double,
+                     int);
+
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double), const double *, int);
 
@@ -12,6 +17,11 @@ void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
                                        size_t),
                      long double (*ref_func)(long double), double, double, int,
                      int, int);
+
+void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
+                                       size_t, double *, size_t),
+                     long double (*ref_func)(long double), int, double, double,
+                     int, int, int, int);
 
 void report_err2_fp64(void (*test_func)(size_t, const double *, const double *,
                                         double *),
@@ -35,6 +45,10 @@ void report_err_fp80(void (*test_func)(size_t, const double *, const double *,
 
 void show_special_fp64(void (*test_func)(size_t, const double *, double *),
                        const char *);
+
+void show_special12_fp64(void (*test_func)(size_t, const double *, double *,
+                                           double *),
+                         char *);
 
 void show_special2_fp64(void (*test_func)(size_t, const double *,
                                           const double *, double *),

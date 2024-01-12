@@ -61,6 +61,10 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinpiD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sinpiDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sincosD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sincosDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sincospiD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_sincospiDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_tanD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_tanDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_tanpiD.c

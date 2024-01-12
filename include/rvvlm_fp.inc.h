@@ -63,11 +63,17 @@ static_assert(false, "requested BIT_WIDTH unsupported" __FILE__);
 #define API_21_US                                                              \
   size_t _inarg_n, const NATIVE_TYPE *_inarg1, const NATIVE_TYPE *_inarg2,     \
       NATIVE_TYPE *_outarg1
-
 #define API_21_GS                                                              \
   size_t _inarg_n, const NATIVE_TYPE *_inarg1, size_t _inarg1_stride,          \
       const NATIVE_TYPE *_inarg2, size_t _inarg2_stride,                       \
       NATIVE_TYPE *_outarg1, size_t _outarg1_stride
+#define API_12_US                                                              \
+  size_t _inarg_n, const NATIVE_TYPE *_inarg1, NATIVE_TYPE *_outarg1,          \
+      NATIVE_TYPE *_outarg2
+#define API_12_GS                                                              \
+  size_t _inarg_n, const NATIVE_TYPE *_inarg1, size_t _inarg1_stride,          \
+      NATIVE_TYPE *_outarg1, size_t _outarg1_stride, NATIVE_TYPE *_outarg2,    \
+      size_t _outarg2_stride
 
 #if (API_SIGNATURE == API_SIGNATURE_11)
 #if (STRIDE == UNIT_STRIDE)
@@ -81,6 +87,14 @@ static_assert(false, "requested BIT_WIDTH unsupported" __FILE__);
 #else
 #define API API_21_GS
 #endif
+#elif (API_SIGNATURE == API_SIGNATURE_12)
+#if (STRIDE == UNIT_STRIDE)
+#define API API_12_US
+#else
+#define API API_12_GS
+#endif
+#else
+static_assert(false, "API_SIGNATURE ill or undefined" __FILE__);
 #endif
 
 #if (STRIDE == UNIT_STRIDE)

@@ -16,6 +16,17 @@
 #define FUNC_NEAR_ZERO(small_x, vx, vlen)                                      \
   __riscv_vfmadd((small_x), (vx), PI_HI,                                       \
                  __riscv_vfmul((small_x), (vx), PI_MID, (vlen)), (vlen))
+#elif defined(COMPILE_FOR_SINCOS)
+#define SIN_NEAR_ZERO(small_x, vx, vlen)                                       \
+  __riscv_vfmadd((small_x), (vx), 0x1.0p-60, (vx), (vlen))
+#define COS_NEAR_ZERO(small_x, vx, vlen)                                       \
+  __riscv_vfadd((small_x), (vx), 0x1.0p0, (vlen))
+#elif defined(COMPILE_FOR_SINCOSPI)
+#define SIN_NEAR_ZERO(small_x, vx, vlen)                                       \
+  __riscv_vfmadd((small_x), (vx), PI_HI,                                       \
+                 __riscv_vfmul((small_x), (vx), PI_MID, (vlen)), (vlen))
+#define COS_NEAR_ZERO(small_x, vx, vlen)                                       \
+  __riscv_vfadd((small_x), (vx), 0x1.0p0, (vlen))
 #else
 #define FUNC_NEAR_ZERO(small_x, vx, vlen)                                      \
   __riscv_vfadd((small_x), (vx), 0x1.0p0, (vlen))
@@ -38,6 +49,31 @@
       vy_NaN_Inf = __riscv_vfadd(NaN_Inf, vy_NaN_Inf, vy_NaN_Inf, (vlen));     \
       (vy_special) =                                                           \
           __riscv_vmerge((vy_special), vy_NaN_Inf, NaN_Inf, (vlen));           \
+      (vx) = __riscv_vfmerge((vx), fp_posZero, (special_args), (vlen));        \
+    }                                                                          \
+  } while (0)
+
+#define EXCEPTION_HANDLING_SINCOS(vx, expo_x, special_args, vy_special,        \
+                                  vz_special, vlen)                            \
+  do {                                                                         \
+    VUINT vclass = __riscv_vfclass((vx), (vlen));                              \
+    VBOOL NaN_Inf;                                                             \
+    IDENTIFY(vclass, class_NaN | class_Inf, NaN_Inf, (vlen));                  \
+    VBOOL small_x = __riscv_vmsleu((expo_x), EXP_BIAS - MAN_LEN - 5, vlen);    \
+    (special_args) = __riscv_vmor(NaN_Inf, small_x, vlen);                     \
+    UINT nb_special_args = __riscv_vcpop((special_args), (vlen));              \
+    if (nb_special_args > 0) {                                                 \
+      /* Substitute Inf with sNaN */                                           \
+      VBOOL id_mask;                                                           \
+      IDENTIFY(vclass, class_Inf, id_mask, (vlen));                            \
+      (vy_special) = SIN_NEAR_ZERO(small_x, vx, vlen);                         \
+      (vz_special) = COS_NEAR_ZERO(small_x, vx, vlen);                         \
+      VFLOAT vy_NaN_Inf = __riscv_vfmerge(vx, fp_sNaN, id_mask, (vlen));       \
+      vy_NaN_Inf = __riscv_vfadd(NaN_Inf, vy_NaN_Inf, vy_NaN_Inf, (vlen));     \
+      (vy_special) =                                                           \
+          __riscv_vmerge((vy_special), vy_NaN_Inf, NaN_Inf, (vlen));           \
+      (vz_special) =                                                           \
+          __riscv_vmerge((vz_special), vy_NaN_Inf, NaN_Inf, (vlen));           \
       (vx) = __riscv_vfmerge((vx), fp_posZero, (special_args), (vlen));        \
     }                                                                          \
   } while (0)
