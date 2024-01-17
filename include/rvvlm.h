@@ -236,6 +236,13 @@ union sui64_fp64 {
 #define RVVLM_ATANHDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_ATANHDI_MIXED rvvlm_atanhI
 
+// FP64 cbrt function configuration
+#define RVVLM_CBRTD_VSET_CONFIG "rvvlm_fp64m4.h"
+#define RVVLM_CBRTD_ITER rvvlm_cbrt
+
+#define RVVLM_CBRTDI_VSET_CONFIG "rvvlm_fp64m4.h"
+#define RVVLM_CBRTDI_ITER rvvlm_cbrtI
+
 // FP64 exp function configuration
 #define RVVLM_EXPD_VSET_CONFIG "rvvlm_fp64m4.h"
 #define RVVLM_EXPD_STD rvvlm_expD_std
@@ -452,6 +459,10 @@ void RVVLM_ASINHDI_STD(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_ATANHD_MIXED(size_t x_len, const double *x, double *y);
 void RVVLM_ATANHDI_MIXED(size_t x_len, const double *x, size_t stride_x,
                          double *y, size_t stride_y);
+
+void RVVLM_CBRTD_ITER(size_t x_len, const double *x, double *y);
+void RVVLM_CBRTDI_ITER(size_t x_len, const double *x, size_t stride_x,
+                       double *y, size_t stride_y);
 
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_EXPDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,

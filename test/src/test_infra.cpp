@@ -31,7 +31,7 @@ union sui64_fp64 {
 
 #define N_PTS_MAX 100000
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 double ulp_32(double ref_value) {
   union sui64_fp64 ulp;

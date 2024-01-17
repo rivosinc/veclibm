@@ -76,6 +76,8 @@ set(TEST_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_asinhI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atanh.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atanhI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cbrt.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cbrtI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp2.cpp
@@ -102,10 +104,10 @@ set(TEST_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cospiI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpi.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sinpiI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincos.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincosI.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincospi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincospiI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincos.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincosI.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincospi.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_sincospiI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tan.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_tanpi.cpp
