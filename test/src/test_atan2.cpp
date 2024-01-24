@@ -21,39 +21,123 @@ int main() {
   // show_special2_fp64(rvvlm_atan2, swap_xy, "Special Value handling of this
   // function");
 
-  x_start = 0.5;
-  x_end = 2.0;
-  nb_x = 10;
-  y_start = 0x1.0p-20;
-  y_end = 0x1.0p-15;
-  nb_y = 40;
+  x_start = 0x1.000000001p0;
+  x_end = 0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = 0x1.01p0;
+  y_end = 0x1.fffp0;
+  nb_y = 1000000;
   report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
                    nb_y, swap_xy);
 
-  x_start = 0.5;
-  x_end = 2.0;
-  nb_x = 10;
-  y_start = 0x1.0p-5;
-  y_end = 0x1.0p5;
-  nb_y = 40;
+  x_start = 0x1.000000001p0;
+  x_end = 0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = 0x1.01p1020;
+  y_end = 0x1.ffffffffp1020;
+  nb_y = 1000000;
   report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
                    nb_y, swap_xy);
 
-  x_start = -2.0;
-  x_end = -0.5;
-  nb_x = 10;
-  y_start = 0x1.0p-5;
-  y_end = 0x1.0p5;
-  nb_y = 40;
+  x_start = 0x1.000000001p0;
+  x_end = 0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = 0x1.01p-1020;
+  y_end = 0x1.ffffffffp-1020;
+  nb_y = 1000000;
   report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
                    nb_y, swap_xy);
 
-  x_start = -10.0;
-  x_end = -10.0;
-  nb_x = 10;
-  y_start = -1.0e3;
-  y_end = 1.0e3;
-  nb_y = 400000;
+  x_start = -0x1.000000001p0;
+  x_end = -0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = 0x1.01p0;
+  y_end = 0x1.fffp0;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = -0x1.000000001p0;
+  x_end = -0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = 0x1.01p1020;
+  y_end = 0x1.ffffffffp1020;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = -0x1.000000001p0;
+  x_end = -0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = 0x1.01p-1020;
+  y_end = 0x1.ffffffffp-1020;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = 0x1.000000001p0;
+  x_end = 0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = -0x1.01p0;
+  y_end = -0x1.fffp0;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = 0x1.000000001p0;
+  x_end = 0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = -0x1.01p1020;
+  y_end = -0x1.ffffffffp1020;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = 0x1.000000001p0;
+  x_end = 0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = -0x1.01p-1020;
+  y_end = -0x1.ffffffffp-1020;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = -0x1.000000001p0;
+  x_end = -0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = -0x1.01p0;
+  y_end = -0x1.fffp0;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = -0x1.000000001p0;
+  x_end = -0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = -0x1.01p1020;
+  y_end = -0x1.ffffffffp1020;
+  nb_y = 1000000;
+  report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
+                   nb_y, swap_xy);
+
+  x_start = -0x1.000000001p0;
+  x_end = -0x1.ffffffffffp0;
+  ;
+  nb_x = 8;
+  y_start = -0x1.01p-1020;
+  y_end = -0x1.ffffffffp-1020;
+  nb_y = 1000000;
   report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
                    nb_y, swap_xy);
 

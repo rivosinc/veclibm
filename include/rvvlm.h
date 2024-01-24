@@ -246,8 +246,8 @@ union sui64_fp64 {
 // FP64 exp function configuration
 #define RVVLM_EXPD_VSET_CONFIG "rvvlm_fp64m4.h"
 #define RVVLM_EXPD_STD rvvlm_expD_std
-#define RVVLM_EXPD_STD_R_EXTRA rvvlm_exp
-#define RVVLM_EXPD_STD_EPSIM rvvlm_expD_std_epsim
+#define RVVLM_EXPD_STD_R_EXTRA rvvlm_expD_std_r_extra
+#define RVVLM_EXPD_STD_EPSIM rvvlm_exp
 #define RVVLM_EXPD_TBL64 rvvlm_expD_tbl64
 
 #define RVVLM_EXPDI_VSET_CONFIG "rvvlm_fp64m4.h"
@@ -259,8 +259,8 @@ union sui64_fp64 {
 // FP64 exp2 function configuration
 #define RVVLM_EXP2D_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_EXP2D_STD rvvlm_exp2D_std
-#define RVVLM_EXP2D_STD_R_EXTRA rvvlm_exp2
-#define RVVLM_EXP2D_STD_EPSIM rvvlm_exp2D_std_epsim
+#define RVVLM_EXP2D_STD_R_EXTRA rvvlm_exp2D_std_r_extra
+#define RVVLM_EXP2D_STD_EPSIM rvvlm_exp2
 #define RVVLM_EXP2D_TBL64 rvvlm_exp2D_tbl64
 
 #define RVVLM_EXP2DI_VSET_CONFIG "rvvlm_fp64m2.h"

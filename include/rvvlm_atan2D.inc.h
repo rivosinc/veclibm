@@ -250,10 +250,11 @@ void F_VER1(API) {
       r = __riscv_vfnmsac(divide, r, R, tmp3, vlen);
       r = __riscv_vfmul(divide, r, R, vlen);
       // R + r is 1/(pi * scaled_x) to extra precision
-      // now compute vy * (R + r)
-      tmp1 = __riscv_vfmul(divide, vy, 0x1.0p-55, vlen);
+      // now compute (2^55 vy) * (R + r)
+      tmp1 = __riscv_vfmul(divide, vy, 0x1.0p55, vlen);
       tmp2 = __riscv_vfmul(divide, tmp1, r, vlen);
       tmp1 = __riscv_vfmadd(divide, tmp1, R, tmp2, vlen);
+      tmp1 = __riscv_vfmul(divide, tmp1, 0x1.0p-110, vlen);
       tmp1 = __riscv_vfmerge(tmp1, 0x1.0p-60, no_divide, vlen);
       tmp1 = __riscv_vfsgnj(tmp1, vx, vlen);
 
