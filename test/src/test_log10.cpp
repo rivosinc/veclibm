@@ -21,22 +21,22 @@ int main() {
 
   x_start = 0.7;
   x_end = 1.5;
-  nb_tests = 1000000;
+  nb_tests = 4000000;
   report_err_fp64(rvvlm_log10, log10l, x_start, x_end, nb_tests);
 
   x_start = 1.0;
   x_end = 4.0;
-  nb_tests = 400000;
+  nb_tests = 4000000;
   report_err_fp64(rvvlm_log10, log10l, x_start, x_end, nb_tests);
 
   x_start = 0.25;
   x_end = 1.0;
-  nb_tests = 400000;
+  nb_tests = 4000000;
   report_err_fp64(rvvlm_log10, log10l, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p1023;
   x_end = 0x1.ffffffp1023;
-  nb_tests = 40000;
+  nb_tests = 400000;
   report_err_fp64(rvvlm_log10, log10l, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p-1074;
