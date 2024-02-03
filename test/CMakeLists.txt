@@ -68,7 +68,7 @@ set(TEST_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atanpiI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2I.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2pi.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2pi.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atan2piI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_acosh.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_acoshI.cpp
@@ -78,6 +78,10 @@ set(TEST_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_atanhI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cbrt.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cbrtI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cdfnorm.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_cdfnormI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_erfc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/test_erfcI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_expI.cpp
 #   ${CMAKE_CURRENT_SOURCE_DIR}/src/test_exp2.cpp
