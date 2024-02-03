@@ -1088,3 +1088,36 @@ long double tanpil(long double x) {
   result = (x >= 0.0) ? result : -result;
   return result;
 }
+
+long double cdfnorml(long double x) {
+  long double rt_half = 0.707106781186547524400844362104849039L;
+  long double half, y, result;
+  half = 0x1.0p-1L;
+  result = half * erfcl(-x * rt_half);
+  return result;
+}
+
+long double exp_neg_rsq(long double x) {
+  long double xsq, result;
+  xsq = -x * x;
+  result = expl(xsq);
+  return result;
+}
+
+long double x_transform(long double x) {
+  long double neg_a_scaled, b, scale, result;
+  neg_a_scaled = -0x1.ep+64L;
+  b = 0x1.04p2L;
+  scale = 0x1.0p63L;
+  result = scale * x;
+  result = result + neg_a_scaled;
+  result = result / (x + b);
+  return result;
+}
+
+long double recip_scale(long double x) {
+  long double result;
+  result = 0x1.0p0L;
+  result = result / (result + x + x);
+  return result;
+}

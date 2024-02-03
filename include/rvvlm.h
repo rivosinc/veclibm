@@ -243,6 +243,20 @@ union sui64_fp64 {
 #define RVVLM_CBRTDI_VSET_CONFIG "rvvlm_fp64m4.h"
 #define RVVLM_CBRTDI_ITER rvvlm_cbrtI
 
+// FP64 cdfnorm function configuration
+#define RVVLM_CDFNORMD_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_CDFNORMD_STD rvvlm_cdfnorm
+
+#define RVVLM_CDFNORMDI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_CDFNORMDI_STD rvvlm_cdfnormI
+
+// FP64 erfc function configuration
+#define RVVLM_ERFCD_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_ERFCD_STD rvvlm_erfc
+
+#define RVVLM_ERFCDI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_ERFCDI_STD rvvlm_erfcI
+
 // FP64 exp function configuration
 #define RVVLM_EXPD_VSET_CONFIG "rvvlm_fp64m4.h"
 #define RVVLM_EXPD_STD rvvlm_expD_std
@@ -463,6 +477,14 @@ void RVVLM_ATANHDI_MIXED(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_CBRTD_ITER(size_t x_len, const double *x, double *y);
 void RVVLM_CBRTDI_ITER(size_t x_len, const double *x, size_t stride_x,
                        double *y, size_t stride_y);
+
+void RVVLM_CDFNORMD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_CDFNORMDI_STD(size_t x_len, const double *x, size_t stride_x,
+                         double *y, size_t stride_y);
+
+void RVVLM_ERFCD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_ERFCDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
+                      size_t stride_y);
 
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_EXPDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,

@@ -33,6 +33,10 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_atanhDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cbrtD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cbrtDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cdfnormD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_cdfnormDI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_erfcD.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_erfcDI.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expD_tbl.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expD.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rvvlm_expDI.c

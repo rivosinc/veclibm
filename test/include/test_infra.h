@@ -64,3 +64,9 @@ long double atan2pil(long double, long double);
 long double cospil(long double);
 long double sinpil(long double);
 long double tanpil(long double);
+
+long double cdfnorml(long double);
+
+long double exp_neg_rsq(long double);
+long double x_transform(long double);
+long double recip_scale(long double);
