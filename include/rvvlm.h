@@ -250,6 +250,13 @@ union sui64_fp64 {
 #define RVVLM_CDFNORMDI_VSET_CONFIG "rvvlm_fp64m1.h"
 #define RVVLM_CDFNORMDI_STD rvvlm_cdfnormI
 
+// FP64 erf function configuration
+#define RVVLM_ERFD_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ERFD_STD rvvlm_erf
+
+#define RVVLM_ERFDI_VSET_CONFIG "rvvlm_fp64m2.h"
+#define RVVLM_ERFDI_STD rvvlm_erfI
+
 // FP64 erfc function configuration
 #define RVVLM_ERFCD_VSET_CONFIG "rvvlm_fp64m1.h"
 #define RVVLM_ERFCD_STD rvvlm_erfc
@@ -481,6 +488,10 @@ void RVVLM_CBRTDI_ITER(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_CDFNORMD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_CDFNORMDI_STD(size_t x_len, const double *x, size_t stride_x,
                          double *y, size_t stride_y);
+
+void RVVLM_ERFD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_ERFDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
+                     size_t stride_y);
 
 void RVVLM_ERFCD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_ERFCDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
