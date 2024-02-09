@@ -34,6 +34,37 @@ static_assert(false, "Must define COMPILE_FOR_{ERFC,ERF,CDFNORM}" __FILE__);
     }                                                                          \
   } while (0)
 
+// ALPHA is 2/sqrt(pi), erf'(0) derivative of erf(x) at x=0
+#define ALPHA_HI 0x1.20dd750429b6dp+0
+#define ALPHA_LO 0x1.1ae3a914fed80p-56
+
+#define EXCEPTION_HANDLING_ERF(vx, special_args, vy_special, vlen)             \
+  do {                                                                         \
+    VUINT vclass = __riscv_vfclass((vx), (vlen));                              \
+    VUINT expo_x = __riscv_vsrl(F_AS_U((vx)), MAN_LEN, (vlen));                \
+    expo_x = __riscv_vand(expo_x, 0x7FF, (vlen));                              \
+    IDENTIFY(vclass, class_NaN | class_Inf, (special_args), (vlen));           \
+    VBOOL expo_small = __riscv_vmsltu(expo_x, EXP_BIAS - 30, (vlen));          \
+    (special_args) = __riscv_vmor((special_args), expo_small, (vlen));         \
+    UINT nb_special_args = __riscv_vcpop((special_args), (vlen));              \
+    if (nb_special_args > 0) {                                                 \
+      VBOOL id_mask;                                                           \
+      IDENTIFY(vclass, class_NaN, id_mask, (vlen));                            \
+      (vy_special) = __riscv_vfadd(id_mask, (vx), (vx), (vlen));               \
+      IDENTIFY(vclass, class_posInf, id_mask, (vlen));                         \
+      (vy_special) =                                                           \
+          __riscv_vfmerge((vy_special), Y_AT_posINF, id_mask, (vlen));         \
+      IDENTIFY(vclass, class_negInf, id_mask, (vlen));                         \
+      (vy_special) =                                                           \
+          __riscv_vfmerge((vy_special), Y_AT_negINF, id_mask, (vlen));         \
+      VFLOAT vy_small = __riscv_vfmul(expo_small, (vx), ALPHA_LO, (vlen));     \
+      vy_small = __riscv_vfmacc(expo_small, vy_small, ALPHA_HI, (vx), (vlen)); \
+      (vy_special) =                                                           \
+          __riscv_vmerge((vy_special), vy_small, expo_small, (vlen));          \
+      (vx) = __riscv_vfmerge((vx), fp_posZero, (special_args), (vlen));        \
+    }                                                                          \
+  } while (0)
+
 #define LOG2_HI 0x1.62e42fefa39efp-1
 #define LOG2_LO 0x1.abc9e3b39803fp-56
 #define NEG_LOG2_INV -0x1.71547652b82fep+0
