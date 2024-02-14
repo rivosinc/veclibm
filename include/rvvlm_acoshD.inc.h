@@ -10,8 +10,6 @@
 #define F_VER1 RVVLM_ACOSHDI_STD
 #endif
 
-#include <fenv.h>
-
 // Acosh(x)  is defined for x >= 1 by the formula log(x + sqrt(x*x - 1))
 // and for the log function log(2^n z), we uses the expansion in terms of atanh
 // n log(2) + 2 atanh((z-1)/(z+1))

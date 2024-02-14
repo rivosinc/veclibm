@@ -86,8 +86,6 @@
 static_assert(false, "Must specify base of exponential" __FILE__);
 #endif
 
-#include <fenv.h>
-
 // Version 1 is reduction to standard primary interval.
 // Reduced argument is represented as one FP64 variable.
 void F_VER1(API) {

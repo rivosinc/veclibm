@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-#include <fenv.h>
-
 #if defined(COMPILE_FOR_ATAN2)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_ATAN2D_FIXEDPT

@@ -32,8 +32,6 @@
 #define X_MAX 0x1.65p+9
 #define X_MIN -0x1.5p+5
 
-#include <fenv.h>
-
 // We use the EPsim version of expD to compute expm1
 void F_VER1(API) {
   size_t vlen;

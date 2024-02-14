@@ -4,8 +4,6 @@
 
 #include "rvvlm_trigD.h"
 
-#include <fenv.h>
-
 #if defined(COMPILE_FOR_TAN)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_TAND_MERGED
@@ -21,8 +19,6 @@
 #else
 static_assert(false, "Must specify tan or tanpi" __FILE__);
 #endif
-
-#include <fenv.h>
 
 // This versions reduces argument to [-pi/4, pi/4] and computes sin(r) or cos(r)
 // tan(x) is either sin(r)/cos(r) or -cos(r)/sin(r)
