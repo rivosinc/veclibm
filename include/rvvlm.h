@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+#pragma once
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -35,18 +37,37 @@ union sui64_fp64 {
 #define UNIT_STRIDE 1
 #define GENERAL_STRIDE 2
 
+#ifndef FE_TONEAREST
+#define FE_TONEAREST 0x000
+#endif
+
+#define read_frm()                                                             \
+  ({                                                                           \
+    unsigned long __value;                                                     \
+    __asm__ __volatile__("frrm %0" : "=r"(__value)::"memory");                 \
+    __value;                                                                   \
+  })
+
+#define write_frm(value)                                                       \
+  ({                                                                           \
+    unsigned long __value;                                                     \
+    __asm__ __volatile__("fsrm %0, %1"                                         \
+                         : "=r"(__value)                                       \
+                         : "r"(value)                                          \
+                         : "memory");                                          \
+    __value;                                                                   \
+  })
+
 #define SET_ROUNDTONEAREST                                                     \
-  int original_frm;                                                            \
-  bool need_to_restore;                                                        \
-  do {                                                                         \
-    (original_frm) = fegetround();                                             \
-    need_to_restore = (original_frm != FE_TONEAREST);                          \
-  } while (0)
+  int __original_frm = read_frm();                                             \
+  if (__original_frm != FE_TONEAREST) {                                        \
+    write_frm(FE_TONEAREST);                                                   \
+  }
 
 #define RESTORE_FRM                                                            \
   do {                                                                         \
-    if (need_to_restore) {                                                     \
-      fesetround((original_frm));                                              \
+    if (__original_frm != FE_TONEAREST) {                                      \
+      write_frm(__original_frm);                                               \
     }                                                                          \
   } while (0)
 

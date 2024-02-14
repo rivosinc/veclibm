@@ -36,8 +36,6 @@
 #define LOG2_HI 0x1.62e42fefa39efp-1
 #define LOG2_LO 0x1.abc9e3b39803fp-56
 
-#include <fenv.h>
-
 // Version 1 uses a 128-entry LUT
 void F_VER1(API) {
   size_t vlen;

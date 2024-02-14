@@ -10,8 +10,6 @@
 #define F_VER1 RVVLM_ATANHDI_MIXED
 #endif
 
-#include <fenv.h>
-
 // Atanh(x) is defined only for |x| <= 1. As atanh(-x) = -atanh(x), the
 // main computation works with |x|.
 // For |x| > 1 and x being a sNaN, the invalid signal has to be generated

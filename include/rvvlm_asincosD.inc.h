@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-#include <fenv.h>
-
 #if defined(COMPILE_FOR_ASIN)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_ASIND_FIXEDPT
@@ -115,8 +113,6 @@ static_assert(false, "Must specify asin, acos, asinpi or acospi" __FILE__);
       (vx) = __riscv_vfmerge((vx), fp_posZero, special_args, (vlen));          \
     }                                                                          \
   } while (0)
-
-#include <fenv.h>
 
 // For asin/acos, the computation is of the form  Const +/- (r + r*s*poly(s))
 // This version computes this entire expression in fixed point by converting

@@ -4,8 +4,6 @@
 
 #include "rvvlm_hyperbolicsD.h"
 
-#include <fenv.h>
-
 #if defined(COMPILE_FOR_SINH)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_SINHD_STD
@@ -25,8 +23,6 @@
 #else
 static_assert(false, "Must specify sinh or cosh" __FILE__);
 #endif
-
-#include <fenv.h>
 
 // This versions reduces argument to [-log2/2, log2/2]
 // Exploit common expressions exp(R) and exp(-R), and uses purely

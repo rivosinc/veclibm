@@ -181,8 +181,6 @@ static const double negtwo_to_65 = -0x1.0p65;
 #define F_VER1 RVVLM_POWDI_TBL
 #endif
 
-#include <fenv.h>
-
 // Version 1 is reduction to standard primary interval.
 // Reduced argument is represented as one FP64 variable.
 void F_VER1(API) {

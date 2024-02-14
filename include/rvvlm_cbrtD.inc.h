@@ -2,15 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-#include <fenv.h>
-
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_CBRTD_ITER
 #else
 #define F_VER1 RVVLM_CBRTDI_ITER
 #endif
-
-#include <fenv.h>
 
 #define EXCEPTION_HANDLING_CBRT(vx, special_args, vy_special, n_adjust, vlen)  \
   do {                                                                         \

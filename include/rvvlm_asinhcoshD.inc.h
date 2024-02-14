@@ -18,8 +18,6 @@
 #endif
 #endif
 
-#include <fenv.h>
-
 // Acosh(x)  is defined for x >= 1 by the formula log(x + sqrt(x*x - 1))
 // Asinh(x) is defined for all finite x by the formula log(x + sqrt(x*x + 1))
 // Acosh is always positive, and Asinh(-x) = -Asinh(x). Thus we in general

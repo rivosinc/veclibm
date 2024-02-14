@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-#include <fenv.h>
-
 #if defined(COMPILE_FOR_ATAN)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_ATAND_FIXEDPT
@@ -70,8 +68,6 @@ static_assert(false, "Must specify atan or atanpi" __FILE__);
       (vx) = __riscv_vfmerge((vx), fp_posZero, (special_args), (vlen));        \
     }                                                                          \
   } while (0)
-
-#include <fenv.h>
 
 // For atan, atan(x) ~=~ r + r*s*poly(s), r = x and s = r*r for |x| < 1
 // and atan(x) = pi/2 - atan(1/x) for |x| >= 1

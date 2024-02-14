@@ -4,15 +4,11 @@
 
 #include "rvvlm_hyperbolicsD.h"
 
-#include <fenv.h>
-
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_TANHD_STD
 #else
 #define F_VER1 RVVLM_TANHDI_STD
 #endif
-
-#include <fenv.h>
 
 // This versions reduces argument to [-log2/2, log2/2]
 // Exploit common expressions exp(R) and exp(-R),

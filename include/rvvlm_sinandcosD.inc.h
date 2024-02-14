@@ -4,8 +4,6 @@
 
 #include "rvvlm_trigD.h"
 
-#include <fenv.h>
-
 #if defined(COMPILE_FOR_SINCOS)
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_SINCOSD_STD
@@ -21,8 +19,6 @@
 #else
 static_assert(false, "Must specify sincos or sincospi" __FILE__);
 #endif
-
-#include <fenv.h>
 
 // This versions reduces argument to [-pi/4, pi/4] and computes sin(r) and
 // cos(r)

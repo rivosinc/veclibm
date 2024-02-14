@@ -72,8 +72,6 @@
 static_assert(false, "Must specify base of logarithm" __FILE__);
 #endif
 
-#include <fenv.h>
-
 // Version 1 uses a 128-entry LUT
 void F_VER1(API) {
   size_t vlen;
