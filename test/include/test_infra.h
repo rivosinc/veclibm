@@ -2,6 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+#pragma once
+
+#include <stdio.h>
+
+#define COMMENT(comment)                                                       \
+  { printf("\n=====\t" comment "\n"); }
+
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double), double, double, int);
 

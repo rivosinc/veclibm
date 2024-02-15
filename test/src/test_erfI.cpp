@@ -2,16 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+#include <gtest/gtest.h>
 #include <math.h>
-#include <stdio.h>
 
 #include "rvvlm.h"
 #include "test_infra.h"
 
-#define COMMENT(comment)                                                       \
-  { printf("\n=====\t" comment "\n"); }
-
-int main() {
+TEST(erfI, test) {
   unsigned long nb_tests;
   double x_start, x_end;
 
@@ -24,6 +21,4 @@ int main() {
   int stride_y = 39;
   report_err_fp64(rvvlm_erfI, erfl, x_start, x_end, nb_tests, stride_x,
                   stride_y);
-
-  return 0;
 }

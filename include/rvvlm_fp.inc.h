@@ -2,6 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+#ifndef __VECLIBM_RVVLM_FP_INC_H
+#define __VECLIBM_RVVLM_FP_INC_H
+#else
+#warning "are you sure you want to include this file multiple times?"
+#endif
+
 #include <assert.h>
 
 #ifndef _GNU_SOURCE
@@ -189,31 +195,31 @@ static_assert(false, "API_SIGNATURE ill or undefined" __FILE__);
 #define VMVU_VX MAKE_FUNC(__riscv_vmv_v_x_u)
 #define VFMV_VF MAKE_FUNC(__riscv_vfmv_v_f_f)
 
-    const INT int_Zero = 0;
-const UINT uint_Zero = 0;
+    static const INT int_Zero = 0;
+static const UINT uint_Zero = 0;
 
 #if (BIT_WIDTH == 64)
 #define EXP_BIAS 1023
 #define MAN_LEN 52
-const uint64_t class_sNaN = 0x100;
-const uint64_t class_qNaN = 0x200;
-const uint64_t class_NaN = 0x300;
-const uint64_t class_negInf = 0x1;
-const uint64_t class_posInf = 0x80;
-const uint64_t class_Inf = 0x81;
-const uint64_t class_negZero = 0x8;
-const uint64_t class_posZero = 0x10;
-const uint64_t class_Zero = 0x18;
-const uint64_t class_negDenorm = 0x4;
-const uint64_t class_posDenorm = 0x20;
-const uint64_t class_Denorm = 0x24;
-const uint64_t class_negNormal = 0x2;
-const uint64_t class_posNormal = 0x40;
-const uint64_t class_Normal = 0x42;
-const uint64_t class_negative = 0x7;
-const uint64_t class_positive = 0xe0;
-const uint64_t class_finite_neg = 0x06;
-const uint64_t class_finite_pos = 0x60;
+static const uint64_t class_sNaN = 0x100;
+static const uint64_t class_qNaN = 0x200;
+static const uint64_t class_NaN = 0x300;
+static const uint64_t class_negInf = 0x1;
+static const uint64_t class_posInf = 0x80;
+static const uint64_t class_Inf = 0x81;
+static const uint64_t class_negZero = 0x8;
+static const uint64_t class_posZero = 0x10;
+static const uint64_t class_Zero = 0x18;
+static const uint64_t class_negDenorm = 0x4;
+static const uint64_t class_posDenorm = 0x20;
+static const uint64_t class_Denorm = 0x24;
+static const uint64_t class_negNormal = 0x2;
+static const uint64_t class_posNormal = 0x40;
+static const uint64_t class_Normal = 0x42;
+static const uint64_t class_negative = 0x7;
+static const uint64_t class_positive = 0xe0;
+static const uint64_t class_finite_neg = 0x06;
+static const uint64_t class_finite_pos = 0x60;
 
 static const double fp_sNaN = __builtin_nans("");
 static const double fp_qNaN = __builtin_nan("");
