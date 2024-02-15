@@ -2,39 +2,20 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-if (RISCV_TOOLCHAIN_INCLUDED)
-    return()
-endif()
-set(RISCV_TOOLCHAIN_INCLUDED)
+SET (CMAKE_CROSSCOMPILING   TRUE)
+SET (CMAKE_SYSTEM_NAME      "Linux")
+SET (CMAKE_SYSTEM_PROCESSOR "riscv64")
 
-set(CMAKE_SYSTEM_NAME Linux)
-set(CMAKE_SYSTEM_PROCESSOR riscv)
+SET(CMAKE_FIND_ROOT_PATH  /usr/riscv64-linux-gnu /usr/include/riscv64-linux-gnu /usr/lib/riscv64-linux-gnu /lib/riscv64-linux-gnu)
 
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_C_COMPILER_TARGET riscv64-unknown-linux-gnu)
-set(CMAKE_CXX_COMPILER clang++)
-set(CMAKE_CXX_COMPILER_TARGET riscv64-unknown-linux-gnu)
+find_program(CMAKE_C_COMPILER NAMES clang-18 clang)
+set(CMAKE_C_COMPILER_TARGET riscv64-linux-gnu)
+set(CMAKE_C_FLAGS "-march=rv64gcv_zba_zbb_zbs")
 
-set(RISCV_TOOL_BASE /opt/riscv)
-set(SYSROOT_PATH ${RISCV_TOOL_BASE}/sysroot)
+find_program(CMAKE_CXX_COMPILER NAMES clang++-18 clang++)
+set(CMAKE_CXX_COMPILER_TARGET riscv64-linux-gnu)
+set(CMAKE_CXX_FLAGS "-march=rv64gcv_zba_zbb_zbs")
 
-set(CMAKE_FIND_ROOT_PATH ${SYSROOT_PATH})
-set(CMAKE_SYSROOT ${SYSROOT_PATH})
-
-# Find includes and libraries in the target environment
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-
-# General options to enable cross-compilation
-set(MARCH_OR_CPU -march=rv64gcv)
-set(GCC_TOOLCHAIN --gcc-toolchain=${RISCV_TOOL_BASE})
-set(ISYSTEM -isystem${RISCV_TOOL_BASE}/${CMAKE_C_COMPILER_TARGET}/include/c++/12.1.0/riscv64-unknown-linux-gnu -isystem${RISCV_TOOL_BASE}/${CMAKE_C_COMPILER_TARGET}/include/c++/12.1.0)
-
-add_compile_options(
-    ${MARCH_OR_CPU} ${GCC_TOOLCHAIN} ${ISYSTEM}
-)
-
-add_link_options(
-    ${MARCH_OR_CPU}
-    ${GCC_TOOLCHAIN}
-)
+SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
+SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)

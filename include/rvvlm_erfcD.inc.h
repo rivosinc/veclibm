@@ -19,8 +19,6 @@ static_assert(false,
               "Must compile for ERFC or CDFNORM when including " __FILE__);
 #endif
 
-#include <fenv.h>
-
 #if defined(COMPILE_FOR_ERFC)
 // polynomial coefficients Q62
 #define P_0 0x4f33682d757709e8
