@@ -8,8 +8,6 @@
 #define F_VER1 RVVLM_ERFDI_STD
 #endif
 
-#include <fenv.h>
-
 // T is 2.0
 #define T 0x1.0p+1
 

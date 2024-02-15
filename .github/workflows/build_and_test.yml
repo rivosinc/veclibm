@@ -1,0 +1,149 @@
+# SPDX-FileCopyrightText: 2024 Rivos Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: "Build & Test"
+
+on:
+  # allow direct trigger
+  workflow_dispatch:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  GCC_VERSION: "12"
+  LLVM_VERSION: "18"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.1
+        with:
+          persist-credentials: false
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y -qq
+          sudo apt-get install -y -qq build-essential curl ninja-build debootstrap
+
+      # Needed for some target toolchains like ld
+      - name: Install gcc
+        run: |
+          sudo apt-get install -y -qq gcc-${GCC_VERSION} gcc-${GCC_VERSION}-riscv64-linux-gnu g++-${GCC_VERSION} g++-${GCC_VERSION}-riscv64-linux-gnu
+
+      - name: Install llvm
+        run: |
+          curl -o llvm.sh https://apt.llvm.org/llvm.sh
+          chmod u+x llvm.sh
+          sudo ./llvm.sh ${LLVM_VERSION}
+          rm llvm.sh
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3.0.0
+
+      - name: Check sysroot cache
+        id: check-sysroot-cache
+        uses: actions/cache@v4
+        with:
+          path: sysroot
+          key: sysroot-${{ hashFiles('./.github/workflows/build_and_test.yml') }}
+
+      - name: Create sysroot
+        run: |
+          sudo debootstrap --arch=riscv64 --verbose --include=fakeroot,symlinks --resolve-deps --variant=minbase --components=main,universe focal sysroot
+          # Remove unused files to minimize cache
+          sudo chroot sysroot symlinks -cr .
+          sudo chown ${USER} -R sysroot
+          rm -rf sysroot/{dev,proc,run,sys,var}
+          rm -rf sysroot/usr/{sbin,bin,share}
+          rm -rf sysroot/usr/lib/{apt,gcc,udev,systemd}
+          rm -rf sysroot/usr/libexec/gcc
+        if: steps.check-sysroot-cache.outputs.cache-hit != 'true'
+
+      - name: Build
+        shell: bash -ex -o pipefail {0}
+        run: |
+          cmake -S . -B build -GNinja \
+            -DCMAKE_INSTALL_PREFIX="$(pwd)/install" \
+            -DCMAKE_TOOLCHAIN_FILE=$(pwd)/CMakeToolchain/riscv.clang.cross.cmake \
+            -DCMAKE_SYSROOT=$(pwd)/sysroot
+          cmake --build build
+          cmake --install build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            build
+            install
+        if: always()
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - qemu_cpu: "rv64,zba=true,zbb=true,zbs=true,v=true,vlen=128,elen=64,vext_spec=v1.0"
+          - qemu_cpu: "rv64,zba=true,zbb=true,zbs=true,v=true,vlen=256,elen=64,vext_spec=v1.0"
+          - qemu_cpu: "rv64,zba=true,zbb=true,zbs=true,v=true,vlen=512,elen=64,vext_spec=v1.0"
+
+    name: "test (qemu_cpu: \"${{ matrix.qemu_cpu }}\")"
+    steps:
+      - uses: actions/checkout@v4.1.1
+        with:
+          persist-credentials: false
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3.0.0
+
+      - name: Check sysroot cache
+        id: check-sysroot-cache
+        uses: actions/cache@v4
+        with:
+          path: sysroot
+          key: sysroot-${{ hashFiles('./.github/workflows/build_and_test.yml') }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y -qq
+          sudo apt-get install -y -qq libgmp-dev libmpfr-dev
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+
+      - name: Fix build permissions
+        run: |
+          chmod +x build/test/test_*
+
+      - name: Test
+        env:
+          CTEST_OUTPUT_ON_FAILURE: "TRUE"
+        run: |
+          if [[ -n "${{ matrix.qemu_cpu }}" ]]; then
+            export QEMU_CPU="${{ matrix.qemu_cpu }}"
+          fi
+          export QEMU_LD_PREFIX=$(pwd)/sysroot
+          cd build
+          ctest -j$(nproc)
+
+      - name: Upload test-${{ strategy.job-index }} artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-${{ strategy.job-index }}
+          path: |
+            build/Testing
+        if: always()
