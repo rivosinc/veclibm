@@ -2,17 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+#include <gtest/gtest.h>
 #include <math.h>
 #include <stdbool.h>
-#include <stdio.h>
 
 #include "rvvlm.h"
 #include "test_infra.h"
 
-#define COMMENT(comment)                                                       \
-  { printf("\n=====\t" comment "\n"); }
-
-int main() {
+TEST(powI, test) {
   unsigned long nb_pts_x, nb_pts_y, stride_x, stride_y, stride_z;
   double x_start, x_end, y_start, y_end;
   bool swap_xy;

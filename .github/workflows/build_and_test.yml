@@ -59,7 +59,7 @@ jobs:
 
       - name: Create sysroot
         run: |
-          sudo debootstrap --arch=riscv64 --verbose --include=fakeroot,symlinks --resolve-deps --variant=minbase --components=main,universe focal sysroot
+          sudo debootstrap --arch=riscv64 --verbose --include=fakeroot,symlinks,googletest --resolve-deps --variant=minbase --components=main,universe jammy sysroot
           # Remove unused files to minimize cache
           sudo chroot sysroot symlinks -cr .
           sudo chown ${USER} -R sysroot
@@ -72,6 +72,7 @@ jobs:
       - name: Build
         shell: bash -ex -o pipefail {0}
         run: |
+          export QEMU_LD_PREFIX=$(pwd)/sysroot
           cmake -S . -B build -GNinja \
             -DCMAKE_INSTALL_PREFIX="$(pwd)/install" \
             -DCMAKE_TOOLCHAIN_FILE=$(pwd)/CMakeToolchain/riscv.clang.cross.cmake \
@@ -115,11 +116,6 @@ jobs:
           path: sysroot
           key: sysroot-${{ hashFiles('./.github/workflows/build_and_test.yml') }}
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update -y -qq
-          sudo apt-get install -y -qq libgmp-dev libmpfr-dev
-
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -133,12 +129,10 @@ jobs:
         env:
           CTEST_OUTPUT_ON_FAILURE: "TRUE"
         run: |
-          if [[ -n "${{ matrix.qemu_cpu }}" ]]; then
-            export QEMU_CPU="${{ matrix.qemu_cpu }}"
-          fi
+          export QEMU_CPU="${{ matrix.qemu_cpu }}"
           export QEMU_LD_PREFIX=$(pwd)/sysroot
           cd build
-          ctest -j$(nproc)
+          ctest -j$(nproc) --output-on-failure
 
       - name: Upload test-${{ strategy.job-index }} artifacts
         uses: actions/upload-artifact@v4

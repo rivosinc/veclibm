@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "test_infra.h"
+#include <gtest/gtest.h>
+
 union sui32_fp32 {
   int32_t si;
   uint32_t ui;
@@ -133,8 +136,6 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
   printf("Maximum observed ULP      error is %3.3lf\n", max_ulp_err);
 
   free(y);
-
-  return;
 }
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
@@ -209,8 +210,6 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
 
   free(x);
   free(y);
-
-  return;
 }
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *,
@@ -292,8 +291,6 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *,
   free(x);
   free(y);
   free(z);
-
-  return;
 }
 
 void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
@@ -369,8 +366,6 @@ void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
 
   free(x);
   free(y);
-
-  return;
 }
 
 void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
@@ -458,8 +453,6 @@ void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
   free(x);
   free(y);
   free(z);
-
-  return;
 }
 
 void report_err_pow_fp64(void (*test_func)(size_t, const double *,
@@ -610,8 +603,6 @@ void report_err_fp80(void (*test_func)(size_t, const double *, const double *,
            log2(max_rel_err));
   }
   printf("Maximum observed ULP      error is %3.3lf\n", max_ulp_err);
-
-  return;
 }
 
 void report_err_fp64(double (*test_func)(double), double (*ref_func)(double),
@@ -658,8 +649,6 @@ void report_err_fp64(double (*test_func)(double), double (*ref_func)(double),
            log2(max_rel_err));
   }
   printf("Maximum observed ULP      error is %3.3lf\n", max_ulp_err);
-
-  return;
 }
 
 void report_err2_fp64(void (*test_func)(size_t, const double *, const double *,
@@ -779,8 +768,6 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, const double *,
   free(x);
   free(y);
   free(z);
-
-  return;
 }
 
 void report_err2_fp64(void (*test_func)(size_t, const double *, size_t,
@@ -906,8 +893,6 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, size_t,
   free(x);
   free(y);
   free(z);
-
-  return;
 }
 
 void show_special_fp64(void (*test_func)(size_t, const double *, double *),
