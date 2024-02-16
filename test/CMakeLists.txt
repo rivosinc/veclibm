@@ -79,18 +79,15 @@ add_executable(test_veclibm ${TEST_SOURCES})
 
 target_include_directories(test_veclibm
     PRIVATE
-    ../include
     include
 )
 
-target_link_libraries(
-    test_veclibm
+target_link_libraries(test_veclibm
     vecm
     GTest::gtest_main
 )
 
-target_compile_options(
-    test_veclibm
+target_compile_options(test_veclibm
     PRIVATE
     $<$<COMPILE_LANGUAGE:C>:-std=c11>
     $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>
