@@ -55,6 +55,4 @@ TEST(expm1, test) {
   x_end = -40.0;
   nb_tests = 400000;
   report_err_fp64(rvvlm_expm1, expm1l, x_start, x_end, nb_tests);
-
-  return 0;
 }

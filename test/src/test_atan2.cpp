@@ -137,6 +137,4 @@ TEST(atan2, test) {
   nb_y = 1000000;
   report_err2_fp64(rvvlm_atan2, atan2l, x_start, x_end, nb_x, y_start, y_end,
                    nb_y, swap_xy);
-
-  return 0;
 }

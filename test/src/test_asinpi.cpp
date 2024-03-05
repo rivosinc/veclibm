@@ -35,6 +35,4 @@ TEST(asinpI, test) {
   x_end = 1.0;
   nb_tests = 4000000;
   report_err_fp64(rvvlm_asinpi, asinpil, x_start, x_end, nb_tests);
-
-  return 0;
 }

@@ -125,6 +125,4 @@ TEST(atan2pi, test) {
   nb_y = 1000000;
   report_err2_fp64(rvvlm_atan2pi, atan2pil, x_start, x_end, nb_x, y_start,
                    y_end, nb_y, swap_xy);
-
-  return 0;
 }

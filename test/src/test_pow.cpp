@@ -85,6 +85,4 @@ TEST(pow, test) {
     target = target_start + (double)j * delta;
     report_err_pow_fp64(rvvlm_pow, powl, target, x_start, x_end, nb_tests);
   }
-
-  return 0;
 }

@@ -34,6 +34,4 @@ TEST(sincospi, test) {
   nb_tests = 400000;
   report_err_fp64(rvvlm_sincospi, sinpil, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincospi, cospil, 2, x_start, x_end, nb_tests);
-
-  return 0;
 }

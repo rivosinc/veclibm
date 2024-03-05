@@ -36,6 +36,4 @@ TEST(atan, test) {
   x_end = 10.0;
   nb_tests = 4000000;
   report_err_fp64(rvvlm_atan, atanl, x_start, x_end, nb_tests);
-
-  return 0;
 }

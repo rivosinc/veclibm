@@ -55,6 +55,4 @@ TEST(atanh, test) {
   x_end = 1.0 - 0x1.0p-51;
   nb_tests = 400000;
   report_err_fp64(rvvlm_atanh, atanhl, x_start, x_end, nb_tests);
-
-  return 0;
 }

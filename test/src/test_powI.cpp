@@ -28,6 +28,4 @@ TEST(powI, test) {
   swap_xy = 0;
   report_err2_fp64(rvvlm_powI, powl, x_start, x_end, nb_pts_x, stride_x,
                    y_start, y_end, nb_pts_y, stride_y, stride_z, swap_xy);
-
-  return 0;
 }

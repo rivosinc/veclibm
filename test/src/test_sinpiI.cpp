@@ -21,6 +21,4 @@ TEST(sinpiI, test) {
   int stride_y = 39;
   report_err_fp64(rvvlm_sinpiI, sinpil, x_start, x_end, nb_tests, stride_x,
                   stride_y);
-
-  return 0;
 }

@@ -28,6 +28,4 @@ TEST(atan2I, test) {
 
   report_err2_fp64(rvvlm_atan2I, atan2l, x_start, x_end, nb_x, y_start, y_end,
                    nb_y, stride_x, stride_y, stride_z, swap_xy);
-
-  return 0;
 }

@@ -40,6 +40,4 @@ TEST(log2p, test) {
   x_end = 0x1.0p-1022;
   nb_tests = 400000;
   report_err_fp64(rvvlm_log2, log2l, x_start, x_end, nb_tests);
-
-  return 0;
 }
