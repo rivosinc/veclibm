@@ -21,6 +21,4 @@ TEST(cdfnormI, test) {
   int stride_y = 39;
   report_err_fp64(rvvlm_cdfnormI, cdfnorml, x_start, x_end, nb_tests, stride_x,
                   stride_y);
-
-  return 0;
 }

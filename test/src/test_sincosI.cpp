@@ -26,6 +26,4 @@ TEST(sincosI, test) {
 
   report_err_fp64(rvvlm_sincosI, cosl, 2, x_start, x_end, nb_tests, stride_x,
                   stride_y, stride_z);
-
-  return 0;
 }

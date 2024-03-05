@@ -35,6 +35,4 @@ TEST(acospi, test) {
   x_end = -0.5;
   nb_tests = 4000000;
   report_err_fp64(rvvlm_acospi, acospil, x_start, x_end, nb_tests);
-
-  return 0;
 }

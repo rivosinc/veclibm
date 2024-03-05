@@ -55,6 +55,4 @@ TEST(asinh, test) {
   x_end = 0x1.FFFFFFFFFFp1023;
   nb_tests = 40000;
   report_err_fp64(rvvlm_asinh, asinhl, x_start, x_end, nb_tests);
-
-  return 0;
 }
