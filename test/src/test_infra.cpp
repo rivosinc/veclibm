@@ -140,7 +140,7 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double), double start,
-                     double end, int nb_pts) {
+                     double end, int nb_pts, double threshold) {
 
   long double y_ref;
   double *x, *y, delta;
@@ -207,6 +207,8 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
            log2(max_rel_err));
   }
   printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  EXPECT_LT((double)max_ulp_err, threshold);
 
   free(x);
   free(y);

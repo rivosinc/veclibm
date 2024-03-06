@@ -10,7 +10,8 @@
   { printf("\n=====\t" comment "\n"); }
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
-                     long double (*ref_func)(long double), double, double, int);
+                     long double (*ref_func)(long double), double, double, int,
+                     double = 1.0);
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *,
                                        double *),
