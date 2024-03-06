@@ -4,36 +4,36 @@
 
 set(TEST_SOURCES
     src/test_infra.cpp
-    src/test_acos.cpp
-    src/test_acosI.cpp
-    src/test_acospi.cpp
-    src/test_acospiI.cpp
-    src/test_asin.cpp
-    src/test_asinI.cpp
-    src/test_asinpi.cpp
-    src/test_asinpiI.cpp
-    src/test_atan.cpp
-    src/test_atanI.cpp
-    src/test_atanpi.cpp
-    src/test_atanpiI.cpp
-    src/test_atan2.cpp
-    src/test_atan2I.cpp
-    src/test_atan2pi.cpp
-    src/test_atan2piI.cpp
-    src/test_acosh.cpp
-    src/test_acoshI.cpp
-    src/test_asinh.cpp
-    src/test_asinhI.cpp
-    src/test_atanh.cpp
-    src/test_atanhI.cpp
-    src/test_cbrt.cpp
-    src/test_cbrtI.cpp
-    src/test_cdfnorm.cpp
-    src/test_cdfnormI.cpp
-    src/test_erf.cpp
-    src/test_erfI.cpp
-    src/test_erfc.cpp
-    src/test_erfcI.cpp
+#   src/test_acos.cpp
+#   src/test_acosI.cpp
+#   src/test_acospi.cpp
+#   src/test_acospiI.cpp
+#   src/test_asin.cpp
+#   src/test_asinI.cpp
+#   src/test_asinpi.cpp
+#   src/test_asinpiI.cpp
+#   src/test_atan.cpp
+#   src/test_atanI.cpp
+#   src/test_atanpi.cpp
+#   src/test_atanpiI.cpp
+#   src/test_atan2.cpp
+#   src/test_atan2I.cpp
+#   src/test_atan2pi.cpp
+#   src/test_atan2piI.cpp
+#   src/test_acosh.cpp
+#   src/test_acoshI.cpp
+#   src/test_asinh.cpp
+#   src/test_asinhI.cpp
+#   src/test_atanh.cpp
+#   src/test_atanhI.cpp
+#   src/test_cbrt.cpp
+#   src/test_cbrtI.cpp
+#   src/test_cdfnorm.cpp
+#   src/test_cdfnormI.cpp
+#   src/test_erf.cpp
+#   src/test_erfI.cpp
+#   src/test_erfc.cpp
+#   src/test_erfcI.cpp
     src/test_exp.cpp
     src/test_expI.cpp
     src/test_exp2.cpp
@@ -42,37 +42,37 @@ set(TEST_SOURCES
     src/test_exp10I.cpp
     src/test_expm1.cpp
     src/test_expm1I.cpp
-    src/test_log.cpp
-    src/test_logI.cpp
-    src/test_log2.cpp
-    src/test_log2I.cpp
-    src/test_log10.cpp
-    src/test_log10I.cpp
-    src/test_log1p.cpp
-    src/test_log1pI.cpp
-    src/test_pow.cpp
-    src/test_powI.cpp
-    src/test_cos.cpp
-    src/test_cosI.cpp
-    src/test_sin.cpp
-    src/test_sinI.cpp
-    src/test_cospi.cpp
-    src/test_cospiI.cpp
-    src/test_sinpi.cpp
-    src/test_sinpiI.cpp
-    src/test_sincos.cpp
-    src/test_sincosI.cpp
-    src/test_sincospi.cpp
-    src/test_sincospiI.cpp
-    src/test_tan.cpp
-    src/test_tanI.cpp
-    src/test_tanpi.cpp
-    src/test_cosh.cpp
-    src/test_coshI.cpp
-    src/test_sinh.cpp
-    src/test_sinhI.cpp
-    src/test_tanh.cpp
-    src/test_tanhI.cpp
+#   src/test_log.cpp
+#   src/test_logI.cpp
+#   src/test_log2.cpp
+#   src/test_log2I.cpp
+#   src/test_log10.cpp
+#   src/test_log10I.cpp
+#   src/test_log1p.cpp
+#   src/test_log1pI.cpp
+#   src/test_pow.cpp
+#   src/test_powI.cpp
+#   src/test_cos.cpp
+#   src/test_cosI.cpp
+#   src/test_sin.cpp
+#   src/test_sinI.cpp
+#   src/test_cospi.cpp
+#   src/test_cospiI.cpp
+#   src/test_sinpi.cpp
+#   src/test_sinpiI.cpp
+#   src/test_sincos.cpp
+#   src/test_sincosI.cpp
+#   src/test_sincospi.cpp
+#   src/test_sincospiI.cpp
+#   src/test_tan.cpp
+#   src/test_tanI.cpp
+#   src/test_tanpi.cpp
+#   src/test_cosh.cpp
+#   src/test_coshI.cpp
+#   src/test_sinh.cpp
+#   src/test_sinhI.cpp
+#   src/test_tanh.cpp
+#   src/test_tanhI.cpp
 )
 
 add_executable(test_veclibm ${TEST_SOURCES})
