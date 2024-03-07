@@ -83,8 +83,24 @@ union sui64_fp64 {
 #define PSTEP_I(COEFF_j, X, POLY, vlen)                                        \
   __riscv_vsadd(__riscv_vsmul((POLY), (X), 1, (vlen)), (COEFF_j), (vlen))
 
+#define PSTEP_I_SLL(COEFF_j, X, K, POLY, vlen)                                 \
+  __riscv_vsadd(                                                               \
+      __riscv_vsll(__riscv_vsmul((POLY), (X), 1, (vlen)), (K), (vlen)),        \
+      (COEFF_j), (vlen))
+
+#define PSTEP_I_SRA(COEFF_j, X, K, POLY, vlen)                                 \
+  __riscv_vsadd(                                                               \
+      __riscv_vsra(__riscv_vsmul((POLY), (X), 1, (vlen)), (K), (vlen)),        \
+      (COEFF_j), (vlen))
+
 #define PSTEPN_I(COEFF_j, X, POLY, vlen)                                       \
   __riscv_vrsub(__riscv_vsmul((POLY), (X), 1, (vlen)), (COEFF_j), (vlen))
+
+#define PSTEP_I_ab(pick_a, COEFF_a, COEFF_b, X, POLY, vlen)                    \
+  __riscv_vsadd(                                                               \
+      __riscv_vsmul((POLY), (X), 1, (vlen)),                                   \
+      __riscv_vmerge(VMVI_VX((COEFF_b), (vlen)), (COEFF_a), (pick_a), (vlen)), \
+      (vlen))
 
 #define FAST2SUM(X, Y, S, s, vlen)                                             \
   do {                                                                         \
@@ -284,6 +300,20 @@ union sui64_fp64 {
 
 #define RVVLM_ERFCDI_VSET_CONFIG "rvvlm_fp64m1.h"
 #define RVVLM_ERFCDI_STD rvvlm_erfcI
+
+// FP64 erfinv function configuration
+#define RVVLM_ERFINVD_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_ERFINVD_STD rvvlm_erfinv
+
+#define RVVLM_ERFINVDI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_ERFINVDI_STD rvvlm_erfinvI
+
+// FP64 erfcinv function configuration
+#define RVVLM_ERFCINVD_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_ERFCINVD_STD rvvlm_erfcinv
+
+#define RVVLM_ERFCINVDI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_ERFCINVDI_STD rvvlm_erfcinvI
 
 // FP64 exp function configuration
 #define RVVLM_EXPD_VSET_CONFIG "rvvlm_fp64m4.h"
@@ -517,6 +547,14 @@ void RVVLM_ERFDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
 void RVVLM_ERFCD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_ERFCDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
                       size_t stride_y);
+
+void RVVLM_ERFCINVD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_ERFCINVDI_STD(size_t x_len, const double *x, size_t stride_x,
+                         double *y, size_t stride_y);
+
+void RVVLM_ERFINVD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_ERFINVDI_STD(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
 
 void RVVLM_EXPD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_EXPDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,

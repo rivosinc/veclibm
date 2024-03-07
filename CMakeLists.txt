@@ -48,6 +48,10 @@ set(PROJECT_SOURCES
     src/rvvlm_erfDI.c
     src/rvvlm_erfcD.c
     src/rvvlm_erfcDI.c
+    src/rvvlm_erfcinvD.c
+    src/rvvlm_erfcinvDI.c
+    src/rvvlm_erfinvD.c
+    src/rvvlm_erfinvDI.c
     src/rvvlm_expD_tbl.c
     src/rvvlm_expD.c
     src/rvvlm_expDI.c
