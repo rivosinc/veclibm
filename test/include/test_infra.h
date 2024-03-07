@@ -42,6 +42,11 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, size_t,
                       long double (*ref_func)(long double, long double), double,
                       double, int, int, double, double, int, int, int, bool);
 
+void report_err_byinv_fp64(void (*test_func)(size_t, const double *, double *),
+                           long double (*ref_inv_func)(long double),
+                           long double (*ref_inv_func_prime)(long double),
+                           double, double, int, double = 1.0);
+
 void report_err_pow_fp64(void (*test_func)(size_t, const double *,
                                            const double *, double *),
                          long double (*ref_func)(long double, long double),
@@ -78,3 +83,5 @@ long double cdfnorml(long double);
 long double exp_neg_rsq(long double);
 long double x_transform(long double);
 long double recip_scale(long double);
+long double erfl_prime(long double);
+long double erfcl_prime(long double);

@@ -30,10 +30,12 @@ set(TEST_SOURCES
 #   src/test_cbrtI.cpp
 #   src/test_cdfnorm.cpp
 #   src/test_cdfnormI.cpp
-#   src/test_erf.cpp
-#   src/test_erfI.cpp
-#   src/test_erfc.cpp
-#   src/test_erfcI.cpp
+    src/test_erf.cpp
+    src/test_erfI.cpp
+    src/test_erfc.cpp
+    src/test_erfcI.cpp
+    src/test_erfinv.cpp
+    src/test_erfcinv.cpp
     src/test_exp.cpp
     src/test_expI.cpp
     src/test_exp2.cpp

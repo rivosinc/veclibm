@@ -457,6 +457,91 @@ void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
   free(z);
 }
 
+void report_err_byinv_fp64(void (*test_func)(size_t, const double *, double *),
+                           long double (*ref_inv_func)(long double),
+                           long double (*ref_inv_func_prime)(long double),
+                           double start, double end, int nb_pts,
+                           double threshold) {
+
+  long double f_inv_ref;
+  double *x, *y, delta;
+  long double abs_err, rel_err, ulp_err;
+  long double max_abs_err, max_rel_err, max_ulp_err;
+
+  x = (double *)malloc(nb_pts * sizeof(double));
+  y = (double *)malloc(nb_pts * sizeof(double));
+
+  if (nb_pts <= 1) {
+    delta = 0.0;
+    nb_pts = 1;
+  } else {
+    delta = (end - start) / (double)(nb_pts - 1);
+  }
+
+  max_abs_err = 0.0L;
+  max_rel_err = 0.0L;
+  max_ulp_err = 0.0L;
+
+  // fill up the set of test points
+  for (int i = 0; i < nb_pts; ++i) {
+    x[i] = start + (double)i * delta;
+  }
+
+  // call function under test
+  test_func((size_t)nb_pts, x, y);
+
+  // now for each point we compute error and log the max
+  for (int j = 0; j < nb_pts; j++) {
+    f_inv_ref = ref_inv_func((long double)y[j]);
+    abs_err = (long double)x[j] - f_inv_ref;
+    abs_err = abs_err / ref_inv_func_prime((long double)y[j]);
+    abs_err = ABS(abs_err);
+
+    if (ABS(y[j]) > 0.0) {
+      rel_err = abs_err / ABS(y[j]);
+    } else {
+      rel_err = abs_err / 0x1.0p-1074;
+    }
+    ulp_err = abs_err / ulp_64(y[j]);
+
+    max_abs_err = MAX(max_abs_err, abs_err);
+    max_rel_err = MAX(max_rel_err, rel_err);
+    max_ulp_err = MAX(max_ulp_err, ulp_err);
+
+    if (VERBOSE) {
+      union sui64_fp64 xxx, yyy;
+      xxx.f = x[j];
+      yyy.f = y[j];
+      printf("--input %24.17le, 0x%016lx, output %24.17le, 0x%016lx \n", xxx.f,
+             xxx.ui, yyy.f, yyy.ui);
+      printf("  inverse of computed value %28.25Le\n\n", f_inv_ref);
+      printf("  abs err %8.3Le, rel err %8.3Le, ulp err %8.3Le\n\n", abs_err,
+             rel_err, ulp_err);
+      printf("  max observered abs err %8.3Le\n", max_abs_err);
+    }
+  }
+  printf("----------------------------\n");
+  if ((ABS(start) > 100.) || (ABS(end) < 1.e-2)) {
+    printf("Tested %d points in [%8.3le, %8.3le]\n", nb_pts, start, end);
+  } else {
+    printf("Tested %d points in [%3.3lf, %3.3lf]\n", nb_pts, start, end);
+  }
+  printf("Maximum observed absolute error is %8.3Le\n", max_abs_err);
+  printf("Maximum observed relative error is %8.3Le\n", max_rel_err);
+  if (max_rel_err > 0.0) {
+    printf("                          which is 2^(%3.3Lf)\n",
+           log2(max_rel_err));
+  }
+  printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  EXPECT_LT(max_ulp_err, threshold);
+
+  free(x);
+  free(y);
+
+  return;
+}
+
 void report_err_pow_fp64(void (*test_func)(size_t, const double *,
                                            const double *, double *),
                          long double (*ref_func)(long double, long double),
@@ -1107,4 +1192,18 @@ long double recip_scale(long double x) {
   result = 0x1.0p0L;
   result = result / (result + x + x);
   return result;
+}
+
+long double erfl_prime(long double x) {
+  long double two_ov_rt_pi = 1.12837916709551257389615890312154517L;
+  long double y;
+  y = two_ov_rt_pi * expl(-x * x);
+  return y;
+}
+
+long double erfcl_prime(long double x) {
+  long double two_ov_rt_pi = 1.12837916709551257389615890312154517L;
+  long double y;
+  y = -two_ov_rt_pi * expl(-x * x);
+  return y;
 }
