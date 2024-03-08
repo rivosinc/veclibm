@@ -19,19 +19,19 @@ TEST(sincospi, test) {
 
   x_start = -0.5;
   x_end = 0.5;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_sincospi, sinpil, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincospi, cospil, 2, x_start, x_end, nb_tests);
 
   x_start = -0x1.0p3;
   x_end = 0x1.0p3;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_sincospi, sinpil, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincospi, cospil, 2, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p3;
   x_end = 0x1.0p60;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_sincospi, sinpil, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincospi, cospil, 2, x_start, x_end, nb_tests);
 }

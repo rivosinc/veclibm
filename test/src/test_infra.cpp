@@ -217,7 +217,7 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
 void report_err_fp64(void (*test_func)(size_t, const double *, double *,
                                        double *),
                      long double (*ref_func)(long double), int which_output,
-                     double start, double end, int nb_pts) {
+                     double start, double end, int nb_pts, double threshold) {
 
   long double y_ref;
   double *x, *y, *z, delta;
@@ -290,6 +290,8 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *,
   }
   printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
 
+  EXPECT_LT(max_ulp_err, threshold);
+
   free(x);
   free(y);
   free(z);
@@ -298,7 +300,8 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *,
 void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
                                        size_t),
                      long double (*ref_func)(long double), double start,
-                     double end, int nb_pts, int stride_in, int stride_out) {
+                     double end, int nb_pts, int stride_in, int stride_out,
+                     double threshold) {
 
   long double y_ref;
   double *x, *y, delta;
@@ -365,6 +368,8 @@ void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
            log2(max_rel_err));
   }
   printf("Maximum observed ULP      error is %3.3lf\n", max_ulp_err);
+
+  EXPECT_LT(max_ulp_err, threshold);
 
   free(x);
   free(y);
@@ -542,10 +547,97 @@ void report_err_byinv_fp64(void (*test_func)(size_t, const double *, double *),
   return;
 }
 
+void report_err_byinv_fp64(void (*test_func)(size_t, const double *, size_t,
+                                             double *, size_t),
+                           long double (*ref_inv_func)(long double),
+                           long double (*ref_inv_func_prime)(long double),
+                           double start, double end, int nb_pts, int stride_in,
+                           int stride_out, double threshold) {
+
+  long double f_inv_ref;
+  double *x, *y, delta;
+  long double abs_err, rel_err, ulp_err;
+  long double max_abs_err, max_rel_err, max_ulp_err;
+
+  x = (double *)malloc(nb_pts * sizeof(double) * stride_in);
+  y = (double *)malloc(nb_pts * sizeof(double) * stride_out);
+
+  if (nb_pts <= 1) {
+    delta = 0.0;
+    nb_pts = 1;
+  } else {
+    delta = (end - start) / (double)(nb_pts - 1);
+  }
+
+  max_abs_err = 0.0L;
+  max_rel_err = 0.0L;
+  max_ulp_err = 0.0L;
+
+  // fill up the set of test points
+  for (int i = 0; i < nb_pts; ++i) {
+    x[i * stride_in] = start + (double)i * delta;
+  }
+
+  // call function under test
+  test_func((size_t)nb_pts, x, (size_t)stride_in, y, (size_t)stride_out);
+
+  // now for each point we compute error and log the max
+  for (int j = 0; j < nb_pts; j++) {
+    f_inv_ref = ref_inv_func((long double)y[j * stride_out]);
+    abs_err = (long double)x[j * stride_in] - f_inv_ref;
+    abs_err = abs_err / ref_inv_func_prime((long double)y[j * stride_out]);
+    abs_err = ABS(abs_err);
+
+    if (ABS(y[j * stride_out]) > 0.0) {
+      rel_err = abs_err / ABS(y[j * stride_out]);
+    } else {
+      rel_err = abs_err / 0x1.0p-1074;
+    }
+    ulp_err = abs_err / ulp_64(y[j * stride_out]);
+
+    max_abs_err = MAX(max_abs_err, abs_err);
+    max_rel_err = MAX(max_rel_err, rel_err);
+    max_ulp_err = MAX(max_ulp_err, ulp_err);
+
+    if (VERBOSE) {
+      union sui64_fp64 xxx, yyy;
+      xxx.f = x[j * stride_in];
+      yyy.f = y[j * stride_out];
+      printf("--input %24.17le, 0x%016lx, output %24.17le, 0x%016lx \n", xxx.f,
+             xxx.ui, yyy.f, yyy.ui);
+      printf("  inverse of computed value %28.25Le\n\n", f_inv_ref);
+      printf("  abs err %8.3Le, rel err %8.3Le, ulp err %8.3Le\n\n", abs_err,
+             rel_err, ulp_err);
+      printf("  max observered abs err %8.3Le\n", max_abs_err);
+    }
+  }
+  printf("----------------------------\n");
+  if ((ABS(start) > 100.) || (ABS(end) < 1.e-2)) {
+    printf("Tested %d points in [%8.3le, %8.3le]\n", nb_pts, start, end);
+  } else {
+    printf("Tested %d points in [%3.3lf, %3.3lf]\n", nb_pts, start, end);
+  }
+  printf("Maximum observed absolute error is %8.3Le\n", max_abs_err);
+  printf("Maximum observed relative error is %8.3Le\n", max_rel_err);
+  if (max_rel_err > 0.0) {
+    printf("                          which is 2^(%3.3Lf)\n",
+           log2(max_rel_err));
+  }
+  printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  EXPECT_LT(max_ulp_err, threshold);
+
+  free(x);
+  free(y);
+
+  return;
+}
+
 void report_err_pow_fp64(void (*test_func)(size_t, const double *,
                                            const double *, double *),
                          long double (*ref_func)(long double, long double),
-                         double target, double start, double end, int nb_pts) {
+                         double target, double start, double end, int nb_pts,
+                         double threshold) {
 
   long double z_ref;
   double *x, *y, *z, delta;
@@ -614,6 +706,8 @@ void report_err_pow_fp64(void (*test_func)(size_t, const double *,
            log2l(max_rel_err));
   }
   printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  EXPECT_LT(max_ulp_err, threshold);
 
   free(x);
   free(y);
@@ -742,8 +836,8 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, const double *,
                                         double *),
                       long double (*ref_func)(long double, long double),
                       double start_x, double end_x, int nb_pts_x,
-                      double start_y, double end_y, int nb_pts_y,
-                      bool swap_xy) {
+                      double start_y, double end_y, int nb_pts_y, bool swap_xy,
+                      double threshold) {
 
   long double z_ref;
   double *x, *y, *z, delta_x, delta_y;
@@ -852,6 +946,8 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, const double *,
   }
   printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
 
+  EXPECT_LT(max_ulp_err, threshold);
+
   free(x);
   free(y);
   free(z);
@@ -863,7 +959,7 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, size_t,
                       long double (*ref_func)(long double, long double),
                       double start_x, double end_x, int nb_pts_x, int stride_x,
                       double start_y, double end_y, int nb_pts_y, int stride_y,
-                      int stride_z, bool swap_xy) {
+                      int stride_z, bool swap_xy, double threshold) {
 
   long double z_ref;
   double *x, *y, *z, delta_x, delta_y;
@@ -976,6 +1072,8 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, size_t,
            log2l(max_rel_err));
   }
   printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  EXPECT_LT(max_ulp_err, threshold);
 
   free(x);
   free(y);

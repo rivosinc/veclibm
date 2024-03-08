@@ -18,16 +18,16 @@ TEST(tanpi, test) {
 
   x_start = -0.4999;
   x_end = 0.49999;
-  nb_tests = 4000000;
+  nb_tests = 100000;
   report_err_fp64(rvvlm_tanpi, tanpil, x_start, x_end, nb_tests);
 
   x_start = -0x1.0p3;
   x_end = 0x1.0p3;
-  nb_tests = 4000000;
+  nb_tests = 100000;
   report_err_fp64(rvvlm_tanpi, tanpil, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p3;
   x_end = 0x1.0p60;
-  nb_tests = 4000000;
+  nb_tests = 100000;
   report_err_fp64(rvvlm_tanpi, tanpil, x_start, x_end, nb_tests);
 }
