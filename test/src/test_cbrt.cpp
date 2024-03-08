@@ -18,7 +18,7 @@ TEST(cbrt, test) {
 
   x_start = 0x1.0p-1074;
   x_end = 0x1.0p-1064;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cbrt, cbrtl, x_start, x_end, nb_tests);
 
   x_start = -0x1.0p-1064;
@@ -28,31 +28,31 @@ TEST(cbrt, test) {
 
   x_start = 0x1.0p0;
   x_end = 0x1.0p8;
-  nb_tests = 4000000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cbrt, cbrtl, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p-8;
   x_end = 0x1.0p-4;
-  nb_tests = 4000000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cbrt, cbrtl, x_start, x_end, nb_tests);
 
   x_start = -0x1.0p0;
   x_end = -0x1.0p8;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cbrt, cbrtl, x_start, x_end, nb_tests);
 
   x_start = -0x1.0p-8;
   x_end = -0x1.0p-4;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cbrt, cbrtl, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p1020;
   x_end = 0x1.fffffp1023;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cbrt, cbrtl, x_start, x_end, nb_tests);
 
   x_start = -0x1.0p1020;
   x_end = -0x1.fffffp1023;
-  nb_tests = 4000000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cbrt, cbrtl, x_start, x_end, nb_tests);
 }

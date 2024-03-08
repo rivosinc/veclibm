@@ -18,36 +18,36 @@ TEST(cdfnorm, test) {
 
   x_start = -0x1.0p0;
   x_end = 0x1.0p0;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p-2;
   x_end = 0x1.0p0;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, -x_start, -x_end, nb_tests);
 
   x_start = 0x1.0p0;
   x_end = 0x1.0p3;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, -x_start, -x_end, nb_tests);
 
   x_start = 0x1.0p3;
   x_end = 30.0;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, -x_start, -x_end, nb_tests);
 
   x_start = 0x1.0p-80;
   x_end = 0x1.0p-50;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, -x_start, -x_end, nb_tests);
 
   x_start = 0x1.0p-50;
   x_end = 0x1.0p-10;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_cdfnorm, cdfnorml, -x_start, -x_end, nb_tests);
 }

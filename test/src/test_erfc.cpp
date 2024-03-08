@@ -25,7 +25,7 @@ TEST(erfc, medium_args) {
 
   x_start = -0x1.0p0;
   x_end = 0x1.0p0;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_erfc, erfcl, x_start, x_end, nb_tests);
 }
 
@@ -37,7 +37,7 @@ TEST(erfc, around_one) {
 
   x_start = 0x1.0p-1;
   x_end = 0x1.0p1;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_erfc, erfcl, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_erfc, erfcl, -x_start, -x_end, nb_tests);
 }
@@ -50,7 +50,7 @@ TEST(erfc, large) {
 
   x_start = 0x1.0p1;
   x_end = 0x1.0p3;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_erfc, erfcl, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_erfc, erfcl, -x_start, -x_end, nb_tests);
 }

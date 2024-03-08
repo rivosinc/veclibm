@@ -9,6 +9,8 @@
 #define COMMENT(comment)                                                       \
   { printf("\n=====\t" comment "\n"); }
 
+// Most common interface: testing on 1 interval
+// for 1-in-1-out unit-stride function
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double), double, double, int,
                      double = 1.0);
@@ -16,15 +18,17 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
 void report_err_fp64(void (*test_func)(size_t, const double *, double *,
                                        double *),
                      long double (*ref_func)(long double), int, double, double,
-                     int);
+                     int, double = 1.0);
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double), const double *, int);
 
+// Second most common interface: testing on 1 interval
+// for 1-in-1-out general-stride function
 void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
                                        size_t),
                      long double (*ref_func)(long double), double, double, int,
-                     int, int);
+                     int, int, double = 1.0);
 
 void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
                                        size_t, double *, size_t),
@@ -34,23 +38,34 @@ void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
 void report_err2_fp64(void (*test_func)(size_t, const double *, const double *,
                                         double *),
                       long double (*ref_func)(long double, long double), double,
-                      double, int, double, double, int, bool);
+                      double, int, double, double, int, bool, double = 1.0);
 
 void report_err2_fp64(void (*test_func)(size_t, const double *, size_t,
                                         const double *, size_t, double *,
                                         size_t),
                       long double (*ref_func)(long double, long double), double,
-                      double, int, int, double, double, int, int, int, bool);
+                      double, int, int, double, double, int, int, int, bool,
+                      double = 1.0);
 
+// Testing a function where we only have a reference version for its inverse
+// Testing on 1 interval for 1-in-1-out and unit-stride
 void report_err_byinv_fp64(void (*test_func)(size_t, const double *, double *),
                            long double (*ref_inv_func)(long double),
                            long double (*ref_inv_func_prime)(long double),
                            double, double, int, double = 1.0);
 
+// Testing a function where we only have a reference version for its inverse
+// Testing on 1 interval for 1-in-1-out and general-stride
+void report_err_byinv_fp64(void (*test_func)(size_t, const double *, size_t,
+                                             double *, size_t),
+                           long double (*ref_inv_func)(long double),
+                           long double (*ref_inv_func_prime)(long double),
+                           double, double, int, int, int, double = 1.0);
+
 void report_err_pow_fp64(void (*test_func)(size_t, const double *,
                                            const double *, double *),
                          long double (*ref_func)(long double, long double),
-                         double, double, double, int);
+                         double, double, double, int, double = 1.0);
 
 void report_err_fp80(void (*test_func)(size_t, const double *, const double *,
                                        double *, double *),

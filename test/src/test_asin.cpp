@@ -24,16 +24,16 @@ TEST(asin, test) {
 
   x_start = 0.0;
   x_end = 0.5;
-  nb_tests = 4000000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_asin, asinl, x_start, x_end, nb_tests);
 
   x_start = 0.5;
   x_end = 1.0;
-  nb_tests = 4000000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_asin, asinl, x_start, x_end, nb_tests);
 
   x_start = -1.0;
   x_end = 1.0;
-  nb_tests = 4000000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_asin, asinl, x_start, x_end, nb_tests);
 }

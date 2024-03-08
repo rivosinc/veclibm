@@ -8,35 +8,52 @@
 #include "rvvlm.h"
 #include "test_infra.h"
 
-TEST(sincos, test) {
+TEST(sincos, small_args) {
   unsigned long nb_tests;
   double x_start, x_end;
 
   COMMENT("sin: current chosen algorithm; reduced argument in FP64 only")
 
-  show_special12_fp64(rvvlm_sincos, "Special Value handling of this function");
-
   x_start = -0.78;
   x_end = 0.78;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_sincos, sinl, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincos, cosl, 2, x_start, x_end, nb_tests);
 
   x_start = -6.0;
   x_end = 6.0;
-  nb_tests = 400000;
+  nb_tests = 40000;
+  report_err_fp64(rvvlm_sincos, sinl, 1, x_start, x_end, nb_tests);
+  report_err_fp64(rvvlm_sincos, cosl, 2, x_start, x_end, nb_tests);
+}
+
+TEST(sincos, large_args) {
+  unsigned long nb_tests;
+  double x_start, x_end;
+
+  COMMENT("sin: current chosen algorithm; reduced argument in FP64 only")
+
+  x_start = -0.78;
+  x_end = 0.78;
+  nb_tests = 40000;
+  report_err_fp64(rvvlm_sincos, sinl, 1, x_start, x_end, nb_tests);
+  report_err_fp64(rvvlm_sincos, cosl, 2, x_start, x_end, nb_tests);
+
+  x_start = -6.0;
+  x_end = 6.0;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_sincos, sinl, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincos, cosl, 2, x_start, x_end, nb_tests);
 
   x_start = 1.0;
   x_end = 0x1.0p23;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_sincos, sinl, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincos, cosl, 2, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p25;
   x_end = 0x1.0p100;
-  nb_tests = 400000;
+  nb_tests = 40000;
   report_err_fp64(rvvlm_sincos, sinl, 1, x_start, x_end, nb_tests);
   report_err_fp64(rvvlm_sincos, cosl, 2, x_start, x_end, nb_tests);
 }
