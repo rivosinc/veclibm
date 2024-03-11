@@ -107,8 +107,8 @@ void F_VER1(API) {
                         0x1.0p-63, vlen);
       if (__riscv_vcpop(x_is_tiny, vlen) > 0) {
         VFLOAT w_hi_dummy, w_lo_dummy;
-        SQRTX_4_TRANSFORM(y_hi, y_lo, w_hi_dummy, w_lo_dummy, T_tiny, 0x1.0p65,
-                          0x1.0p-65, vlen);
+        SQRTX_4_TRANSFORM(y_hi, y_lo, w_hi_dummy, w_lo_dummy, T_tiny, 0x1.0p64,
+                          0x1.0p-64, vlen);
       }
     }
     w_hi = VFMV_VF(fp_posOne, vlen);
@@ -195,7 +195,8 @@ void F_VER1(API) {
 
     if (__riscv_vcpop(x_is_tiny, vlen) > 0) {
       VFLOAT p_hi_tiny, p_lo_tiny, q_hi_tiny, q_lo_tiny;
-      ERFCINV_PQ_TINY(T_tiny, p_hi_tiny, p_lo_tiny, q_hi_tiny, q_lo_tiny, vlen);
+      ERFCINV_PQ_HILO_TINY(T_tiny, p_hi_tiny, p_lo_tiny, q_hi_tiny, q_lo_tiny,
+                           vlen);
       p_hi = __riscv_vmerge(p_hi, p_hi_tiny, x_is_tiny, vlen);
       p_lo = __riscv_vmerge(p_lo, p_lo_tiny, x_is_tiny, vlen);
       q_hi = __riscv_vmerge(q_hi, q_hi_tiny, x_is_tiny, vlen);
