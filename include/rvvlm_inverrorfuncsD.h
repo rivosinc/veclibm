@@ -35,9 +35,8 @@
 #define Q_tiny_9 0x5e4a26a7c1415755        // sacle 57
 #define DELTA_Q0_tiny 0x1.8a7adad44d65ap-4 // scale 66
 
-#define Q50_84
+#if defined(COMPILE_FOR_ERFCINV)
 // Using [P,Q]_tiny_[HI,LO]_k, HI in Q50, LO in Q84
-#if defined(Q50_84)
 #define P_tiny_HI_0 -0x8593442eL
 #define P_tiny_LO_0 -0x4e7245b3L
 #define P_tiny_HI_1 -0x7f3dc156b1L
@@ -58,6 +57,51 @@
 #define P_tiny_LO_8 -0x3b6c5afbL
 #define P_tiny_HI_9 0x156a7e2e54e260L
 #define P_tiny_LO_9 0x1a0c336beL
+
+#define Q_tiny_HI_0 -0x85933cdaL
+#define Q_tiny_LO_0 -0xb5b39d61L
+#define Q_tiny_HI_1 -0x7f3de4b69fL
+#define Q_tiny_LO_1 -0x151d1cd35L
+#define Q_tiny_HI_2 -0x20dd8dc1da27L
+#define Q_tiny_LO_2 -0x1706945d7L
+#define Q_tiny_HI_3 -0x30dc92d1cd231L
+#define Q_tiny_LO_3 0xabde03f9L
+#define Q_tiny_HI_4 -0x1af5fcee397d58L
+#define Q_tiny_LO_4 -0xc3530d28L
+#define Q_tiny_HI_5 -0x42639eeec1d051L
+#define Q_tiny_LO_5 0x662b41ecL
+#define Q_tiny_HI_6 0x6182b99f6ca998L
+#define Q_tiny_LO_6 0x938a5e35L
+#define Q_tiny_HI_7 0x17a6848dc07624aL
+#define Q_tiny_LO_7 0x8a0484b7L
+#define Q_tiny_HI_8 0x105ecd6aac52b12L
+#define Q_tiny_LO_8 0x1d1e38258L
+#define Q_tiny_HI_9 0xbc944d4f8282afL
+#define Q_tiny_LO_9 -0x155b50b48L
+#endif
+
+#if defined(COMPILE_FOR_CDFNORMINV)
+// Using [P,Q]_tiny_[HI,LO]_k, HI in Q50, LO in Q84
+#define P_tiny_HI_0 -0xbce768cfL
+#define P_tiny_LO_0 -0x6824d442L
+#define P_tiny_HI_1 -0xb3f23f158aL
+#define P_tiny_LO_1 0x120e225b6L
+#define P_tiny_HI_2 -0x2e77fdb703eaL
+#define P_tiny_LO_2 -0x1e1d72461L
+#define P_tiny_HI_3 -0x44fbca4f8507eL
+#define P_tiny_LO_3 -0xd2fb9bf1L
+#define P_tiny_HI_4 -0x25be85812224dcL
+#define P_tiny_LO_4 -0x14663c6d2L
+#define P_tiny_HI_5 -0x56d9a544fd76f0L
+#define P_tiny_LO_5 -0x1e3fd12d9L
+#define P_tiny_HI_6 0xb44c46b00008ccL
+#define P_tiny_LO_6 0x123f14b79L
+#define P_tiny_HI_7 0x22eb3f29425cc2dL
+#define P_tiny_LO_7 -0x1f47840b1L
+#define P_tiny_HI_8 0x6b5068e2aa0bc1L
+#define P_tiny_LO_8 -0xd830044aL
+#define P_tiny_HI_9 0x1e496a7253435eL
+#define P_tiny_LO_9 -0xf06a1c9L
 
 #define Q_tiny_HI_0 -0x85933cdaL
 #define Q_tiny_LO_0 -0xb5b39d61L
@@ -137,6 +181,35 @@
       (vy_special) = __riscv_vfsub((special_args), (vx), (vx), (vlen));        \
       (vy_special) = __riscv_vmerge((vy_special), tmp, pm_Inf, (vlen));        \
       (vx) = __riscv_vfmerge((vx), fp_posOne, (special_args), (vlen));         \
+    }                                                                          \
+  } while (0)
+
+// cdfnorminv(0) = -Inf, erfcinv(1) = Inf with divide by zero
+// cdfnorminv(x) x outside [0, 1], real is NaN with invalid
+// cdfnorminv(NaN) is NaN, invalid if input is signalling NaN
+#define EXCEPTION_HANDLING_CDFNORMINV(vx, special_args, vy_special, vlen)      \
+  do {                                                                         \
+    VUINT vclass = __riscv_vfclass((vx), (vlen));                              \
+    IDENTIFY(vclass, 0x39F, (special_args), (vlen));                           \
+    VBOOL x_ge_1 = __riscv_vmfge((vx), fp_posOne, (vlen));                     \
+    (special_args) = __riscv_vmor((special_args), x_ge_1, (vlen));             \
+    if (__riscv_vcpop((special_args), (vlen)) > 0) {                           \
+      VBOOL x_gt_1 = __riscv_vmfgt((vx), fp_posOne, (vlen));                   \
+      VBOOL x_lt_0 = __riscv_vmflt((vx), fp_posZero, (vlen));                  \
+      /* substitute x > 1 or x < 0 with sNaN */                                \
+      (vx) = __riscv_vfmerge((vx), fp_sNaN, x_gt_1, (vlen));                   \
+      (vx) = __riscv_vfmerge((vx), fp_sNaN, x_lt_0, (vlen));                   \
+      /* substitute x = 0 or 1 with +/-Inf and generate div-by-zero signal */  \
+      VFLOAT tmp = VFMV_VF(fp_posZero, (vlen));                                \
+      VFLOAT x_tmp = __riscv_vfsub((vx), 0x1.0p-1, (vlen));                    \
+      tmp = __riscv_vfsgnj(tmp, x_tmp, (vlen));                                \
+      VBOOL x_eq_1 = __riscv_vmfeq((vx), fp_posOne, (vlen));                   \
+      VBOOL x_eq_0 = __riscv_vmfeq((vx), fp_posZero, (vlen));                  \
+      VBOOL pm_Inf = __riscv_vmor(x_eq_1, x_eq_0, (vlen));                     \
+      tmp = __riscv_vfrec7(pm_Inf, tmp, (vlen));                               \
+      (vy_special) = __riscv_vfsub((special_args), (vx), (vx), (vlen));        \
+      (vy_special) = __riscv_vmerge((vy_special), tmp, pm_Inf, (vlen));        \
+      (vx) = __riscv_vfmerge((vx), 0x1.0p-1, (special_args), (vlen));          \
     }                                                                          \
   } while (0)
 

@@ -30,6 +30,8 @@ set(TEST_SOURCES
     src/test_cbrtI.cpp
     src/test_cdfnorm.cpp
     src/test_cdfnormI.cpp
+    src/test_cdfnorminv.cpp
+    src/test_cdfnorminvI.cpp
     src/test_erf.cpp
     src/test_erfI.cpp
     src/test_erfc.cpp

@@ -44,6 +44,8 @@ set(PROJECT_SOURCES
     src/rvvlm_cbrtDI.c
     src/rvvlm_cdfnormD.c
     src/rvvlm_cdfnormDI.c
+    src/rvvlm_cdfnorminvD.c
+    src/rvvlm_cdfnorminvDI.c
     src/rvvlm_erfD.c
     src/rvvlm_erfDI.c
     src/rvvlm_erfcD.c

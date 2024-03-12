@@ -1305,3 +1305,11 @@ long double erfcl_prime(long double x) {
   y = -two_ov_rt_pi * expl(-x * x);
   return y;
 }
+
+long double cdfnorml_prime(long double x) {
+  long double one_ov_rt_2pi = 0.39894228040143267793994605993438187L;
+  long double half = 0x1.0p-1L;
+  long double y;
+  y = one_ov_rt_2pi * expl(-x * x * half);
+  return y;
+}
