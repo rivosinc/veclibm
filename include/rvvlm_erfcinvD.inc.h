@@ -74,8 +74,6 @@ void F_VER1(API) {
   VFLOAT vx, vx_sign, vy, vy_special;
   VBOOL special_args;
 
-  VFLOAT dummy;
-
   SET_ROUNDTONEAREST;
   // stripmining over input arguments
   for (; _inarg_n > 0; _inarg_n -= vlen) {
@@ -84,8 +82,6 @@ void F_VER1(API) {
 
     // Handle Inf and NaN
     EXCEPTION_HANDLING_ERFCINV(vx, special_args, vy_special, vlen);
-
-    dummy = VFMV_VF(3.1415926535, vlen);
 
     vx_sign = __riscv_vfrsub(vx, fp_posOne, vlen);
     VFLOAT two_minus_x = __riscv_vfadd(vx_sign, fp_posOne, vlen);
@@ -97,6 +93,7 @@ void F_VER1(API) {
     VFLOAT w_hi, w_lo, w_hi_left, w_lo_left, y_hi, y_lo;
     VINT T, T_left, T_tiny;
     VBOOL x_is_tiny;
+    x_is_tiny = __riscv_vmxor(x_is_tiny, x_is_tiny, vlen);
 
     if (__riscv_vcpop(x_in_left, vlen) > 0) {
       VFLOAT x_left = VFMV_VF(0x1.0p-3, vlen);
@@ -110,10 +107,8 @@ void F_VER1(API) {
                         0x1.0p-63, vlen);
       if (__riscv_vcpop(x_is_tiny, vlen) > 0) {
         VFLOAT w_hi_dummy, w_lo_dummy;
-        SQRTX_4_TRANSFORM(y_hi, y_lo, w_hi_dummy, w_lo_dummy, T_tiny, 0x1.0p65,
-                          0x1.0p-65, vlen);
-        dummy = __riscv_vfmul(__riscv_vfcvt_f(T_tiny, vlen), 0x1.0p-2, vlen);
-        dummy = __riscv_vfsub(dummy, __riscv_vfcvt_f(T_left, vlen), vlen);
+        SQRTX_4_TRANSFORM(y_hi, y_lo, w_hi_dummy, w_lo_dummy, T_tiny, 0x1.0p64,
+                          0x1.0p-64, vlen);
       }
     }
     w_hi = VFMV_VF(fp_posOne, vlen);
@@ -200,7 +195,8 @@ void F_VER1(API) {
 
     if (__riscv_vcpop(x_is_tiny, vlen) > 0) {
       VFLOAT p_hi_tiny, p_lo_tiny, q_hi_tiny, q_lo_tiny;
-      ERFCINV_PQ_TINY(T_tiny, p_hi_tiny, p_lo_tiny, q_hi_tiny, q_lo_tiny, vlen);
+      ERFCINV_PQ_HILO_TINY(T_tiny, p_hi_tiny, p_lo_tiny, q_hi_tiny, q_lo_tiny,
+                           vlen);
       p_hi = __riscv_vmerge(p_hi, p_hi_tiny, x_is_tiny, vlen);
       p_lo = __riscv_vmerge(p_lo, p_lo_tiny, x_is_tiny, vlen);
       q_hi = __riscv_vmerge(q_hi, q_hi_tiny, x_is_tiny, vlen);
@@ -219,8 +215,6 @@ void F_VER1(API) {
 
     vy = __riscv_vfsgnj(vy, vx_sign, vlen);
     vy = __riscv_vmerge(vy, vy_special, special_args, vlen);
-
-    // vy = dummy;
 
     // copy vy into y and increment addr pointers
     VFSTORE_OUTARG1(vy, vlen);

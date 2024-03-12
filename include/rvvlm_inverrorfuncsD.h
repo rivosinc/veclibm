@@ -35,6 +35,52 @@
 #define Q_tiny_9 0x5e4a26a7c1415755        // sacle 57
 #define DELTA_Q0_tiny 0x1.8a7adad44d65ap-4 // scale 66
 
+#define Q50_84
+// Using [P,Q]_tiny_[HI,LO]_k, HI in Q50, LO in Q84
+#if defined(Q50_84)
+#define P_tiny_HI_0 -0x8593442eL
+#define P_tiny_LO_0 -0x4e7245b3L
+#define P_tiny_HI_1 -0x7f3dc156b1L
+#define P_tiny_LO_1 -0x1f0300096L
+#define P_tiny_HI_2 -0x20dbbc67b1b8L
+#define P_tiny_LO_2 -0xbc59b742L
+#define P_tiny_HI_3 -0x30c75b8264d44L
+#define P_tiny_LO_3 -0x18a421ab9L
+#define P_tiny_HI_4 -0x1ab06f39e5addeL
+#define P_tiny_LO_4 -0x180f2a477L
+#define P_tiny_HI_5 -0x3d698fc2964a9cL
+#define P_tiny_LO_5 0xc3d4ab0bL
+#define P_tiny_HI_6 0x7f7d6a748d0c2fL
+#define P_tiny_LO_6 0x1729754e9L
+#define P_tiny_HI_7 0x18b100818c77848L
+#define P_tiny_LO_7 0x1aca73439L
+#define P_tiny_HI_8 0x4be1ed5d031774L
+#define P_tiny_LO_8 -0x3b6c5afbL
+#define P_tiny_HI_9 0x156a7e2e54e260L
+#define P_tiny_LO_9 0x1a0c336beL
+
+#define Q_tiny_HI_0 -0x85933cdaL
+#define Q_tiny_LO_0 -0xb5b39d61L
+#define Q_tiny_HI_1 -0x7f3de4b69fL
+#define Q_tiny_LO_1 -0x151d1cd35L
+#define Q_tiny_HI_2 -0x20dd8dc1da27L
+#define Q_tiny_LO_2 -0x1706945d7L
+#define Q_tiny_HI_3 -0x30dc92d1cd231L
+#define Q_tiny_LO_3 0xabde03f9L
+#define Q_tiny_HI_4 -0x1af5fcee397d58L
+#define Q_tiny_LO_4 -0xc3530d28L
+#define Q_tiny_HI_5 -0x42639eeec1d051L
+#define Q_tiny_LO_5 0x662b41ecL
+#define Q_tiny_HI_6 0x6182b99f6ca998L
+#define Q_tiny_LO_6 0x938a5e35L
+#define Q_tiny_HI_7 0x17a6848dc07624aL
+#define Q_tiny_LO_7 0x8a0484b7L
+#define Q_tiny_HI_8 0x105ecd6aac52b12L
+#define Q_tiny_LO_8 0x1d1e38258L
+#define Q_tiny_HI_9 0xbc944d4f8282afL
+#define Q_tiny_LO_9 -0x155b50b48L
+#endif
+
 // erfinv(+-1) = +-Inf with divide by zero
 // erfinv(x) |x| > 1, real is NaN with invalid
 // erfinv(NaN) is NaN, invalid if input is signalling NaN
@@ -210,4 +256,74 @@
     q_lo_tiny = __riscv_vfcvt_f(                                               \
         __riscv_vsub(Q, __riscv_vfcvt_x(q_hi_tiny, (vlen)), (vlen)), (vlen));  \
     q_lo_tiny = __riscv_vfadd(q_lo, DELTA_Q0_tiny, (vlen));                    \
+  } while (0)
+
+#define UPDATE_P_LO(COEFF, T, P_HI, P_LO, P_tmp, K, vlen)                      \
+  do {                                                                         \
+    (P_LO) = PSTEP_I_HI((COEFF), (T), (P_LO), (vlen));                         \
+    (P_tmp) = __riscv_vmul((T), (P_HI), (vlen));                               \
+    (P_tmp) = VSRL_I_AS_U((P_tmp), (K), (vlen));                               \
+    (P_LO) = __riscv_vadd((P_LO), (P_tmp), (vlen));                            \
+  } while (0)
+
+#define ERFCINV_PQ_HILO_TINY(T, p_hi_tiny, p_lo_tiny, q_hi_tiny, q_lo_tiny,    \
+                             vlen)                                             \
+  do {                                                                         \
+    /* T is in scale of 64 */                                                  \
+    VINT P_HI, P_LO, Q_HI, Q_LO, P_tmp, Q_tmp;                                 \
+                                                                               \
+    P_HI = VMVI_VX(P_tiny_HI_9, (vlen));                                       \
+    P_LO = VMVI_VX(P_tiny_LO_9, (vlen));                                       \
+                                                                               \
+    UPDATE_P_LO(P_tiny_LO_8, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_8, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_7, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_7, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_6, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_6, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_5, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_5, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_4, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_4, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_3, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_3, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_2, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_2, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_1, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_1, (T), P_HI, (vlen));                         \
+    UPDATE_P_LO(P_tiny_LO_0, (T), P_HI, P_LO, P_tmp, 30, (vlen));              \
+    P_HI = PSTEP_I_HI(P_tiny_HI_0, (T), P_HI, (vlen));                         \
+                                                                               \
+    Q_HI = VMVI_VX(Q_tiny_HI_9, (vlen));                                       \
+    Q_LO = VMVI_VX(Q_tiny_LO_9, (vlen));                                       \
+                                                                               \
+    UPDATE_P_LO(Q_tiny_LO_8, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_8, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_7, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_7, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_6, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_6, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_5, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_5, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_4, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_4, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_3, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_3, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_2, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_2, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_1, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_1, (T), Q_HI, (vlen));                         \
+    UPDATE_P_LO(Q_tiny_LO_0, (T), Q_HI, Q_LO, Q_tmp, 30, (vlen));              \
+    Q_HI = PSTEP_I_HI(Q_tiny_HI_0, (T), Q_HI, (vlen));                         \
+                                                                               \
+    VFLOAT A = __riscv_vfcvt_f(P_HI, (vlen));                                  \
+    p_lo_tiny = __riscv_vfcvt_f(P_LO, (vlen));                                 \
+    p_hi_tiny = __riscv_vfmadd(p_lo_tiny, 0x1.0p-34, A, (vlen));               \
+    p_lo_tiny = __riscv_vfmadd(p_lo_tiny, 0x1.0p-34,                           \
+                               __riscv_vfsub(A, p_hi_tiny, (vlen)), (vlen));   \
+    VFLOAT B = __riscv_vfcvt_f(Q_HI, (vlen));                                  \
+    q_lo_tiny = __riscv_vfcvt_f(Q_LO, (vlen));                                 \
+    q_hi_tiny = __riscv_vfmadd(q_lo_tiny, 0x1.0p-34, B, (vlen));               \
+    q_lo_tiny = __riscv_vfmadd(q_lo_tiny, 0x1.0p-34,                           \
+                               __riscv_vfsub(B, q_hi_tiny, (vlen)), (vlen));   \
   } while (0)
