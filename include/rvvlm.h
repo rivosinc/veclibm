@@ -71,6 +71,9 @@ union sui64_fp64 {
     }                                                                          \
   } while (0)
 
+#define VSRL_I_AS_U(x, nbits, vlen)                                            \
+  U_AS_I(__riscv_vsrl(I_AS_U((x)), (nbits), (vlen)))
+
 #define PSTEP(coeff_j, x, poly, vlen)                                          \
   __riscv_vfmadd((poly), (x), VFMV_VF((coeff_j), (vlen)), (vlen))
 
@@ -92,6 +95,13 @@ union sui64_fp64 {
   __riscv_vsadd(                                                               \
       __riscv_vsra(__riscv_vsmul((POLY), (X), 1, (vlen)), (K), (vlen)),        \
       (COEFF_j), (vlen))
+
+#define PSTEP_I_HI_SRA(COEFF_j, X, K, POLY, vlen)                              \
+  __riscv_vadd(__riscv_vsra(__riscv_vmulh((POLY), (X), (vlen)), (K), (vlen)),  \
+               (COEFF_j), (vlen))
+
+#define PSTEP_I_HI(COEFF_j, X, POLY, vlen)                                     \
+  __riscv_vadd(__riscv_vmulh((POLY), (X), (vlen)), (COEFF_j), (vlen))
 
 #define PSTEPN_I(COEFF_j, X, POLY, vlen)                                       \
   __riscv_vrsub(__riscv_vsmul((POLY), (X), 1, (vlen)), (COEFF_j), (vlen))
