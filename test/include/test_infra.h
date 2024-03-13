@@ -100,3 +100,4 @@ long double x_transform(long double);
 long double recip_scale(long double);
 long double erfl_prime(long double);
 long double erfcl_prime(long double);
+long double cdfnorml_prime(long double);
