@@ -1313,3 +1313,40 @@ long double cdfnorml_prime(long double x) {
   y = one_ov_rt_2pi * expl(-x * x * half);
   return y;
 }
+
+long double log_4_stirling(long double x) {
+  long double e = 2.7182818284590452353602874713526615L;
+  long double y = x / e;
+  y = logl(y);
+  return y;
+}
+
+long double stirling_power(long double x) {
+  long double e = 2.7182818284590452353602874713526615L;
+  long double half = 0x1.0p-1L;
+  long double x_minus_half = x - half;
+  long double y = x / e;
+  y = powl(y, x_minus_half);
+  return y;
+}
+
+long double stirling_correction(long double x) {
+  long double stirling = stirling_power(x);
+  long double y = tgammal(x) / stirling;
+  return y;
+}
+
+long double tgammal_mod(long double x) {
+  // tgammal(x) for x >= 0; else tgamma(1-x)
+  long double one_minus_x = 1.0L - x;
+  long double y;
+  y = (x >= 0.0) ? tgammal(x) : tgammal(one_minus_x);
+  return y;
+}
+
+long double sinpix_by_pi(long double x) {
+  long double pi = 0x1.921f'b5444'2d18'4698'98cc'5170'1b83'9p1L;
+  long double y = pi * x;
+  y = -sinl(y) / pi;
+  return y;
+}

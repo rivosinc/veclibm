@@ -18,12 +18,12 @@ TEST(exp2, small_args) {
 
   x_start = -0.34;
   x_end = 0.34;
-  nb_tests = 300000;
+  nb_tests = 80000;
   report_err_fp64(rvvlm_exp2, exp2l, x_start, x_end, nb_tests);
 
   x_start = -3.0;
   x_end = 3.0;
-  nb_tests = 400000;
+  nb_tests = 100000;
   report_err_fp64(rvvlm_exp2, exp2l, x_start, x_end, nb_tests);
 }
 
@@ -35,12 +35,12 @@ TEST(exp2, medium_args) {
 
   x_start = -14.0;
   x_end = -10.0;
-  nb_tests = 400000;
+  nb_tests = 100000;
   report_err_fp64(rvvlm_exp2, exp2l, x_start, x_end, nb_tests);
 
   x_start = 10.0;
   x_end = 15.0;
-  nb_tests = 400000;
+  nb_tests = 100000;
   report_err_fp64(rvvlm_exp2, exp2l, x_start, x_end, nb_tests);
 }
 

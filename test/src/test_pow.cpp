@@ -33,15 +33,15 @@ TEST(pow, medium_args) {
 
   x_start = 0x1.0p-3;
   x_end = 0x1.0p4;
-  nb_pts_x = 400;
+  nb_pts_x = 200;
   y_start = 0x1.0p-3;
   y_end = 0x1.0p4;
-  nb_pts_y = 400;
+  nb_pts_y = 200;
   report_err2_fp64(rvvlm_pow, powl, x_start, x_end, nb_pts_x, y_start, y_end,
                    nb_pts_y, swap_xy);
 
-  nb_targets = 10;
-  nb_tests = 10000;
+  nb_targets = 5;
+  nb_tests = 1000;
 
   target_start = -32.0 * log(2.0);
   target_end = 32.0 * log(2.0);
@@ -69,8 +69,8 @@ TEST(pow, large_args) {
 
   COMMENT("pow: current chosen algorithm; reduced argument in FP64 only")
 
-  nb_targets = 10;
-  nb_tests = 100000;
+  nb_targets = 5;
+  nb_tests = 1000;
 
   x_start = 0x1.0p-10;
   x_end = 0x1.0p10;

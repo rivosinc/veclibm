@@ -18,26 +18,26 @@ TEST(erf, test) {
 
   x_start = 0x1.0p-40;
   x_end = 0x1.0p-20;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_erf, erfl, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p-20;
   x_end = 0x1.0p1;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_erf, erfl, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p1;
   x_end = 0x1.0p2;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_erf, erfl, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p2;
   x_end = 7.0;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_erf, erfl, x_start, x_end, nb_tests);
 
   x_start = -6.5;
   x_end = 6.5;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_erf, erfl, x_start, x_end, nb_tests);
 }

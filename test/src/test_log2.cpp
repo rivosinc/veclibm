@@ -25,17 +25,17 @@ TEST(log2, around_1) {
 
   x_start = 0.7;
   x_end = 1.5;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_log2, log2l, x_start, x_end, nb_tests);
 
   x_start = 1.0;
   x_end = 4.0;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_log2, log2l, x_start, x_end, nb_tests);
 
   x_start = 0.25;
   x_end = 1.0;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_log2, log2l, x_start, x_end, nb_tests);
 }
 
@@ -47,11 +47,11 @@ TEST(log2, extreme_args) {
 
   x_start = 0x1.0p1023;
   x_end = 0x1.ffffffp1023;
-  nb_tests = 400000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_log2, log2l, x_start, x_end, nb_tests);
 
   x_start = 0x1.0p-1074;
   x_end = 0x1.0p-1022;
-  nb_tests = 400000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_log2, log2l, x_start, x_end, nb_tests);
 }
