@@ -98,6 +98,8 @@ set(PROJECT_SOURCES
     src/rvvlm_sinhDI.c
     src/rvvlm_tanhD.c
     src/rvvlm_tanhDI.c
+    src/rvvlm_tgammaD.c
+    src/rvvlm_tgammaDI.c
 )
 
 add_library(vecm

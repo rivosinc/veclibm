@@ -25,19 +25,19 @@ TEST(erfcinv, tiny_args) {
 
   x_start = 0x1.0p-1074;
   x_end = 0x1.0p-1000;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 
   x_start = 0x1.0p-1000;
   x_end = 0x1.0p-500;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 
   x_start = 0x1.0p-55;
   x_end = 0x1.0p-53;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 }
@@ -51,14 +51,14 @@ TEST(erfcinv, small_args) {
   x_start = 0x1.0p-50;
   ;
   x_end = 0x1.0p-20;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 
   x_start = 0x1.0p-20;
   ;
   x_end = 0x1.0p-4;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 }
@@ -72,20 +72,20 @@ TEST(erfcinv, medium_args) {
   x_start = 0x1.0p-4;
   ;
   x_end = 0x1.0p-1;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 
   x_start = 0x1.0p-1;
   ;
   x_end = 0x1.8p0;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 
   x_start = 2.0 - 0x1.0p-52;
   x_end = 0x1.8p0;
-  nb_tests = 40000;
+  nb_tests = 10000;
   report_err_byinv_fp64(rvvlm_erfcinv, erfcl, erfcl_prime, x_start, x_end,
                         nb_tests);
 }

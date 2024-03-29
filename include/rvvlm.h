@@ -172,6 +172,17 @@ union sui64_fp64 {
     (delta_Q) = __riscv_vfmul(_q, __riscv_vfrec7((denom), (vlen)), (vlen));    \
   } while (0)
 
+#define ACC_DIV2_N2D2(numer, delta_n, denom, delta_d, Q, delta_Q, vlen)        \
+  do {                                                                         \
+    VFLOAT _recip, _q;                                                         \
+    _recip = __riscv_vfrdiv((denom), 0x1.0p0, (vlen));                         \
+    (Q) = __riscv_vfmul((numer), _recip, (vlen));                              \
+    _q = __riscv_vfnmsub((Q), (denom), (numer), (vlen));                       \
+    _q = __riscv_vfnmsac(_q, (Q), (delta_d), (vlen));                          \
+    _q = __riscv_vfadd(_q, (delta_n), (vlen));                                 \
+    (delta_Q) = __riscv_vfmul(_q, _recip, (vlen));                             \
+  } while (0)
+
 #define SQRT2_X2(x, delta_x, r, delta_r, vlen)                                 \
   do {                                                                         \
     VFLOAT xx = __riscv_vfadd((x), (delta_x), (vlen));                         \
@@ -469,6 +480,13 @@ union sui64_fp64 {
 #define RVVLM_TANPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_TANPIDI_MERGED rvvlm_tanpiI
 
+// FP64 tgamma function configuration
+#define RVVLM_TGAMMAD_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_TGAMMAD_STD rvvlm_tgamma
+
+#define RVVLM_TGAMMADI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_TGAMMADI_STD rvvlm_tgammaI
+
 // FP64 cosh function configuration
 #define RVVLM_COSHD_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_COSHD_STD rvvlm_coshD_std
@@ -499,6 +517,7 @@ extern int64_t expD_tbl64_fixedpt[64];
 extern int64_t logD_tbl128_fixedpt[128];
 extern double logtbl_4_powD_128_hi_lo[256];
 extern double dbl_2ovpi_tbl[28];
+extern int64_t factorial_fixedpt[180];
 
 // Define the functions in the vector math library
 void RVVLM_ACOSD_FIXEDPT(size_t x_len, const double *x, double *y);
@@ -702,6 +721,10 @@ void RVVLM_SINHDI_MIXED(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_TANHD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_TANHDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
                       size_t stride_y);
+
+void RVVLM_TGAMMAD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_TGAMMADI_STD(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
 
 #ifdef __cplusplus
 }

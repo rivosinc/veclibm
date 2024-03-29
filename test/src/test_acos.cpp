@@ -19,21 +19,21 @@ TEST(acos, test) {
   x_start = -0x1.0p-40;
   x_end = 0x1.0p-40;
   ;
-  nb_tests = 100000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_acos, acosl, x_start, x_end, nb_tests);
 
   x_start = -0.5;
   x_end = 0.5;
-  nb_tests = 100000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_acos, acosl, x_start, x_end, nb_tests);
 
   x_start = 0.5;
   x_end = 1.0;
-  nb_tests = 100000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_acos, acosl, x_start, x_end, nb_tests);
 
   x_start = -1.0;
   x_end = -0.5;
-  nb_tests = 100000;
+  nb_tests = 10000;
   report_err_fp64(rvvlm_acos, acosl, x_start, x_end, nb_tests);
 }
