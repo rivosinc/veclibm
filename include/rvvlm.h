@@ -143,6 +143,21 @@ union sui64_fp64 {
     (prod_lo) = __riscv_vfmsub((x), (y), (prod_hi), (vlen));                   \
   } while (0)
 
+#define PROD_X1Y2(x, y_hi, y_lo, prod_hi, prod_lo, vlen)                       \
+  do {                                                                         \
+    (prod_hi) = __riscv_vfmul((x), (y_hi), (vlen));                            \
+    (prod_lo) = __riscv_vfmsub((x), (y_hi), (prod_hi), (vlen));                \
+    (prod_lo) = __riscv_vfmacc((prod_lo), (x), (y_lo), (vlen));                \
+  } while (0)
+
+#define PROD_X2Y2(x_hi, x_lo, y_hi, y_lo, prod_hi, prod_lo, vlen)              \
+  do {                                                                         \
+    (prod_hi) = __riscv_vfmul((x_hi), (y_hi), (vlen));                         \
+    (prod_lo) = __riscv_vfmsub((x_hi), (y_hi), (prod_hi), (vlen));             \
+    (prod_lo) = __riscv_vfmacc((prod_lo), (x_hi), (y_lo), (vlen));             \
+    (prod_lo) = __riscv_vfmacc((prod_lo), (x_lo), (y_hi), (vlen));             \
+  } while (0)
+
 #define DIV_N1D2(numer, denom, delta_d, Q, q, vlen)                            \
   do {                                                                         \
     Q = __riscv_vfdiv((numer), (denom), (vlen));                               \
@@ -170,6 +185,16 @@ union sui64_fp64 {
     _q = __riscv_vfnmsac(_q, (Q), (delta_d), (vlen));                          \
     _q = __riscv_vfadd(_q, (delta_n), (vlen));                                 \
     (delta_Q) = __riscv_vfmul(_q, __riscv_vfrec7((denom), (vlen)), (vlen));    \
+  } while (0)
+
+#define ACC_DIV2_N1D2(numer, denom, delta_d, Q, delta_Q, vlen)                 \
+  do {                                                                         \
+    VFLOAT _recip, _q;                                                         \
+    _recip = __riscv_vfrdiv((denom), 0x1.0p0, (vlen));                         \
+    (Q) = __riscv_vfmul((numer), _recip, (vlen));                              \
+    _q = __riscv_vfnmsub((Q), (denom), (numer), (vlen));                       \
+    _q = __riscv_vfnmsac(_q, (Q), (delta_d), (vlen));                          \
+    (delta_Q) = __riscv_vfmul(_q, _recip, (vlen));                             \
   } while (0)
 
 #define ACC_DIV2_N2D2(numer, delta_n, denom, delta_d, Q, delta_Q, vlen)        \
@@ -480,6 +505,13 @@ union sui64_fp64 {
 #define RVVLM_TANPIDI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_TANPIDI_MERGED rvvlm_tanpiI
 
+// FP64 lgamma function configuration
+#define RVVLM_LGAMMAD_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_LGAMMAD_STD rvvlm_lgamma
+
+#define RVVLM_LGAMMADI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_LGAMMADI_STD rvvlm_lgammaI
+
 // FP64 tgamma function configuration
 #define RVVLM_TGAMMAD_VSET_CONFIG "rvvlm_fp64m1.h"
 #define RVVLM_TGAMMAD_STD rvvlm_tgamma
@@ -721,6 +753,10 @@ void RVVLM_SINHDI_MIXED(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_TANHD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_TANHDI_STD(size_t x_len, const double *x, size_t stride_x, double *y,
                       size_t stride_y);
+
+void RVVLM_LGAMMAD_STD(size_t x_len, const double *x, double *y);
+void RVVLM_LGAMMADI_STD(size_t x_len, const double *x, size_t stride_x,
+                        double *y, size_t stride_y);
 
 void RVVLM_TGAMMAD_STD(size_t x_len, const double *x, double *y);
 void RVVLM_TGAMMADI_STD(size_t x_len, const double *x, size_t stride_x,

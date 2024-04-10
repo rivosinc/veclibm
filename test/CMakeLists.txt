@@ -79,6 +79,8 @@ set(TEST_SOURCES
     src/test_sinhI.cpp
     src/test_tanh.cpp
     src/test_tanhI.cpp
+    src/test_lgamma.cpp
+    src/test_lgammaI.cpp
     src/test_tgamma.cpp
     src/test_tgammaI.cpp
 )
