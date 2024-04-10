@@ -832,6 +832,80 @@ void report_err_fp64(double (*test_func)(double), double (*ref_func)(double),
   printf("Maximum observed ULP      error is %3.3lf\n", max_ulp_err);
 }
 
+void report_mixederr_fp64(void (*test_func)(size_t, const double *, double *),
+                          long double (*ref_func)(long double), double start,
+                          double end, int nb_pts, double threshold) {
+
+  long double y_ref;
+  double *x, *y, delta;
+  long double abs_err, rel_err, ulp_err, mixed_err;
+  long double max_abs_err, max_rel_err, max_ulp_err, max_mixed_err;
+
+  x = (double *)malloc(nb_pts * sizeof(double));
+  y = (double *)malloc(nb_pts * sizeof(double));
+
+  if (nb_pts <= 1) {
+    delta = 0.0;
+    nb_pts = 1;
+  } else {
+    delta = (end - start) / (double)(nb_pts - 1);
+  }
+
+  max_abs_err = 0.0;
+  max_rel_err = 0.0;
+  max_ulp_err = 0.0;
+  max_mixed_err = 0.0;
+
+  // fill up the set of test points
+  for (int i = 0; i < nb_pts; ++i) {
+    x[i] = start + (double)i * delta;
+  }
+
+  // call function under test
+  test_func((size_t)nb_pts, x, y);
+
+  // now for each point we compute error and log the max
+  for (int j = 0; j < nb_pts; j++) {
+    y_ref = ref_func((long double)x[j]);
+    abs_err = (long double)y[j] - y_ref;
+    abs_err = ABS(abs_err);
+    if (ABS((double)y_ref) > 0.0) {
+      rel_err = abs_err / ABS((double)y_ref);
+    } else {
+      rel_err = abs_err / 0x1.0p-1074;
+    }
+    ulp_err = abs_err / ulp_64((double)y_ref);
+
+    mixed_err = MIN(ulp_err, abs_err * 0x1.0p+52);
+
+    max_abs_err = MAX(max_abs_err, abs_err);
+    max_rel_err = MAX(max_rel_err, rel_err);
+    max_ulp_err = MAX(max_ulp_err, ulp_err);
+    max_mixed_err = MAX(max_mixed_err, mixed_err);
+
+    if (VERBOSE) {
+      union sui64_fp64 xxx, yyy;
+      xxx.f = x[j];
+      yyy.f = y[j];
+      printf("--input %24.17le, 0x%016lx, output %24.17le, 0x%016lx \n", xxx.f,
+             xxx.ui, yyy.f, yyy.ui);
+      printf("  reference %24.17le\n\n", (double)y_ref);
+    }
+  }
+  printf("----------------------------\n");
+  if ((ABS(start) > 100.) || (ABS(end) < 1.e-2)) {
+    printf("Tested %d points in [%8.3le, %8.3le]\n", nb_pts, start, end);
+  } else {
+    printf("Tested %d points in [%3.3lf, %3.3lf]\n", nb_pts, start, end);
+  }
+  printf("Maximum observed mixed error is %8.3Le\n", max_mixed_err);
+
+  EXPECT_LT((double)max_mixed_err, threshold);
+
+  free(x);
+  free(y);
+}
+
 void report_err2_fp64(void (*test_func)(size_t, const double *, const double *,
                                         double *),
                       long double (*ref_func)(long double, long double),
@@ -1348,5 +1422,27 @@ long double sinpix_by_pi(long double x) {
   long double pi = 0x1.921f'b5444'2d18'4698'98cc'5170'1b83'9p1L;
   long double y = pi * x;
   y = -sinl(y) / pi;
+  return y;
+}
+
+long double lgammap1l(long double x) {
+  long double one = 1.0L;
+  long double y = x + one;
+  y = lgammal(y);
+  return y;
+}
+
+long double log_stirling(long double x) {
+  long double e = 2.7182818284590452353602874713526615L;
+  long double half = 0x1.0p-1L;
+  long double x_minus_half = x - half;
+  long double y = x / e;
+  y = (x - half) * logl(y);
+  return y;
+}
+
+long double log_stirling_correction(long double x) {
+  long double log_stir = log_stirling(x);
+  long double y = lgammal(x) - log_stir;
   return y;
 }

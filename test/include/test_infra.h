@@ -23,6 +23,10 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *,
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double), const double *, int);
 
+void report_mixederr_fp64(void (*test_func)(size_t, const double *, double *),
+                          long double (*ref_func)(long double), double, double,
+                          int, double = 1.0);
+
 // Second most common interface: testing on 1 interval
 // for 1-in-1-out general-stride function
 void report_err_fp64(void (*test_func)(size_t, const double *, size_t, double *,
@@ -106,3 +110,6 @@ long double stirling_power(long double);
 long double stirling_correction(long double);
 long double tgammal_mod(long double);
 long double sinpix_by_pi(long double);
+long double lgammap1l(long double);
+long double log_stirling(long double);
+long double log_stirling_correction(long double);
