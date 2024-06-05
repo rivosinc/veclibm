@@ -129,11 +129,28 @@ union sui64_fp64 {
 
 #define KNUTH2SUM(X, Y, S, s, vlen)                                            \
   do {                                                                         \
-    S = __riscv_vfadd((X), (Y), (vlen));                                       \
+    (S) = __riscv_vfadd((X), (Y), (vlen));                                     \
     VFLOAT X_hat = __riscv_vfsub((S), (Y), (vlen));                            \
-    s = __riscv_vfadd(                                                         \
+    (s) = __riscv_vfadd(                                                       \
         __riscv_vfsub((X), X_hat, (vlen)),                                     \
         __riscv_vfsub((Y), __riscv_vfsub((S), X_hat, (vlen)), (vlen)),         \
+        (vlen));                                                               \
+  } while (0)
+
+#define FIX2FLT(X, scale, y_hi, y_lo, vlen)                                    \
+  do {                                                                         \
+    (y_hi) = __riscv_vfcvt_f((X), (vlen));                                     \
+    (y_lo) = __riscv_vfcvt_f(                                                  \
+        __riscv_vsub((X), __riscv_vfcvt_x((y_hi), (vlen)), (vlen)), (vlen));   \
+    (y_hi) = __riscv_vfmul((y_hi), (scale), (vlen));                           \
+    (y_lo) = __riscv_vfmul((y_lo), (scale), (vlen));                           \
+  } while (0)
+
+#define FLT2FIX(x_hi, x_lo, scale, Y, vlen)                                    \
+  do {                                                                         \
+    (Y) = __riscv_vfcvt_x(__riscv_vfmul((x_hi), (scale), (vlen)), (vlen));     \
+    (Y) = __riscv_vadd(                                                        \
+        (Y), __riscv_vfcvt_x(__riscv_vfmul((x_lo), (scale), (vlen)), (vlen)),  \
         (vlen));                                                               \
   } while (0)
 
@@ -156,6 +173,14 @@ union sui64_fp64 {
     (prod_lo) = __riscv_vfmsub((x_hi), (y_hi), (prod_hi), (vlen));             \
     (prod_lo) = __riscv_vfmacc((prod_lo), (x_hi), (y_lo), (vlen));             \
     (prod_lo) = __riscv_vfmacc((prod_lo), (x_lo), (y_hi), (vlen));             \
+  } while (0)
+
+#define SQR_X2(x_hi, x_lo, prod_hi, prod_lo, vlen)                             \
+  do {                                                                         \
+    (prod_hi) = __riscv_vfmul((x_hi), (x_hi), (vlen));                         \
+    (prod_lo) = __riscv_vfmsub((x_hi), (x_hi), (prod_hi), (vlen));             \
+    (prod_lo) = __riscv_vfmacc((prod_lo), (x_hi), (x_lo), (vlen));             \
+    (prod_lo) = __riscv_vfmacc((prod_lo), (x_lo), (x_hi), (vlen));             \
   } while (0)
 
 #define DIV_N1D2(numer, denom, delta_d, Q, q, vlen)                            \
@@ -233,13 +258,13 @@ union sui64_fp64 {
 
 #define FAST_LDEXP(num, exp, vlen)                                             \
   do {                                                                         \
-    VINT n1 = __riscv_vsra((exp), 1, (vlen));                                  \
-    VINT n2 = __riscv_vsub((exp), n1, (vlen));                                 \
-    n1 = __riscv_vsll(n1, MAN_LEN, (vlen));                                    \
-    num = I_AS_F(__riscv_vadd(F_AS_I((num)), n1, (vlen)));                     \
-    n2 = __riscv_vadd(n2, EXP_BIAS, (vlen));                                   \
-    n2 = __riscv_vsll(n2, MAN_LEN, (vlen));                                    \
-    num = __riscv_vfmul((num), I_AS_F(n2), (vlen));                            \
+    VINT _n1 = __riscv_vsra((exp), 1, (vlen));                                 \
+    VINT _n2 = __riscv_vsub((exp), _n1, (vlen));                               \
+    _n1 = __riscv_vsll(_n1, MAN_LEN, (vlen));                                  \
+    (num) = I_AS_F(__riscv_vadd(F_AS_I((num)), _n1, (vlen)));                  \
+    _n2 = __riscv_vadd(_n2, EXP_BIAS, (vlen));                                 \
+    _n2 = __riscv_vsll(_n2, MAN_LEN, (vlen));                                  \
+    (num) = __riscv_vfmul((num), I_AS_F(_n2), (vlen));                         \
   } while (0)
 
 // Some of the functions have multiple implementations using different
@@ -413,6 +438,13 @@ union sui64_fp64 {
 
 #define RVVLM_EXPM1DI_VSET_CONFIG "rvvlm_fp64m2.h"
 #define RVVLM_EXPM1DI_STD_EPSIM rvvlm_expm1I
+
+// FP64 expint1 function configuration
+#define RVVLM_EXPINT1D_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_EXPINT1D_STD rvvlm_expint1
+
+#define RVVLM_EXPINT1DI_VSET_CONFIG "rvvlm_fp64m1.h"
+#define RVVLM_EXPINT1DI_STD rvvlm_expint1I
 
 // FP64 log function configuration
 #define RVVLM_LOGD_VSET_CONFIG "rvvlm_fp64m2.h"
@@ -670,6 +702,10 @@ void RVVLM_EXP10DI_TBL64(size_t x_len, const double *x, size_t stride_x,
 void RVVLM_EXPM1D_STD_EPSIM(size_t x_len, const double *x, double *y);
 void RVVLM_EXPM1DI_STD_EPSIM(size_t x_len, const double *x, size_t stride_x,
                              double *y, size_t stride_y);
+
+void RVVLM_EXPINT1D_STD(size_t x_len, const double *x, double *y);
+void RVVLM_EXPINT1DI_STD(size_t x_len, const double *x, size_t stride_x,
+                         double *y, size_t stride_y);
 
 void RVVLM_LOGD_TBL128(size_t x_len, const double *x, double *y);
 void RVVLM_LOGDI_TBL128(size_t x_len, const double *x, size_t stride_x,

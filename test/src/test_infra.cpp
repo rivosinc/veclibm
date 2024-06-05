@@ -1446,3 +1446,141 @@ long double log_stirling_correction(long double x) {
   long double y = lgammal(x) - log_stir;
   return y;
 }
+
+long double expint1_01(long double x) {
+  long double euler = 0.57721566490153286060651209008240243L;
+  long double poly, pm1, one_ov_j;
+  int j, k;
+
+  k = 30;
+  pm1 = 1.0L;
+  poly = x * pm1 / (long double)(k * k);
+  for (j = k - 1; j > 0; j--) {
+    pm1 = -pm1;
+    one_ov_j = 1.0L / (long double)j;
+    poly = (x * one_ov_j) * (pm1 * one_ov_j + poly);
+  }
+  poly = -euler - logl(x) - poly;
+  return poly;
+}
+
+long double expint1_01_plus_logx(long double x) {
+  long double euler = 0.57721566490153286060651209008240243L;
+  long double poly, pm1, one_ov_j;
+  int j, k;
+
+  k = 30;
+  pm1 = 1.0L;
+  poly = x * pm1 / (long double)(k * k);
+  for (j = k - 1; j > 0; j--) {
+    pm1 = -pm1;
+    one_ov_j = 1.0L / (long double)j;
+    poly = (x * one_ov_j) * (pm1 * one_ov_j + poly);
+  }
+  poly = -euler - poly;
+  return poly;
+}
+
+long double neg_logl(long double x) {
+  long double y;
+  y = -logl(x);
+  return y;
+}
+
+long double expint1_trans_rat(long double x) {
+  // x is in [1, 750.]
+  // this is expint1(x) * exp(x) * x to be
+  // approximated by Rat(y); y = 1/x
+  // for y in [1/2, 1] we have a simple polynomial
+  // for y in [1/750., 1/2) we use a rational function
+  long double p_right[22], p_left[14], q_left[14];
+  p_right[0] = 0.99987613969769648351829947450235L;
+  p_right[1] = -0.995436991603177238605900535907384L;
+  p_right[2] = 1.91642873700614960400379430154164L;
+  p_right[3] = -4.96928640815223815715904498181514L;
+  p_right[4] = 14.1324749826880151534932904432367L;
+  p_right[5] = -38.9667868397570887721933445686686L;
+  p_right[6] = 97.5605103837944579296609693076357L;
+  p_right[7] = -214.761340520189928266723102523174L;
+  p_right[8] = 409.18383634768587379304036059589L;
+  p_right[9] = -669.268447733630270781719121268103L;
+  p_right[10] = 934.84391224021040063981160795538L;
+  p_right[11] = -1110.10943096556260145723841809809L;
+  p_right[12] = 1114.90010322661588294174507765726L;
+  p_right[13] = -940.659293300673552071683107051285L;
+  p_right[14] = 660.681240993594853884300206878527L;
+  p_right[15] = -381.455445139537699250303694568335L;
+  p_right[16] = 177.876165044693837128795272031401L;
+  p_right[17] = -65.3092245790846289562772463961134L;
+  p_right[18] = 18.171563714995189323264387992913L;
+  p_right[19] = -3.60052408990624169526090783518627L;
+  p_right[20] = 0.45257250419054783414204789425677L;
+  p_right[21] = -0.027120384752283994271123347020199L;
+
+  // EXP1_TRANS, in [0.0013333333333333333, 0.500001], deg 13 Rational
+  // p-polynomial
+  p_left[0] = 2.609052865061399112841795516448e-15L;
+  p_left[1] = 1.98356953618995556532438083406e-13L;
+  p_left[2] = 6.258759434686381299795348095755e-12L;
+  p_left[3] = 0.0000000001075504261602435563215267385062L;
+  p_left[4] = 0.000000001110963084524612683870876138919L;
+  p_left[5] = 0.000000007190009661170689035135227834627L;
+  p_left[6] = 0.00000002950897867378183147216477630402L;
+  p_left[7] = 0.00000007615532315194565244731692347672L;
+  p_left[8] = 0.0000001202048365022797070621746040863L;
+  p_left[9] = 0.0000001102495441115030587751477794941L;
+  p_left[10] = 0.00000005385760957843800007322680746912L;
+  p_left[11] = 0.00000001199355047512229026210909634098L;
+  p_left[12] = 0.0000000008712990385806422820871685492115L;
+  p_left[13] = 4.710185598749621860891991378835e-12L;
+  // q-polynomial
+  q_left[0] = 2.609052865061399112842055502448e-15L;
+  q_left[1] = 2.009660064840569556447891955744e-13L;
+  q_left[2] = 6.454507335440315457584518105482e-12L;
+  q_left[3] = 0.0000000001136186557999061261121284142544L;
+  q_left[4] = 0.000000001212815904423781085064160464895L;
+  q_left[5] = 0.000000008209805200195483320110547962575L;
+  q_left[6] = 0.00000003584219322659465550633806324206L;
+  q_left[7] = 0.0000001007709486474447742002541026923L;
+  q_left[8] = 0.0000001793373132726086539120937709741L;
+  q_left[9] = 0.0000001951698113626937338975156946121L;
+  q_left[10] = 0.000000122566141409666205579099651711L;
+  q_left[11] = 0.00000004032304730567004431760037201357L;
+  q_left[12] = 0.000000005832024467701252050247653318405L;
+  q_left[13] = 0.0000000002486460975207609365876750359993L;
+
+  long double y, P, Q, result;
+  x = (x > 750.0L) ? 750.0L : x;
+  y = 1.0L / x;
+  if (y >= 0.5L) {
+    P = p_right[21];
+    for (int j = 20; j >= 0; j--) {
+      P = y * P + p_right[j];
+    }
+    result = P;
+  } else {
+    P = p_left[13];
+    Q = q_left[13];
+    for (int j = 12; j >= 0; j--) {
+      P = y * P + p_left[j];
+      Q = y * Q + q_left[j];
+    }
+    result = P / Q;
+  }
+  return result;
+}
+
+long double exp_negx(long double x) { return expl(-x); }
+
+long double expint1(long double x) {
+  long double A, B, result;
+  assert(x > 0.0L);
+  if (x < 1.0L) {
+    result = expint1_01(x);
+  } else {
+    A = expl(-x);
+    B = expint1_trans_rat(x);
+    result = A * B / x;
+  }
+  return result;
+}
