@@ -63,6 +63,8 @@ set(PROJECT_SOURCES
     src/rvvlm_exp10DI.c
     src/rvvlm_expm1D.c
     src/rvvlm_expm1DI.c
+    src/rvvlm_expint1D.c
+    src/rvvlm_expint1DI.c
     src/rvvlm_logD_tbl.c
     src/rvvlm_logD.c
     src/rvvlm_logDI.c

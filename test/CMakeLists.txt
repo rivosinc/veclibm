@@ -48,6 +48,8 @@ set(TEST_SOURCES
     src/test_exp10I.cpp
     src/test_expm1.cpp
     src/test_expm1I.cpp
+    src/test_expint1.cpp
+    src/test_expint1I.cpp
     src/test_log.cpp
     src/test_logI.cpp
     src/test_log2.cpp
