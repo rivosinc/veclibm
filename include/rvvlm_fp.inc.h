@@ -166,6 +166,7 @@ static_assert(false, "API_SIGNATURE ill or undefined" __FILE__);
 #define MAKE_VBOOL(A) __PASTE3(A, 8, _t)
 #endif
 #define VSET __PASTE2(__riscv_vsetvl_e, __PASTE3(BIT_WIDTH, m, LMUL))
+#define VSETMAX __PASTE2(__riscv_vsetvlmax_e, __PASTE3(BIT_WIDTH, m, LMUL))
 #define VSE __PASTE2(__riscv_vse, BIT_WIDTH)
 #define VSSE __PASTE2(__riscv_vsse, BIT_WIDTH)
 #define MAKE_REINTERPRET(A, B)                                                 \
