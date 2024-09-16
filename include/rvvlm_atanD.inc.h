@@ -76,7 +76,7 @@ static_assert(false, "Must specify atan or atanpi" __FILE__);
 // r and s into fixed point.
 void F_VER1(API) {
   size_t vlen;
-  VFLOAT vx_orig, vx, vy, vy_special;
+  VFLOAT vx_orig, vy, vy_special;
   VBOOL special_args;
 
   SET_ROUNDTONEAREST;

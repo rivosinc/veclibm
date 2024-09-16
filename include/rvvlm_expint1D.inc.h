@@ -203,7 +203,7 @@
 // On return rat_hi and rat_lo are floating-point values
 #define EXPINT1_RAT_GE1(x_hi, x_lo, scale, rat_hi, rat_lo, vlen)               \
   do {                                                                         \
-    VINT P75, P81, P89, Q74, Q81, Q89, Ysq, Y4;                                \
+    VINT P75, P81, P89, Q74, Q81, Q89;                                         \
     VINT _X;                                                                   \
     FLT2FIX((x_hi), (x_lo), (scale), _X, (vlen));                              \
     P75 = PSTEP_I_SLL(P_10, P_11, 1, _X, (vlen));                              \
@@ -242,7 +242,6 @@
     FAST2SUM(_p_tmp2_hi, _p_tmp2_lo, _p_hi, _p_lo, (vlen));                    \
     /* (_p_hi, _p_lo) is an accurate version of p(x) */                        \
                                                                                \
-    VFLOAT AA, aa;                                                             \
     Q74 = PSTEP_I_SLL(Q_10, Q_11, 1, _X, (vlen));                              \
     Q74 = PSTEP_I_SLL(Q_9, _X, 1, Q74, (vlen));                                \
     Q74 = PSTEP_I_SLL(Q_8, _X, 1, Q74, (vlen));                                \
@@ -342,7 +341,7 @@
 
 void F_VER1(API) {
   size_t vlen;
-  VFLOAT vx, vx_sign, vy, vy_special;
+  VFLOAT vx, vy, vy_special;
   VBOOL special_args;
   VINT n_adjust;
 

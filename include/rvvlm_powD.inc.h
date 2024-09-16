@@ -92,8 +92,6 @@
         vy = __riscv_vfmin_mu(current_cases, vy, vy, 0x1.0p53, vlen);          \
         vy = __riscv_vfmax_mu(current_cases, vy, vy, -0x1.0p53, vlen);         \
         VINT y_to_int = __riscv_vfcvt_x(current_cases, vy, vlen);              \
-        VFLOAT y_to_int_fp = __riscv_vfcvt_f(current_cases, y_to_int, vlen);   \
-        VBOOL y_is_int = __riscv_vmfeq(current_cases, vy, y_to_int_fp, vlen);  \
         VINT sign_z = __riscv_vsll(y_to_int, 63, vlen);                        \
         /* the parity is used later on to manipulate sign, hence sll 63 bits   \
          */                                                                    \

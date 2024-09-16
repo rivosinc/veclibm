@@ -37,7 +37,7 @@
 // which is computed with care.
 void F_VER1(API) {
   size_t vlen;
-  VFLOAT vx, vx_orig, vy, vy_special;
+  VFLOAT vx, vy, vy_special;
   VBOOL special_args;
 
   SET_ROUNDTONEAREST;
@@ -46,7 +46,7 @@ void F_VER1(API) {
     vlen = VSET(_inarg_n);
     vx = VFLOAD_INARG1(vlen);
 #if defined(COMPILE_FOR_ASINH)
-    vx_orig = vx;
+    VFLOAT vx_orig = vx;
 #endif
 
 #if defined(COMPILE_FOR_ACOSH)
