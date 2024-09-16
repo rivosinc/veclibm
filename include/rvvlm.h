@@ -577,11 +577,10 @@ union sui64_fp64 {
 #define RVVLM_TANHDI_STD rvvlm_tanhI
 
 // Define the various tables for table-driven implementations
-extern int64_t expD_tbl64_fixedpt[64];
-extern int64_t logD_tbl128_fixedpt[128];
-extern double logtbl_4_powD_128_hi_lo[256];
-extern double dbl_2ovpi_tbl[28];
-extern int64_t factorial_fixedpt[180];
+extern const int64_t expD_tbl64_fixedpt[64];
+extern const int64_t logD_tbl128_fixedpt[128];
+extern const double logtbl_4_powD_128_hi_lo[256];
+extern const double dbl_2ovpi_tbl[28];
 
 // Define the functions in the vector math library
 void RVVLM_ACOSD_FIXEDPT(size_t x_len, const double *x, double *y);

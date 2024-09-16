@@ -7,7 +7,7 @@
 
 // This is 2^500 * (2/pi) and the lsb of dbl_2ovpi_tbl[j] is 2^(500-(j+1)*52),
 // j=0,1,...,27
-const extern double dbl_2ovpi_tbl[28] = {
+const double dbl_2ovpi_tbl[28] = {
     0x1.45f306dc9c882p+499,  0x1.4a7f09d5f47d4p+446,  0x1.a6ee06db14ad0p+393,
     -0x1.b0ef1bef806bcp+342, 0x1.8eaf7aef1586cp+290,  0x1.c91b8e909374cp+238,
     -0x1.ff9b6d115f630p+184, 0x1.921cfe1deb1d0p+132,  -0x1.3b5963045df74p+82,
