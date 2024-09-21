@@ -480,7 +480,7 @@
   } while (0)
 
 void F_VER1(API) {
-  size_t vlen = VSETMAX();
+  size_t vlen = VSET(_inarg_n);
   VFLOAT vx, vx_orig, vy, vy_special;
   VBOOL special_args;
   VFLOAT zero = VFMV_VF(fp_posZero, vlen);
