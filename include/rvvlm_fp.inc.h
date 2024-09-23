@@ -227,12 +227,6 @@ static const double fp_posInf = __builtin_inf();
 static const double fp_negInf = -__builtin_inf();
 static const double fp_negZero = -0.;
 
-static const union sui64_fp64 SNAN = {fp_sNaN};
-static const union sui64_fp64 QNAN = {fp_qNaN};
-static const union sui64_fp64 PINF = {fp_posInf};
-static const union sui64_fp64 NINF = {fp_negInf};
-static const union sui64_fp64 NEGZERO = {fp_negZero};
-
 static const double fp_posZero = 0.0;
 static const double fp_posOne = 0x1.0p0;
 static const double fp_negOne = -0x1.0p0;
