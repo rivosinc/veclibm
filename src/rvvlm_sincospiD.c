@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #include <riscv_vector.h>
-#include <stdio.h>
 
 #include "rvvlm.h"
 #define API_SIGNATURE API_SIGNATURE_12

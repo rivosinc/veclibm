@@ -213,8 +213,8 @@ void F_VER1(API) {
       divide = __riscv_vmandn(divide, x_neg, vlen);
       divide = __riscv_vmand(divide, exp_diff_large, vlen);
 
-      VFLOAT abs_y = __riscv_vfsgnj(vy, fp_posOne, vlen);
 #if defined(COMPILE_FOR_ATAN2)
+      VFLOAT abs_y = __riscv_vfsgnj(vy, fp_posOne, vlen);
       VFLOAT tmp1 = __riscv_vfdiv(divide, abs_y, vx, vlen);
       tmp1 = __riscv_vfmerge(tmp1, 0x1.0p-60, no_divide, vlen);
       tmp1 = __riscv_vfsgnj(tmp1, vx, vlen);

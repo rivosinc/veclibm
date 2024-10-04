@@ -89,7 +89,7 @@ static_assert(false,
 // cdfnorm(|x|) = 1 - cdfnorm(-|x|)
 void F_VER1(API) {
   size_t vlen;
-  VFLOAT vx, vx_orig, vy, vy_special;
+  VFLOAT vx, vx_orig, vy_special;
   VBOOL special_args;
 
   SET_ROUNDTONEAREST;

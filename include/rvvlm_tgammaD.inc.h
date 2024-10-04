@@ -316,7 +316,6 @@ void F_VER1(API) {
       vx_lo = __riscv_vmerge(vx_lo, a_tmp_lo, x_lt_0, vlen);
     }
 
-    VFLOAT y_hi, y_lo;
     VINT n, EXP;
 
     VINT XF = __riscv_vsll(VMVI_VX(1, vlen), 61, vlen);
