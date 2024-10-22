@@ -42,7 +42,7 @@ _Static_assert(0, "NaN not available on this architecture")
 #define __PASTE5_BASE(A, B, C, D, E) A##B##C##D##E
 #define __PASTE5(A, B, C, D, E) __PASTE5_BASE(A, B, C, D, E)
 #define __PASTE6_BASE(A, B, C, D, E, F) A##B##C##D##E##F
-#define __PASTE6(A, B, C, D, E, F) __PASTE5_BASE(A, B, C, D, E, F)
+#define __PASTE6(A, B, C, D, E, F) __PASTE6_BASE(A, B, C, D, E, F)
 
 #define MAKE_VTYPE(A) __PASTE3(A, BIT_WIDTH, __PASTE3(m, LMUL, _t))
 #define MAKE_TYPE(A) __PASTE3(A, BIT_WIDTH, _t)
