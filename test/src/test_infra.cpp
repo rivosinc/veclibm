@@ -33,6 +33,7 @@ union sui64_fp64 {
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 #define N_PTS_MAX 100000
+#define N_TV_MAX 200
 
 #define VERBOSE 0
 
@@ -84,10 +85,11 @@ union sui64_fp64 fp64_special_values[N_SPECIALS] = {
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *),
                      long double (*ref_func)(long double),
-                     const double *test_args, int nb_test_args) {
+                     const double *test_args, int nb_test_args,
+                     double threshold) {
 
   long double y_ref;
-  double *x, *y, delta;
+  double *y;
   double abs_err, rel_err, ulp_err;
   double max_abs_err, max_rel_err, max_ulp_err;
 
@@ -134,6 +136,8 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
            log2(max_rel_err));
   }
   printf("Maximum observed ULP      error is %3.3lf\n", max_ulp_err);
+
+  EXPECT_LT((double)max_ulp_err, threshold);
 
   free(y);
 }
@@ -212,6 +216,72 @@ void report_err_fp64(void (*test_func)(size_t, const double *, double *),
 
   free(x);
   free(y);
+}
+
+void report_err_fp64(void (*test_func)(size_t, const double *, double *,
+                                       double *),
+                     long double (*ref_func)(long double), int which_output,
+                     const double *test_args, int nb_test_args,
+                     double threshold) {
+
+  long double y_ref;
+  double *y, *z;
+  long double abs_err, rel_err, ulp_err;
+  long double max_abs_err, max_rel_err, max_ulp_err;
+
+  y = (double *)malloc(nb_test_args * sizeof(double));
+  z = (double *)malloc(nb_test_args * sizeof(double));
+
+  max_abs_err = 0.0;
+  max_rel_err = 0.0;
+  max_ulp_err = 0.0;
+
+  // call function under test
+  if (which_output == 1) {
+    test_func((size_t)nb_test_args, test_args, y, z);
+  } else {
+    test_func((size_t)nb_test_args, test_args, z, y);
+  }
+
+  // now for each point we compute error and log the max
+  for (int j = 0; j < nb_test_args; j++) {
+    y_ref = ref_func((long double)test_args[j]);
+    abs_err = (long double)y[j] - y_ref;
+    abs_err = ABS(abs_err);
+    if (ABS((double)y_ref) > 0.0) {
+      rel_err = abs_err / ABS((double)y_ref);
+    } else {
+      rel_err = abs_err / 0x1.0p-1074;
+    }
+    ulp_err = abs_err / ulp_64((double)y_ref);
+
+    max_abs_err = MAX(max_abs_err, abs_err);
+    max_rel_err = MAX(max_rel_err, rel_err);
+    max_ulp_err = MAX(max_ulp_err, ulp_err);
+
+    if (VERBOSE) {
+      union sui64_fp64 xxx, yyy;
+      xxx.f = test_args[j];
+      yyy.f = y[j];
+      printf("--input %24.17le, 0x%016lx, output %24.17le, 0x%016lx \n", xxx.f,
+             xxx.ui, yyy.f, yyy.ui);
+      printf("  reference %24.17le\n\n", (double)y_ref);
+    }
+  }
+  printf("----------------------------\n");
+  printf("Tested %d special test arguments\n", nb_test_args);
+  printf("Maximum observed absolute error is %8.3Le\n", max_abs_err);
+  printf("Maximum observed relative error is %8.3Le\n", max_rel_err);
+  if (max_rel_err > 0.0) {
+    printf("                          which is 2^(%3.3Lf)\n",
+           log2(max_rel_err));
+  }
+  printf("Maximum observed ULP      error is %3.3Lf\n", max_ulp_err);
+
+  EXPECT_LT(max_ulp_err, threshold);
+
+  free(y);
+  free(z);
 }
 
 void report_err_fp64(void (*test_func)(size_t, const double *, double *,
@@ -1152,6 +1222,47 @@ void report_err2_fp64(void (*test_func)(size_t, const double *, size_t,
   free(x);
   free(y);
   free(z);
+}
+
+void test_vectors_fp64(void (*test_func)(size_t, const double *, double *),
+                       int64_t *tv_in_out, int nb_tv) {
+
+  double x[N_TV_MAX], y[N_TV_MAX];
+  union sui64_fp64 xxx, yyy;
+
+  for (int i = 0; i < nb_tv; i++) {
+    xxx.si = tv_in_out[2 * i];
+    x[i] = xxx.f;
+  }
+  test_func((size_t)nb_tv, x, y);
+  for (int i = 0; i < nb_tv; i++) {
+    yyy.f = y[i];
+    EXPECT_EQ(yyy.si, tv_in_out[2 * i + 1]);
+  }
+}
+
+void test_vectors2_fp64(void (*test_func)(size_t, const double *,
+                                          const double *, double *),
+                        int64_t *tv_in_out, int nb_tv, int swap_xy) {
+
+  double x[N_TV_MAX], y[N_TV_MAX], z[N_TV_MAX];
+  union sui64_fp64 xxx, yyy, zzz;
+
+  for (int i = 0; i < nb_tv; i++) {
+    xxx.si = tv_in_out[3 * i];
+    x[i] = xxx.f;
+    yyy.si = tv_in_out[3 * i + 1];
+    y[i] = yyy.f;
+  }
+  if (swap_xy == 0) {
+    test_func((size_t)nb_tv, x, y, z);
+  } else {
+    test_func((size_t)nb_tv, y, x, z);
+  }
+  for (int i = 0; i < nb_tv; i++) {
+    zzz.f = z[i];
+    EXPECT_EQ(zzz.si, tv_in_out[3 * i + 2]);
+  }
 }
 
 void show_special_fp64(void (*test_func)(size_t, const double *, double *),

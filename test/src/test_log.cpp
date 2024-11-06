@@ -9,12 +9,12 @@
 #include "test_infra.h"
 
 TEST(log, special) {
-  unsigned long nb_tests;
-  double x_start, x_end;
+  int nb_tv;
+  int64_t tv_in_out[2 * (NB_TV_FOR_LOG)] = TV_FOR_LOG;
 
-  COMMENT("log: current chosen algorithm; reduced argument in FP64 only")
+  nb_tv = NB_TV_FOR_LOG;
 
-  show_special_fp64(rvvlm_log, "Special Value handling of this function");
+  test_vectors_fp64(rvvlm_log, tv_in_out, nb_tv);
 }
 
 TEST(log, around_1) {

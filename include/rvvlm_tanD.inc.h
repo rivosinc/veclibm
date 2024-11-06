@@ -66,6 +66,7 @@ void F_VER1(API) {
       VFLOAT S = __riscv_vfsub(r_hi, A, vlen);
       VFLOAT s = __riscv_vfsub(r_hi, S, vlen);
       s = __riscv_vfsub(s, A, vlen);
+      s = __riscv_vfsub(s, a, vlen);
       s = __riscv_vfnmsac(s, PIBY2_LO, n_flt, vlen);
       r = __riscv_vmerge(r, S, r_small, vlen);
       r_delta = __riscv_vmerge(r_delta, s, r_small, vlen);
