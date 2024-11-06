@@ -21,6 +21,7 @@
 #define DBL_QNAN (int64_t)0x7FF8000000000000
 #define DBL_SNAN (int64_t)0x7FF4000000000000
 
+// clang-format off
 #define NB_TV_FOR_TRIG 4
 #define TV_FOR_TRIG                                                            \
   {DBL_QNAN,    DBL_QNAN, DBL_SNAN,    DBL_QNAN,                               \
@@ -53,6 +54,7 @@
   {                                                                            \
     printf("\n=====\t" comment "\n");                                          \
   }
+// clang-format on
 
 // Most common interface: testing on 1 interval
 // for 1-in-1-out unit-stride function
