@@ -9,12 +9,12 @@
 #include "test_infra.h"
 
 TEST(sin, special) {
-  unsigned long nb_tests;
-  double x_start, x_end;
+  int nb_tv;
+  int64_t tv_in_out[2 * (NB_TV_FOR_TRIG)] = TV_FOR_TRIG;
 
-  COMMENT("sin: current chosen algorithm; reduced argument in FP64 only")
+  nb_tv = NB_TV_FOR_TRIG;
 
-  show_special_fp64(rvvlm_sin, "Special Value handling of this function");
+  test_vectors_fp64(rvvlm_sin, tv_in_out, nb_tv);
 }
 
 TEST(sin, small_args) {
@@ -32,6 +32,17 @@ TEST(sin, small_args) {
   x_end = 6.0;
   nb_tests = 100000;
   report_err_fp64(rvvlm_sin, sinl, x_start, x_end, nb_tests);
+}
+
+TEST(sin, near_NPiby2) {
+#include "near_NPiby2_tbl.h"
+
+  unsigned long nb_tests;
+
+  COMMENT("sin: current chosen algorithm; reduced argument in FP64 only")
+
+  nb_tests = (NB_TEST_ARGS);
+  report_err_fp64(rvvlm_sin, sinl, dbl_near_NPiby2_tbl, nb_tests);
 }
 
 TEST(sin, medium_args) {

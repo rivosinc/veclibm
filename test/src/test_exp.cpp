@@ -8,13 +8,20 @@
 #include "rvvlm.h"
 #include "test_infra.h"
 
+TEST(exp, special) {
+  int nb_tv;
+  int64_t tv_in_out[2 * (NB_TV_FOR_EXP)] = TV_FOR_EXP;
+
+  nb_tv = NB_TV_FOR_EXP;
+
+  test_vectors_fp64(rvvlm_exp, tv_in_out, nb_tv);
+}
+
 TEST(exp, small_args) {
   unsigned long nb_tests;
   double x_start, x_end;
 
   COMMENT("exp: current chosen algorithm; reduced argument in FP64 only")
-
-  show_special_fp64(rvvlm_exp, "Special Value handling of this function");
 
   x_start = -0.34;
   x_end = 0.34;

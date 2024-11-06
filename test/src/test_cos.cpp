@@ -9,12 +9,22 @@
 #include "test_infra.h"
 
 TEST(cos, special) {
+  int nb_tv;
+  int64_t tv_in_out[2 * (NB_TV_FOR_TRIG)] = TV_FOR_TRIG;
+
+  nb_tv = NB_TV_FOR_TRIG;
+
+  test_vectors_fp64(rvvlm_cos, tv_in_out, nb_tv);
+}
+
+TEST(cos, near_NPiby2) {
+#include "near_NPiby2_tbl.h"
   unsigned long nb_tests;
-  double x_start, x_end;
 
   COMMENT("cos: current chosen algorithm; reduced argument in FP64 only")
 
-  show_special_fp64(rvvlm_cos, "Special Value handling of this function");
+  nb_tests = (NB_TEST_ARGS);
+  report_err_fp64(rvvlm_cos, cosl, dbl_near_NPiby2_tbl, nb_tests);
 }
 
 TEST(cos, small_args) {
