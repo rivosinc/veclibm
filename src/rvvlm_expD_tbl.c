@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 // This table is used my different functions of the exp and exponential family
 #include <stdint.h>

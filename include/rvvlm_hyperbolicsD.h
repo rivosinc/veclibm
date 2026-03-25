@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 #if defined(COMPILE_FOR_SINH) || defined(COMPILE_FOR_TANH)
 #define GEN_EXCEPTIONS(special_args, vx, vlen)                                 \

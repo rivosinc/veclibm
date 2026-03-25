@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 #define NB_TEST_ARGS 63 * 3
 static const double dbl_near_NPiby2_tbl[NB_TEST_ARGS] = {

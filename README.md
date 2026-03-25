@@ -1,7 +1,7 @@
 <!--
 SPDX-FileCopyrightText: 2023 Rivos Inc.
 
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: MIT
 -->
 
 # veclibm
@@ -10,7 +10,7 @@ SPDX-License-Identifier: Apache-2.0
 
 A vector math library using RISC-V vector ISA via C intrinsic. This library aims to demonstrate an effective use of the ISA for accurate and efficient implementations of common math functions. While at present the library only provides double precision implementations, it has all the standard transcendental functions and some of the more common special functions. Further extension is possible. The API conforms to that of MKL vector math function library.
 
-The Apache license is what the authors are most accustomed to, but we are opened to other arrangements as well.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 The basic structure is that each function, such as exp, is contained in one file.
 The file includes a sequence of header files. Typically these three headers are present in this order

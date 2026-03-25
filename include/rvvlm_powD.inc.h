@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 // Macros for common small-block codes
 #define EXCEPTION_HANDLING_POW(vx, vy, special_args, vz_special, vlen)         \
