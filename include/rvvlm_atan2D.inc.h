@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 #if defined(COMPILE_FOR_ATAN2)
 #if (STRIDE == UNIT_STRIDE)

@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 #define RTPI_BY2_HI 0x1.c5bf891b4ef6ap-1
 #define RTPI_BY2_LO 0x1.4f38760a41abbp-54

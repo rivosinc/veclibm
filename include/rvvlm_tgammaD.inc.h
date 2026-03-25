@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 #if (STRIDE == UNIT_STRIDE)
 #define F_VER1 RVVLM_TGAMMAD_STD

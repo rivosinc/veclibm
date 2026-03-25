@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Rivos Inc.
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 // gamma(+inf) = +inf; gamma(-inf/sNaN) is qNaN with invalid
 // gamma(qNaN) is qNaN
